@@ -1,2 +1,9 @@
-# task-manager-webapp
-A full-stack MERN task management app for organizing, prioritizing, and tracking daily tasks efficiently.
+# Task Manager Web App
+
+## Setup
+- npm install
+- npm run dev
+
+## Notes
+- Uses MongoDB
+- Backend runs on port 5000
