@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Schema from "mongoose";
 
 const taskSchema = new mongoose.Schema(
   {
@@ -29,9 +30,9 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const sortDueDate = taskSchema.index({ userId: 1, dueDate: 1 }); // for sorting tasks by due date
-const filterByList = taskSchema.index({ userId: 1, listId: 1 }); // for filtering tasks by list
-const filterByTags = taskSchema.index({ userId: 1, tagIds: 1 }); // for filtering tasks by tags
+// export const sortDueDate = taskSchema.index({ userId: 1, dueDate: 1 }); // for sorting tasks by due date
+// export const filterByList = taskSchema.index({ userId: 1, listId: 1 }); // for filtering tasks by list
+// export const filterByTags = taskSchema.index({ userId: 1, tagIds: 1 }); // for filtering tasks by tags
 
 const Task = mongoose.model("Task", taskSchema);
 
