@@ -1,12 +1,11 @@
-import mongoose from "mongoose";
-import Schema from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const taskSchema = new mongoose.Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
 
     title: { type: String, required: true, trim: true },
-    description: { type: String, default: "" },
+    description: { type: String, default: "", trim: true },
 
     dueDate: { type: Date, default: null },
 
@@ -30,9 +29,9 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// export const sortDueDate = taskSchema.index({ userId: 1, dueDate: 1 }); // for sorting tasks by due date
-// export const filterByList = taskSchema.index({ userId: 1, listId: 1 }); // for filtering tasks by list
-// export const filterByTags = taskSchema.index({ userId: 1, tagIds: 1 }); // for filtering tasks by tags
+taskSchema.index({ userId: 1, dueDate: 1, createdAt: 1 }); // for sorting tasks by due date
+taskSchema.index({ userId: 1, listId: 1 }); // for filtering tasks by list
+taskSchema.index({ userId: 1, tagIds: 1 }); // for filtering tasks by tags
 
 const Task = mongoose.model("Task", taskSchema);
 
