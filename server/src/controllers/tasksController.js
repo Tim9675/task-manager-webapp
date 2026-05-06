@@ -1,10 +1,13 @@
 import Task from "../models/Task.js";
-import { getTodayRange } from "../utils/dateRanges.js";
+import { getUserId } from "../helpers/getUserId.js";
 
-export async function getTasks(_, res) {
+export async function getTasks(req, res) {
   try {
-    const tasks = await Task.find().sort({ dueDate: 1, createdAt: 1 });
-    res.status(200).json(tasks);
+    const userId = getUserId(req);
+    const tasks = await Task.find({ userId })
+      .sort({ dueDate: 1, createdAt: 1 })
+      .lean();
+    res.status(200).json({ data: tasks });
   } catch (error) {
     console.error("Error in getTasks controller", error);
     res.status(500).json({ message: "Internal server error" });
@@ -13,83 +16,42 @@ export async function getTasks(_, res) {
 
 export async function getTaskById(req, res) {
   try {
-    const task = await Task.findById(req.params.id);
+    const userId = getUserId(req);
+    const task = await Task.findOne({ _id: req.params.id, userId }).lean();
     if (!task) return res.status(404).json({ message: "Task not found" });
-    res.status(200).json(task);
+    res.status(200).json({ data: task });
   } catch (error) {
     console.error("Error in getTaskById controller", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
 
-export async function getTasksToday(req, res) {
-  try {
-    const zone = req.user?.timezone || "Asia/Manila";
-
-    const { start, end } = getTodayRange(zone);
-    const tasks = await Task.find({
-      dueDate: { $gte: start, $lt: end },
-    }).sort({ dueDate: 1, createdAt: 1 });
-    res.status(200).json(tasks);
-  } catch (error) {
-    console.error("Error in getTasksToday controller", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
-
-// export async function getTasksUpcoming(_, res) {
-//   try {
-//     const today = await Task.find({ dueDate: { $gte: new Date() } }).sort({
-//       dueDate: 1,
-//       createdAt: 1,
-//     });
-//     const tomorrow = await Task.find({
-//       dueDate: {
-//         $gte: new Date(new Date().setDate(new Date().getDate() + 1)),
-//         $lt: new Date(new Date().setDate(new Date().getDate() + 2)),
-//       },
-//     }).sort({
-//       dueDate: 1,
-//       createdAt: 1,
-//     });
-//     const thisWeek = await Task.find({
-//       dueDate: {
-//         $gte: new Date(new Date().setDate(new Date().getDate() + 2)),
-//         $lt: new Date(new Date().setDate(new Date().getDate() + 7)),
-//       },
-//     }).sort({
-//       dueDate: 1,
-//       createdAt: 1,
-//     });
-
-//     const tasks = [...today, ...tomorrow, ...thisWeek];
-//     res.status(200).json(tasks);
-//   } catch (error) {
-//     console.error("Error in getTasksUpcoming controller", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// }
-
 export async function createTask(req, res) {
   try {
-    const { userId, title, description, dueDate, listId, tagIds, subtasks } =
-      req.body;
+    const userId = getUserId(req);
+    const { title, description, dueDate, listId, tagIds, subtasks } = req.body;
 
-    const convertedDate = new Date(dueDate);
-    convertedDate.setHours(23, 59, 59, 999); // set to end of day
+    // Always send ISO 8601 with timezone
+    // (e.g. "2026-05-06T23:59:59.999+08:00" or "2026-05-06T15:59:59.999Z")
+    // ^^^ SAME WITH updateTask ^^^
+
+    const parsedDate = dueDate ? new Date(dueDate) : null;
+
+    if (parsedDate && isNaN(parsedDate))
+      return res.status(400).json({ message: "Invalid dueDate" });
 
     const task = new Task({
       userId,
       title,
       description,
-      dueDate: convertedDate,
+      dueDate: parsedDate,
       listId,
       tagIds,
       subtasks,
     });
 
     await task.save();
-    res.status(201).json({ message: "Task created successfully", task: task });
+    res.status(201).json({ message: "Task created successfully", data: task });
   } catch (error) {
     console.log("Error in createTask controller", error);
     res.status(500).json({ message: "Internal server error" });
@@ -98,38 +60,41 @@ export async function createTask(req, res) {
 
 export async function updateTask(req, res) {
   try {
-    const {
-      userId,
+    const userId = getUserId(req);
+    const { title, description, dueDate, listId, tagIds, subtasks, checked } =
+      req.body;
+
+    const updatePayload = {
       title,
       description,
-      dueDate,
       listId,
       tagIds,
       subtasks,
       checked,
-    } = req.body;
+    };
 
-    const convertedDate = new Date(dueDate);
-    convertedDate.setHours(23, 59, 59, 999); // set to end of day
+    if (dueDate !== undefined) {
+      const parsedDate = dueDate ? new Date(dueDate) : null;
 
-    const updatedTask = await Task.findByIdAndUpdate(
-      req.params.id,
-      {
-        userId,
-        title,
-        description,
-        dueDate: convertedDate,
-        listId,
-        tagIds,
-        subtasks,
-        checked,
-      },
+      if (parsedDate && isNaN(parsedDate)) {
+        return res.status(400).json({ message: "Invalid dueDate" });
+      }
+
+      updatePayload.dueDate = parsedDate;
+    }
+
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: req.params.id, userId },
+      updatePayload,
       { returnDocument: "after" },
-    );
+    ).lean();
 
     if (!updatedTask)
       return res.status(404).json({ message: "Task not found" });
-    res.status(200).json({ message: "Task updated successfully" });
+
+    res
+      .status(200)
+      .json({ message: "Task updated successfully", data: updatedTask });
   } catch (error) {
     console.log("Error in updateTask controller", error);
     res.status(500).json({ message: "Internal server error" });
@@ -138,8 +103,10 @@ export async function updateTask(req, res) {
 
 export async function deleteTask(req, res) {
   try {
-    const deletedTask = await Task.findByIdAndDelete(req.params.id, {
-      returnDocument: "after",
+    const userId = getUserId(req);
+    const deletedTask = await Task.findOneAndDelete({
+      _id: req.params.id,
+      userId,
     });
 
     if (!deletedTask)

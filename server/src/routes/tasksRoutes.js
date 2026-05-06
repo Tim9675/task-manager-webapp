@@ -1,22 +1,29 @@
 import express from "express";
 import {
+  getTasksToday,
+  getTasksUpcoming,
+} from "../controllers/dateControllers.js";
+import { validateObjectId } from "../middleware/validateObjectId.js";
+
+import {
   getTasks,
   getTaskById,
   createTask,
   updateTask,
   deleteTask,
-  getTasksToday,
-  // getTasksUpcoming,
 } from "../controllers/tasksController.js";
 
 const router = express.Router();
 
+// date-related routes
+router.get("/today", getTasksToday); // Learning Point: Static routes (/today) must come before dynamic ones (/:id)
+router.get("/upcoming", getTasksUpcoming);
+
+// CRUD routes
 router.get("/", getTasks);
-router.get("/today", getTasksToday); // Learning Point: Routes need to be ordered from most specific to least specific, otherwise /:id will catch "today" as an id
-// router.get("/upcoming", getTasksUpcoming);
-router.get("/:id", getTaskById);
 router.post("/", createTask);
-router.put("/:id", updateTask);
-router.delete("/:id", deleteTask);
+router.get("/:id", validateObjectId(), getTaskById);
+router.put("/:id", validateObjectId(), updateTask);
+router.delete("/:id", validateObjectId(), deleteTask);
 
 export default router;

@@ -16,25 +16,23 @@ export function getTaskDateBuckets(zone) {
   const now = DateTime.now().setZone(zone);
 
   const todayStart = now.startOf("day");
-  const todayEnd = now.endOf("day");
-
   const tomorrowStart = todayStart.plus({ days: 1 });
-  const tomorrowEnd = tomorrowStart.endOf("day");
-
-  const weekEnd = now.endOf("week"); // Sunday
+  const dayAfterTomorrow = tomorrowStart.plus({ days: 1 });
+  const weekStart = now.startOf("week"); // Monday (Luxon ISO default)
+  const nextWeekStart = weekStart.plus({ weeks: 1 });
 
   return {
     today: {
       start: todayStart.toUTC().toJSDate(),
-      end: todayEnd.toUTC().toJSDate(),
+      end: tomorrowStart.toUTC().toJSDate(),
     },
     tomorrow: {
       start: tomorrowStart.toUTC().toJSDate(),
-      end: tomorrowEnd.toUTC().toJSDate(),
+      end: dayAfterTomorrow.toUTC().toJSDate(),
     },
     thisWeek: {
-      start: tomorrowEnd.plus({ millisecond: 1 }).toUTC().toJSDate(),
-      end: weekEnd.toUTC().toJSDate(),
+      start: dayAfterTomorrow.toUTC().toJSDate(),
+      end: nextWeekStart.toUTC().toJSDate(),
     },
   };
 }
