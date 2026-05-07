@@ -36,8 +36,19 @@ export async function createTask(req, res) {
     // (e.g. "2026-05-06T23:59:59.999+08:00" or "2026-05-06T15:59:59.999Z")
     // ^^^ SAME WITH updateTask ^^^
 
-    // check createTask with listId of a different user
-    // also try to think of other interactions between tasks and lists using routes
+    // Prevents users from creating their tasks inside other users' lists
+    if (listId) {
+      const listExists = await List.exists({
+        _id: listId,
+        userId,
+      });
+
+      if (!listExists) {
+        return res.status(400).json({
+          message: "Invalid listId",
+        });
+      }
+    }
 
     const parsedDate = dueDate ? new Date(dueDate) : null;
 
