@@ -1,4 +1,5 @@
 import Task from "../models/Task.js";
+import List from "../models/List.js";
 import { getUserId } from "../helpers/getUserId.js";
 
 export async function getTasks(req, res) {
@@ -9,7 +10,7 @@ export async function getTasks(req, res) {
       .lean();
     res.status(200).json({ data: tasks });
   } catch (error) {
-    console.error("Error in getTasks controller", error);
+    console.log("Error in getTasks controller", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
@@ -17,11 +18,11 @@ export async function getTasks(req, res) {
 export async function getTaskById(req, res) {
   try {
     const userId = getUserId(req);
-    const task = await Task.findOne({ _id: req.params.id, userId }).lean();
-    if (!task) return res.status(404).json({ message: "Task not found" });
+    const task = await Task.findOne({ _id: req.params.taskId, userId }).lean();
+    if (!task) return res.status(404).json({ message: "Task not found" }); // Not unauthorized to prevent info leak about task existence
     res.status(200).json({ data: task });
   } catch (error) {
-    console.error("Error in getTaskById controller", error);
+    console.log("Error in getTaskById controller", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
@@ -34,6 +35,9 @@ export async function createTask(req, res) {
     // Always send ISO 8601 with timezone
     // (e.g. "2026-05-06T23:59:59.999+08:00" or "2026-05-06T15:59:59.999Z")
     // ^^^ SAME WITH updateTask ^^^
+
+    // check createTask with listId of a different user
+    // also try to think of other interactions between tasks and lists using routes
 
     const parsedDate = dueDate ? new Date(dueDate) : null;
 
@@ -64,6 +68,20 @@ export async function updateTask(req, res) {
     const { title, description, dueDate, listId, tagIds, subtasks, checked } =
       req.body;
 
+    // Prevents users from putting their tasks inside other users' lists
+    if (listId) {
+      const listExists = await List.exists({
+        _id: listId,
+        userId,
+      });
+
+      if (!listExists) {
+        return res.status(400).json({
+          message: "Invalid listId",
+        });
+      }
+    }
+
     const updatePayload = {
       title,
       description,
@@ -84,7 +102,7 @@ export async function updateTask(req, res) {
     }
 
     const updatedTask = await Task.findOneAndUpdate(
-      { _id: req.params.id, userId },
+      { _id: req.params.taskId, userId },
       updatePayload,
       { returnDocument: "after" },
     ).lean();
@@ -105,7 +123,7 @@ export async function deleteTask(req, res) {
   try {
     const userId = getUserId(req);
     const deletedTask = await Task.findOneAndDelete({
-      _id: req.params.id,
+      _id: req.params.taskId,
       userId,
     });
 

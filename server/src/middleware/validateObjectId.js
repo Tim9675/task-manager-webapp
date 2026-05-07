@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 export function validateObjectId(paramName = "id") {
   return (req, res, next) => {
     const value = req.params[paramName];

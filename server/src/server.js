@@ -1,5 +1,6 @@
 import express from "express";
 import tasksRoutes from "./routes/tasksRoutes.js";
+import listsRoutes from "./routes/listsRoutes.js";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
@@ -14,6 +15,7 @@ app.use(express.json()); // makes req.body available as JSON
 app.use(rateLimiter);
 
 app.use("/api/tasks", tasksRoutes);
+app.use("/api/lists", listsRoutes);
 
 connectDB().then(() => {
   app.listen(PORT, () => {

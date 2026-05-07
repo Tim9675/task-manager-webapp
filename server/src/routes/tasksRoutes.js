@@ -2,7 +2,7 @@ import express from "express";
 import {
   getTasksToday,
   getTasksUpcoming,
-} from "../controllers/dateControllers.js";
+} from "../controllers/datesControllers.js";
 import { validateObjectId } from "../middleware/validateObjectId.js";
 
 import {
@@ -16,14 +16,14 @@ import {
 const router = express.Router();
 
 // date-related routes
-router.get("/today", getTasksToday); // Learning Point: Static routes (/today) must come before dynamic ones (/:id)
+router.get("/today", getTasksToday); // Learning Point: Static routes (/today) must come before dynamic ones (/:taskId)
 router.get("/upcoming", getTasksUpcoming);
 
 // CRUD routes
 router.get("/", getTasks);
 router.post("/", createTask);
-router.get("/:id", validateObjectId(), getTaskById);
-router.put("/:id", validateObjectId(), updateTask);
-router.delete("/:id", validateObjectId(), deleteTask);
+router.get("/:taskId", validateObjectId("taskId"), getTaskById);
+router.put("/:taskId", validateObjectId("taskId"), updateTask);
+router.delete("/:taskId", validateObjectId("taskId"), deleteTask);
 
 export default router;
