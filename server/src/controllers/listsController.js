@@ -6,17 +6,15 @@ export async function getTasksByList(req, res) {
   try {
     const userId = getUserId(req);
     const listId = req.params.listId;
-    if (listId) {
-      const listExists = await List.exists({
-        _id: listId,
-        userId,
-      });
+    const listExists = await List.exists({
+      _id: listId,
+      userId,
+    });
 
-      if (!listExists) {
-        return res.status(400).json({
-          message: "Invalid listId",
-        });
-      }
+    if (!listExists) {
+      return res.status(404).json({
+        message: "List not found",
+      });
     }
     const tasks = await Task.find({ userId, listId })
       .sort({ dueDate: 1, createdAt: 1 })
@@ -91,17 +89,14 @@ export async function updateList(req, res) {
 export async function deleteList(req, res) {
   try {
     const userId = getUserId(req);
-
     await Task.updateMany(
       { userId, listId: req.params.listId },
       { $set: { listId: null } },
     );
-
     const deletedList = await List.findOneAndDelete({
       _id: req.params.listId,
       userId,
     });
-
     if (!deletedList)
       return res.status(404).json({ message: "List not found" });
     res.status(200).json({ message: "List deleted successfully" });

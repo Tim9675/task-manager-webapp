@@ -1,5 +1,6 @@
 import Task from "../models/Task.js";
 import List from "../models/List.js";
+import Tag from "../models/Tag.js";
 import { getUserId } from "../helpers/getUserId.js";
 
 export async function getTasks(req, res) {
@@ -36,34 +37,58 @@ export async function createTask(req, res) {
     // (e.g. "2026-05-06T23:59:59.999+08:00" or "2026-05-06T15:59:59.999Z")
     // ^^^ SAME WITH updateTask ^^^
 
-    // Prevents users from creating their tasks inside other users' lists
-    if (listId) {
+    // Prevents users from creating their tasks inside other users' lists; also catches ""
+    if (listId !== undefined && listId !== null && listId !== "") {
       const listExists = await List.exists({
         _id: listId,
         userId,
       });
 
       if (!listExists) {
-        return res.status(400).json({
-          message: "Invalid listId",
+        return res.status(404).json({
+          message: "List not found",
         });
       }
     }
 
-    const parsedDate = dueDate ? new Date(dueDate) : null;
+    if (Array.isArray(tagIds) && tagIds.length > 0) {
+      const uniqueTagIds = [...new Set(tagIds)];
+
+      const existingTagsCount = await Tag.countDocuments({
+        userId,
+        _id: { $in: uniqueTagIds },
+      });
+
+      if (existingTagsCount !== uniqueTagIds.length) {
+        return res.status(404).json({
+          message: "One or more tags not found",
+        });
+      }
+    }
+
+    const parsedDate =
+      dueDate === undefined || dueDate === "" ? null : new Date(dueDate);
 
     if (parsedDate && isNaN(parsedDate))
       return res.status(400).json({ message: "Invalid dueDate" });
 
-    const task = new Task({
+    const taskPayload = {
       userId,
       title,
       description,
       dueDate: parsedDate,
-      listId,
-      tagIds,
       subtasks,
-    });
+    };
+
+    if (listId !== undefined && listId !== "") {
+      taskPayload.listId = listId;
+    }
+
+    if (tagIds !== undefined) {
+      taskPayload.tagIds = tagIds;
+    }
+
+    const task = new Task(taskPayload);
 
     await task.save();
     res.status(201).json({ message: "Task created successfully", data: task });
@@ -79,31 +104,42 @@ export async function updateTask(req, res) {
     const { title, description, dueDate, listId, tagIds, subtasks, checked } =
       req.body;
 
-    // Prevents users from putting their tasks inside other users' lists
-    if (listId) {
+    // Prevents users from putting their tasks inside other users' lists; also catches ""
+    if (listId !== undefined && listId !== null && listId !== "") {
       const listExists = await List.exists({
         _id: listId,
         userId,
       });
 
       if (!listExists) {
-        return res.status(400).json({
-          message: "Invalid listId",
+        return res.status(404).json({
+          message: "List not found",
         });
       }
     }
 
-    const updatePayload = {
-      title,
-      description,
-      listId,
-      tagIds,
-      subtasks,
-      checked,
-    };
+    if (Array.isArray(tagIds) && tagIds.length > 0) {
+      const uniqueTagIds = [...new Set(tagIds)];
 
+      const existingTagsCount = await Tag.countDocuments({
+        userId,
+        _id: { $in: uniqueTagIds },
+      });
+
+      if (existingTagsCount !== uniqueTagIds.length) {
+        return res.status(404).json({
+          message: "One or more tags not found",
+        });
+      }
+    }
+
+    const updatePayload = {};
+
+    if (title !== undefined) updatePayload.title = title;
+    if (description !== undefined) updatePayload.description = description;
     if (dueDate !== undefined) {
-      const parsedDate = dueDate ? new Date(dueDate) : null;
+      const parsedDate =
+        dueDate === "" || dueDate === null ? null : new Date(dueDate);
 
       if (parsedDate && isNaN(parsedDate)) {
         return res.status(400).json({ message: "Invalid dueDate" });
@@ -111,6 +147,11 @@ export async function updateTask(req, res) {
 
       updatePayload.dueDate = parsedDate;
     }
+    if (listId !== undefined)
+      updatePayload.listId = listId === "" ? null : listId;
+    if (tagIds !== undefined) updatePayload.tagIds = tagIds;
+    if (subtasks !== undefined) updatePayload.subtasks = subtasks;
+    if (checked !== undefined) updatePayload.checked = checked;
 
     const updatedTask = await Task.findOneAndUpdate(
       { _id: req.params.taskId, userId },

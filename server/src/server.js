@@ -1,6 +1,7 @@
 import express from "express";
 import tasksRoutes from "./routes/tasksRoutes.js";
 import listsRoutes from "./routes/listsRoutes.js";
+import tagsRoutes from "./routes/tagsRoutes.js";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
@@ -16,6 +17,7 @@ app.use(rateLimiter);
 
 app.use("/api/tasks", tasksRoutes);
 app.use("/api/lists", listsRoutes);
+app.use("/api/tags", tagsRoutes);
 
 connectDB().then(() => {
   app.listen(PORT, () => {
