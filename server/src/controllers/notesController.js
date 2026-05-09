@@ -1,9 +1,8 @@
 import Note from "../models/Note.js";
-import { getUserId } from "../helpers/getUserId.js";
 
 export async function getNotes(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const notes = await Note.find({ userId }).sort({ createdAt: -1 }).lean();
     res.status(200).json({ data: notes });
   } catch (error) {
@@ -14,7 +13,7 @@ export async function getNotes(req, res) {
 
 export async function createNote(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const { title, content, color } = req.body;
     const notePayload = {
       userId,
@@ -33,7 +32,7 @@ export async function createNote(req, res) {
 
 export async function updateNote(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const { title, content, color } = req.body;
     const updatePayload = {};
     if (title !== undefined) updatePayload.title = title;
@@ -57,7 +56,7 @@ export async function updateNote(req, res) {
 
 export async function deleteNote(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const deletedNote = await Note.findOneAndDelete({
       _id: req.params.noteId,
       userId,

@@ -1,13 +1,12 @@
 import Task from "../models/Task.js";
 import { getTodayRange, getTaskDateBuckets } from "../utils/dateRanges.js";
-import { getUserId } from "../helpers/getUserId.js";
 
 const DEFAULT_ZONE = "Asia/Manila"; // temporary value, change to user timezone when authentication is implemented
 
 export async function getTasksToday(req, res) {
   try {
     const zone = req.user?.timezone || DEFAULT_ZONE;
-    const userId = getUserId(req);
+    const userId = req.user.userId;
 
     const { start, end } = getTodayRange(zone);
     const tasks = await Task.find({
@@ -26,7 +25,7 @@ export async function getTasksToday(req, res) {
 export async function getTasksUpcoming(req, res) {
   try {
     const zone = req.user?.timezone || DEFAULT_ZONE;
-    const userId = getUserId(req);
+    const userId = req.user.userId;
 
     const { today, tomorrow, thisWeek } = getTaskDateBuckets(zone);
 

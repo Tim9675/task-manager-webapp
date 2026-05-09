@@ -3,9 +3,11 @@ import tasksRoutes from "./routes/tasksRoutes.js";
 import listsRoutes from "./routes/listsRoutes.js";
 import tagsRoutes from "./routes/tagsRoutes.js";
 import notesRoutes from "./routes/notesRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
+import { authMiddleWare } from "./middleware/authMiddleware.js";
 
 dotenv.config();
 
@@ -15,6 +17,12 @@ const PORT = process.env.PORT || 5001;
 // Middleware
 app.use(express.json()); // makes req.body available as JSON
 app.use(rateLimiter);
+
+//Public Routes
+app.use("/api/auth", authRoutes);
+
+// Protected Routes
+app.use(authMiddleWare);
 
 app.use("/api/tasks", tasksRoutes);
 app.use("/api/lists", listsRoutes);

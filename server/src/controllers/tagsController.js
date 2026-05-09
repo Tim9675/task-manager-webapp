@@ -1,10 +1,9 @@
 import Task from "../models/Task.js";
 import Tag from "../models/Tag.js";
-import { getUserId } from "../helpers/getUserId.js";
 
 export async function getTasksByTag(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const tagId = req.params.tagId;
     const tagExists = await Tag.exists({
       _id: tagId,
@@ -30,7 +29,7 @@ export async function getTasksByTag(req, res) {
 
 export async function getTags(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const tags = await Tag.find({ userId }).sort({ createdAt: 1 }).lean();
     res.status(200).json({ data: tags });
   } catch (error) {
@@ -41,7 +40,7 @@ export async function getTags(req, res) {
 
 export async function getTagById(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const tag = await Tag.findOne({ _id: req.params.tagId, userId }).lean();
     if (!tag) return res.status(404).json({ message: "Tag not found" });
     res.status(200).json({ data: tag });
@@ -53,7 +52,7 @@ export async function getTagById(req, res) {
 
 export async function createTag(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const { title, color } = req.body;
     const tag = new Tag({
       userId,
@@ -70,7 +69,7 @@ export async function createTag(req, res) {
 
 export async function updateTag(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const { title, color } = req.body;
     const updatedTag = await Tag.findOneAndUpdate(
       { _id: req.params.tagId, userId },
@@ -89,7 +88,7 @@ export async function updateTag(req, res) {
 
 export async function deleteTag(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     await Task.updateMany(
       { userId, tagIds: req.params.tagId },
       { $pull: { tagIds: req.params.tagId } },

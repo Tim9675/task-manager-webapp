@@ -1,10 +1,9 @@
 import Task from "../models/Task.js";
 import List from "../models/List.js";
-import { getUserId } from "../helpers/getUserId.js";
 
 export async function getTasksByList(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const listId = req.params.listId;
     const listExists = await List.exists({
       _id: listId,
@@ -28,7 +27,7 @@ export async function getTasksByList(req, res) {
 
 export async function getLists(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const lists = await List.find({ userId }).sort({ createdAt: 1 }).lean();
     res.status(200).json({ data: lists });
   } catch (error) {
@@ -39,7 +38,7 @@ export async function getLists(req, res) {
 
 export async function getListById(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const list = await List.findOne({ _id: req.params.listId, userId }).lean();
     if (!list) return res.status(404).json({ message: "List not found" });
     res.status(200).json({ data: list });
@@ -51,7 +50,7 @@ export async function getListById(req, res) {
 
 export async function createList(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const { title, color } = req.body;
     const list = new List({
       userId,
@@ -68,7 +67,7 @@ export async function createList(req, res) {
 
 export async function updateList(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const { title, color } = req.body;
     const updatedList = await List.findOneAndUpdate(
       { _id: req.params.listId, userId },
@@ -88,7 +87,7 @@ export async function updateList(req, res) {
 
 export async function deleteList(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     await Task.updateMany(
       { userId, listId: req.params.listId },
       { $set: { listId: null } },

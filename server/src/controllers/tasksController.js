@@ -1,11 +1,10 @@
 import Task from "../models/Task.js";
 import List from "../models/List.js";
 import Tag from "../models/Tag.js";
-import { getUserId } from "../helpers/getUserId.js";
 
 export async function getTasks(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const tasks = await Task.find({ userId })
       .sort({ dueDate: 1, createdAt: 1 })
       .lean();
@@ -18,7 +17,7 @@ export async function getTasks(req, res) {
 
 export async function getTaskById(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const task = await Task.findOne({ _id: req.params.taskId, userId }).lean();
     if (!task) return res.status(404).json({ message: "Task not found" }); // Not unauthorized to prevent info leak about task existence
     res.status(200).json({ data: task });
@@ -30,7 +29,7 @@ export async function getTaskById(req, res) {
 
 export async function createTask(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const { title, description, dueDate, listId, tagIds, subtasks } = req.body;
 
     // Always send ISO 8601 with timezone
@@ -100,7 +99,7 @@ export async function createTask(req, res) {
 
 export async function updateTask(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const { title, description, dueDate, listId, tagIds, subtasks, checked } =
       req.body;
 
@@ -173,7 +172,7 @@ export async function updateTask(req, res) {
 
 export async function deleteTask(req, res) {
   try {
-    const userId = getUserId(req);
+    const userId = req.user.userId;
     const deletedTask = await Task.findOneAndDelete({
       _id: req.params.taskId,
       userId,
