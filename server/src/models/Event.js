@@ -12,7 +12,7 @@ const eventSchema = new mongoose.Schema(
       required: true,
       validate: {
         validator: function (value) {
-          return value >= startAt;
+          return value >= this.startAt;
         },
         message: "endAt must be after startAt",
       },

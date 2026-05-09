@@ -2,6 +2,7 @@ import express from "express";
 import tasksRoutes from "./routes/tasksRoutes.js";
 import listsRoutes from "./routes/listsRoutes.js";
 import tagsRoutes from "./routes/tagsRoutes.js";
+import notesRoutes from "./routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";

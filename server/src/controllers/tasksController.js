@@ -156,7 +156,7 @@ export async function updateTask(req, res) {
     const updatedTask = await Task.findOneAndUpdate(
       { _id: req.params.taskId, userId },
       updatePayload,
-      { returnDocument: "after" },
+      { returnDocument: "after", runValidators: true },
     ).lean();
 
     if (!updatedTask)
