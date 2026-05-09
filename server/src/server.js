@@ -18,6 +18,15 @@ app.use(rateLimiter);
 app.use("/api/tasks", tasksRoutes);
 app.use("/api/lists", listsRoutes);
 app.use("/api/tags", tagsRoutes);
+app.use("/api/notes", notesRoutes); // REMINDER: Replace PUT with PATCH,
+
+// Optional improvement for controller updates
+
+// if (Object.keys(updatePayload).length === 0) {
+//   return res.status(400).json({
+//     message: "No fields to update",
+//   });
+// }
 
 connectDB().then(() => {
   app.listen(PORT, () => {

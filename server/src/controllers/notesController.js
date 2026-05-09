@@ -1,0 +1,72 @@
+import Note from "../models/Note.js";
+import { getUserId } from "../helpers/getUserId.js";
+
+export async function getNotes(req, res) {
+  try {
+    const userId = getUserId(req);
+    const notes = await Note.find({ userId }).sort({ createdAt: -1 }).lean();
+    res.status(200).json({ data: notes });
+  } catch (error) {
+    console.log("Error in getNotes controller", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function createNote(req, res) {
+  try {
+    const userId = getUserId(req);
+    const { title, content, color } = req.body;
+    const notePayload = {
+      userId,
+      title,
+      content,
+      color,
+    };
+    const note = new Note(notePayload);
+    await note.save();
+    res.status(201).json({ message: "Note created successfully", data: note });
+  } catch (error) {
+    console.log("Error in createNote controller", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function updateNote(req, res) {
+  try {
+    const userId = getUserId(req);
+    const { title, content, color } = req.body;
+    const updatePayload = {};
+    if (title !== undefined) updatePayload.title = title;
+    if (content !== undefined) updatePayload.content = content;
+    if (color !== undefined) updatePayload.color = color;
+    const updatedNote = await Note.findOneAndUpdate(
+      { _id: req.params.noteId, userId },
+      updatePayload,
+      { returnDocument: "after", runValidators: true },
+    ).lean();
+    if (!updatedNote)
+      return res.status(404).json({ message: "Note not found" });
+    res
+      .status(200)
+      .json({ message: "Note updated successfully", data: updatedNote });
+  } catch (error) {
+    console.log("Error in updateNote controller", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function deleteNote(req, res) {
+  try {
+    const userId = getUserId(req);
+    const deletedNote = await Note.findOneAndDelete({
+      _id: req.params.noteId,
+      userId,
+    });
+    if (!deletedNote)
+      return res.status(404).json({ message: "Note not found" });
+    res.status(200).json({ message: "Note deleted successfully" });
+  } catch (error) {
+    console.log("Error in deleteNote controller", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}

@@ -58,7 +58,7 @@ export async function createTag(req, res) {
     const tag = new Tag({
       userId,
       title,
-      color,
+      color, // validate color
     });
     await tag.save();
     res.status(201).json({ message: "Tag created successfully", data: tag });
@@ -75,7 +75,7 @@ export async function updateTag(req, res) {
     const updatedTag = await Tag.findOneAndUpdate(
       { _id: req.params.tagId, userId },
       { title, color },
-      { returnDocument: "after" },
+      { returnDocument: "after", runValidators: true },
     ).lean();
     if (!updatedTag) return res.status(404).json({ message: "Tag not found" });
     res

@@ -1,9 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
-const tagSchema = new mongoose.Schema(
+const noteSchema = new mongoose.Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-    title: { type: String, required: true, trim: true }, // Can add lowercase: true if want to implement case-sensitiveness
+    title: { type: String, required: true, trim: true },
+    content: { type: String, default: "", trim: true },
     color: {
       type: String,
       default: "#d1eaed",
@@ -18,9 +19,8 @@ const tagSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-tagSchema.index({ userId: 1, title: 1 }, { unique: true });
-tagSchema.index({ userId: 1, createdAt: 1 });
+noteSchema.index({ userId: 1, createdAt: -1 });
 
-const Tag = mongoose.model("Tag", tagSchema);
+const Note = mongoose.model("Note", noteSchema);
 
-export default Tag;
+export default Note;

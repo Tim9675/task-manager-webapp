@@ -73,7 +73,7 @@ export async function updateList(req, res) {
     const updatedList = await List.findOneAndUpdate(
       { _id: req.params.listId, userId },
       { title, color },
-      { returnDocument: "after" },
+      { returnDocument: "after", runValidators: true },
     ).lean();
     if (!updatedList)
       return res.status(404).json({ message: "List not found" });

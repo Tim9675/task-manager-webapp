@@ -2,7 +2,7 @@ import express from "express";
 import {
   getTasksToday,
   getTasksUpcoming,
-} from "../controllers/datesControllers.js";
+} from "../controllers/datesController.js";
 import { validateObjectId } from "../middleware/validateObjectId.js";
 
 import {
