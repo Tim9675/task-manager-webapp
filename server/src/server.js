@@ -17,6 +17,8 @@ const PORT = process.env.PORT || 5001;
 // Middleware
 app.use(express.json()); // makes req.body available as JSON
 app.use(rateLimiter);
+// app.use(express.urlencoded({ extended: true })); // REMINDER: Eventually add
+// app.use(errorMiddleware); // REMINDER: Eventually add centralized error middleware
 
 //Public Routes
 app.use("/api/auth", authRoutes);
@@ -29,7 +31,7 @@ app.use("/api/lists", listsRoutes);
 app.use("/api/tags", tagsRoutes);
 app.use("/api/notes", notesRoutes); // REMINDER: Replace PUT with PATCH,
 
-// Optional improvement for controller updates
+// Optional improvement for  update functions inside controllers
 
 // if (Object.keys(updatePayload).length === 0) {
 //   return res.status(400).json({
