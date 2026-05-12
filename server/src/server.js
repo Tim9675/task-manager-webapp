@@ -1,11 +1,13 @@
 import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+
 import tasksRoutes from "./routes/tasksRoutes.js";
 import listsRoutes from "./routes/listsRoutes.js";
 import tagsRoutes from "./routes/tagsRoutes.js";
 import notesRoutes from "./routes/notesRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { connectDB } from "./config/db.js";
-import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
 import { authMiddleWare } from "./middleware/authMiddleware.js";
 
@@ -15,6 +17,11 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
 app.use(express.json()); // makes req.body available as JSON
 app.use(rateLimiter);
 // app.use(express.urlencoded({ extended: true })); // REMINDER: Eventually add
