@@ -45,8 +45,9 @@ function LoginPage() {
               <h2 className="mb-5 text-[2.625rem] font-bold text-[#212529]">
                 Sign in{" "}
               </h2>
-              {error &
-              <p className="mx-2 mb-2 text-sm text-red-500">{error}</p>}
+              {error && (
+                <p className="mx-2 mb-2 text-sm text-red-500">{error}</p>
+              )}
               <input
                 type="email"
                 value={email}

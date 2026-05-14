@@ -1,0 +1,15 @@
+import { useState } from "react";
+import TaskList from "../components/tasks/TaskList";
+import Sidebar from "../components/sidebar/Sidebar";
+import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
+
+function DashboardLayout({ children }) {
+  return (
+    <div className="flex h-screen w-screen">
+      <Sidebar />
+      <main className="flex-1">{children}</main>
+    </div>
+  );
+}
+
+export default DashboardLayout;
