@@ -1,8 +1,8 @@
 function TaskSidebarItem({ nav }) {
   const Icon = nav.icon;
   return (
-    <button className="group flex w-full items-center justify-between rounded-md px-3 hover:bg-[#ebebeb] md:h-9">
-      <div className="flex">
+    <button className="group flex w-full cursor-pointer items-center justify-between rounded-md px-3 hover:bg-[#ebebeb] md:h-9">
+      <div className="flex items-center">
         <Icon color="#7c7c7c" size={20} strokeWidth={3} />
         <h3 className="ms-3.5">{nav.title}</h3>
       </div>

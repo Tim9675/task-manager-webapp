@@ -16,6 +16,7 @@
 
 * {
   font-family: Neuwelt-Medium;
+  color: #444444;
 }
 
 html {
@@ -26,6 +27,5 @@ html {
 
 h2,
 h3 {
-  color: #212529;
   font-family: Neuwelt-Bold;
 }

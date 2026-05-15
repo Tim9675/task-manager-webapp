@@ -1,5 +1,12 @@
-function TagSidebarItem() {
-  return <div>TagSidebarItem</div>;
+function TagSidebarItem({ nav }) {
+  return (
+    <button
+      className="my-1 cursor-pointer rounded px-3.5 py-1 text-sm hover:brightness-95"
+      style={{ backgroundColor: nav.color }}
+    >
+      <h3>{nav.title}</h3>
+    </button>
+  );
 }
 
 export default TagSidebarItem;

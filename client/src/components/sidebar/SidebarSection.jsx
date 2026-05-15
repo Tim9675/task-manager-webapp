@@ -1,15 +1,17 @@
 import SidebarItem from "./SidebarItem";
+import AddList from "./AddList";
+import AddTag from "./AddTag";
 
 function SidebarSection({ title, type, navList = [] }) {
   return (
     <section className="mb-5">
       <h2 className="mb-1 ps-3 text-xs text-neutral-500 uppercase">{title}</h2>
-
       {type === "tags" ? (
-        <nav className="flex flex-wrap gap-2 px-3">
+        <nav className="flex w-full flex-wrap gap-1">
           {navList.map((nav) => (
             <SidebarItem key={nav.id} nav={nav} type={type} />
           ))}
+          <AddTag />
         </nav>
       ) : (
         <nav className="flex flex-col">
@@ -19,6 +21,7 @@ function SidebarSection({ title, type, navList = [] }) {
         </nav>
       )}
 
+      {type === "lists" && <AddList />}
       {type !== "tags" && <hr className="mx-auto mt-4 w-64 border-[#ebebeb]" />}
     </section>
   );

@@ -3,9 +3,13 @@ import {
   ListCheck,
   CalendarDays,
   StickyNote,
+  Menu,
 } from "lucide-react";
 
 import SidebarSection from "./SidebarSection";
+import SearchBar from "./SearchBar";
+import SettingsButton from "./SettingsButton";
+import SignOutButton from "./SignOutButton";
 
 function Sidebar() {
   // Should be the only one hardcoded
@@ -17,7 +21,12 @@ function Sidebar() {
   ];
   // Change to fetch later
   const listsSection = [
-    { id: 0, title: "Personal", color: "#ff6b6b", count: 3 },
+    {
+      id: 0,
+      title: "Personally long list for a very personal person",
+      color: "#ff6b6b",
+      count: 3,
+    },
     { id: 1, title: "Work", color: "#66d9e8", count: 6 },
     { id: 2, title: "List 1", color: "#ffd43b", count: 3 },
   ];
@@ -30,15 +39,15 @@ function Sidebar() {
   return (
     <aside className="my-5 ms-5 flex h-[calc(100vh-2.5rem)] w-72 flex-col rounded-2xl bg-neutral-100 px-4 py-5">
       {/* Header */}
-      <header className="mb-6 flex items-center justify-between">
+      <header className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-neutral-900">Menu</h2>
 
-        {/* Future menu toggle */}
-        {/* <MenuToggle /> */}
+        <button className="cursor-pointer">
+          <Menu color="#7c7c7c" size={21} strokeWidth={3} />
+        </button>
       </header>
 
-      {/* Future search */}
-      {/* <Search /> */}
+      <SearchBar />
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto">
@@ -48,9 +57,9 @@ function Sidebar() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-4 border-t border-neutral-200 pt-4">
-        {/* <SettingsButton /> */}
-        {/* <SignOutButton /> */}
+      <footer className="md:h-18">
+        <SettingsButton />
+        <SignOutButton />
       </footer>
     </aside>
   );
