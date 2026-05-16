@@ -1,6 +1,7 @@
 import Checkbox from "@mui/material/Checkbox";
+import { Controller } from "react-hook-form";
 
-function SubtaskCard({ subtask }) {
+function SubtaskCard({ subtask, control, index, remove }) {
   const label = { slotProps: { input: { "aria-label": "Checkbox" } } };
   const sx = {
     color: "#dddddd",
@@ -20,15 +21,31 @@ function SubtaskCard({ subtask }) {
   return (
     <div className="border-[#ebebeb] transition-colors not-first:border-t hover:bg-[#fcfcfc] md:min-h-10">
       <div className="flex min-h-11 items-center">
-        <Checkbox
-          {...label}
-          checked={subtask.checked}
-          onChange={() => {}}
-          sx={sx}
+        <Controller
+          control={control}
+          name={`subtasks.${index}.checked`}
+          render={({ field }) => (
+            <Checkbox
+              {...label}
+              checked={field.value}
+              onChange={(e) => {
+                field.onChange(e.target.checked);
+              }}
+              sx={sx}
+            />
+          )}
         />
-        <p className="subtask-title line-clamp-1 text-sm text-neutral-800">
-          {subtask.title}
-        </p>
+        <Controller
+          control={control}
+          name={`subtasks.${index}.title`}
+          render={({ field }) => (
+            <input
+              {...field}
+              className="flex-1 bg-transparent text-sm outline-none"
+            />
+          )}
+        />
+        {/* Add delete functionality later */}
       </div>
     </div>
   );

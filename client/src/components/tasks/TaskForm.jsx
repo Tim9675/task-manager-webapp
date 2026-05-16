@@ -1,8 +1,24 @@
+import { useState, useEffect } from "react";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import ButtonBar from "./ButtonBar";
 import SubtaskSection from "./SubtaskSection";
 import TagSection from "./TagSection";
 
-function TaskForm() {
+function TaskForm({ selectedTask }) {
+  const { register, control, handleSubmit, reset, watch, setValue } = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+      listId: null,
+      dueDate: null,
+      tagIds: [],
+      subtasks: [],
+    },
+  });
+
   const userLists = [
     // REMINDER: Change to fetch getLists later
     {
@@ -18,17 +34,37 @@ function TaskForm() {
       name: "List 1",
     },
   ];
+
+  const availableTags = [
+    { id: 0, title: "Tag 1", color: "#d1eaed" },
+    { id: 2, title: "Tag 2", color: "#ffdada" },
+  ];
+
+  useEffect(() => {
+    if (!selectedTask) return;
+
+    reset({
+      title: selectedTask.title || "",
+      description: selectedTask.description || "",
+      listId: selectedTask.listId || null,
+      dueDate: selectedTask.dueDate || null,
+      tagIds: selectedTask.tagIds || [],
+      subtasks: selectedTask.subtasks || [],
+    });
+  }, [selectedTask, reset]);
+
   return (
     <form className="flex w-full flex-col">
       {/* Title */}
       <input
+        {...register("title", { required: true })}
         type="text"
         className="my-3 w-full rounded-md border border-[#ebebeb] px-2 md:h-10"
         placeholder="Title"
-        required
       />
       {/* Description */}
       <textarea
+        {...register("description")}
         className="w-full resize-none rounded-md border border-[#ebebeb] p-2 md:h-29"
         placeholder="Description"
       />
@@ -38,8 +74,8 @@ function TaskForm() {
           List
         </label>
         <select
+          {...register("listId")}
           id="list"
-          name="list"
           className="h-7 w-25 rounded-md border border-[#ebebeb] px-2 text-sm"
         >
           <option value="">--unlisted--</option>
@@ -56,28 +92,28 @@ function TaskForm() {
           Due Date
         </label>
         <div className="h-7 w-24 rounded-md border border-[#ebebeb] text-sm">
-          {/* <Controller
-            id="dueDate"
+          <Controller
             control={control}
             name="dueDate"
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field }) => (
               <DatePicker
                 id="dueDate"
-                aria-label="Select due date"
-                onChange={onChange}
-                onBlur={onBlur}
-                selected={value || null}
-                dateFormat={"dd-MM-yy"}
-                className="md:h-7 md:w-25 rounded-md border border-[#ebebeb] "
+                selected={field.value}
+                onChange={field.onChange}
+                className="h-full w-full rounded-md px-2 outline-none"
               />
             )}
-          /> */}
+          />
         </div>
       </div>
       {/* Tags */}
-      <TagSection />
+      <TagSection
+        availableTags={availableTags}
+        watch={watch}
+        setValue={setValue}
+      />
       {/* Subtasks */}
-      <SubtaskSection />
+      <SubtaskSection control={control} watch={watch} setValue={setValue} />
 
       <ButtonBar />
     </form>

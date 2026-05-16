@@ -1,7 +1,8 @@
+import { useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { ChevronRight } from "lucide-react";
 
-function TaskCard({ task }) {
+function TaskCard({ task, onSelect, isSelected }) {
   const label = { slotProps: { input: { "aria-label": "Checkbox" } } };
   const sx = {
     color: "#dddddd",
@@ -26,7 +27,9 @@ function TaskCard({ task }) {
   // const listDetails = null;
   const isMiscInfoPresent = listDetails || task.subtasks.length > 0;
   return (
-    <div className="items-center border-[#ebebeb] transition-colors not-first:border-t hover:bg-[#fcfcfc] md:min-h-10">
+    <div
+      className={`items-center border-[#ebebeb] transition-colors not-first:border-t md:min-h-10 ${isSelected ? "bg-[#f5f5f5]" : "hover:bg-[#fcfcfc]"}`}
+    >
       <div className="flex min-h-11 items-center">
         <Checkbox
           {...label}
@@ -34,7 +37,10 @@ function TaskCard({ task }) {
           onChange={() => {}}
           sx={sx}
         />
-        <button className="flex grow cursor-pointer items-center justify-between py-2 pe-2">
+        <button
+          onClick={onSelect}
+          className="flex grow cursor-pointer items-center justify-between py-2 pe-2"
+        >
           <p className="task-title line-clamp-1 text-sm text-neutral-800">
             {task.title}
           </p>

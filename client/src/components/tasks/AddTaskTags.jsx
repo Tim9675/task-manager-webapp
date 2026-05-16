@@ -1,9 +1,10 @@
 import { Plus } from "lucide-react";
 
-function AddTaskTags() {
+function AddTaskTags({ setIsModalOpen }) {
   return (
     <button
       type="button"
+      onClick={() => setIsModalOpen(true)}
       className="my-1 flex cursor-pointer items-center rounded bg-[#ebebeb] px-3.5 py-1 text-sm hover:brightness-95"
     >
       <Plus color={"#444444"} size={9} strokeWidth={5} />
