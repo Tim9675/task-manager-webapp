@@ -80,7 +80,7 @@ function TaskList() {
   const type = "Today";
 
   return (
-    <main className="flex h-full grow flex-col py-5">
+    <div className="flex h-full grow flex-col py-5">
       <header className="mb-5 flex w-full px-5">
         <h3 className="text-[2.5rem] font-bold">{type}</h3>
         <div className="ms-7.5 h-fit rounded-md border px-2.5 py-1 text-4xl">
@@ -93,7 +93,7 @@ function TaskList() {
           <TaskCard key={task.id} task={task} />
         ))}
       </div>
-    </main>
+    </div>
   );
 }
 

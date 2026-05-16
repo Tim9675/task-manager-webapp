@@ -1,6 +1,7 @@
 function TagSidebarItem({ nav }) {
   return (
     <button
+      type="button"
       className="my-1 cursor-pointer rounded px-3.5 py-1 text-sm hover:brightness-95"
       style={{ backgroundColor: nav.color }}
     >

@@ -8,6 +8,7 @@ function DashboardLayout({ children }) {
     <div className="flex h-screen w-screen">
       <Sidebar />
       <main className="flex-1">{children}</main>
+      <TaskDetailsPanel />
     </div>
   );
 }
