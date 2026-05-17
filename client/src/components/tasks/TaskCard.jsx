@@ -19,13 +19,26 @@ function TaskCard({ task, onSelect, isSelected }) {
     },
     "& .MuiSvgIcon-root": { fontSize: 18 },
   };
-  const listDetails = {
+  const userLists = [
     // REMINDER: Change to fetch using getListById later
-    name: "Personal",
-    color: "#ff6b6b",
-  };
-  // const listDetails = null;
-  const isMiscInfoPresent = listDetails || task.subtasks.length > 0;
+    {
+      id: 0,
+      name: "Personal",
+      color: "#ff6b6b",
+    },
+    {
+      id: 1,
+      name: "Work",
+      color: "#66d9e8",
+    },
+    {
+      id: 2,
+      name: "List 1",
+      color: "#ffd43b",
+    },
+  ];
+  const listDetails = userLists.find((list) => list.id === task.listId) || null;
+
   return (
     <div
       className={`items-center border-[#ebebeb] transition-colors not-first:border-t md:min-h-10 ${isSelected ? "bg-[#f5f5f5]" : "hover:bg-[#fcfcfc]"}`}
@@ -48,7 +61,7 @@ function TaskCard({ task, onSelect, isSelected }) {
         </button>
       </div>
       {/* Metadata */}
-      {isMiscInfoPresent && (
+      {(listDetails || task.subtasks.length > 0) && (
         <div className="ms-9 flex items-center gap-3 pb-2 text-neutral-500">
           {/* List */}
           {listDetails && (

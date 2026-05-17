@@ -7,7 +7,7 @@ import ButtonBar from "./ButtonBar";
 import SubtaskSection from "./SubtaskSection";
 import TagSection from "./TagSection";
 
-function TaskForm({ selectedTask }) {
+function TaskForm({ selectedTask, updateTask }) {
   const { register, control, handleSubmit, reset, watch, setValue } = useForm({
     defaultValues: {
       title: "",
@@ -20,18 +20,21 @@ function TaskForm({ selectedTask }) {
   });
 
   const userLists = [
-    // REMINDER: Change to fetch getLists later
+    // REMINDER: Change to fetch using getListById later
     {
       id: 0,
-      name: "Personally long list for a very long person",
+      name: "Personal",
+      color: "#ff6b6b",
     },
     {
       id: 1,
       name: "Work",
+      color: "#66d9e8",
     },
     {
       id: 2,
       name: "List 1",
+      color: "#ffd43b",
     },
   ];
 
@@ -54,7 +57,10 @@ function TaskForm({ selectedTask }) {
   }, [selectedTask, reset]);
 
   function onSubmit(data) {
-    console.log(data);
+    updateTask({
+      ...selectedTask,
+      ...data,
+    });
   }
 
   return (
@@ -85,7 +91,9 @@ function TaskForm({ selectedTask }) {
           List
         </label>
         <select
-          {...register("listId")}
+          {...register("listId", {
+            setValueAs: (value) => (value === "" ? null : Number(value)),
+          })}
           id="list"
           className="h-7 w-25 rounded-md border border-[#ebebeb] px-2 text-sm"
         >
