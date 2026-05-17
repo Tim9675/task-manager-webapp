@@ -10,6 +10,7 @@ import SidebarSection from "./SidebarSection";
 import SearchBar from "./SearchBar";
 import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
+import { mockTags } from "../../mock/tags";
 
 function Sidebar() {
   // Should be the only one hardcoded
@@ -19,7 +20,7 @@ function Sidebar() {
     { id: 2, title: "Calendar", icon: CalendarDays },
     { id: 3, title: "Sticky Wall", icon: StickyNote },
   ];
-  // Change to fetch later
+  // Change to fetch later, Can't use mockLists yet, needs hardcoded list count
   const listsSection = [
     {
       id: 0,
@@ -30,11 +31,8 @@ function Sidebar() {
     { id: 1, title: "Work", color: "#66d9e8", count: 6 },
     { id: 2, title: "List 1", color: "#ffd43b", count: 3 },
   ];
-  // Change to fetch later
-  const tagsSection = [
-    { id: 0, title: "Tag 1", color: "#d1eaed" },
-    { id: 1, title: "Tag 2", color: "#ffdada" },
-  ];
+
+  const tagsSection = mockTags;
 
   return (
     <aside className="my-5 ms-5 flex h-[calc(100vh-2.5rem)] w-72 flex-col rounded-2xl bg-neutral-100 px-4 py-5">

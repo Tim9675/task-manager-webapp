@@ -6,8 +6,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import ButtonBar from "./ButtonBar";
 import SubtaskSection from "./SubtaskSection";
 import TagSection from "./TagSection";
+import { mockLists } from "../../mock/lists";
+import { mockTags } from "../../mock/tags";
 
-function TaskForm({ selectedTask, updateTask }) {
+function TaskForm({ selectedTask, updateTask, deleteTask }) {
   const { register, control, handleSubmit, reset, watch, setValue } = useForm({
     defaultValues: {
       title: "",
@@ -19,29 +21,9 @@ function TaskForm({ selectedTask, updateTask }) {
     },
   });
 
-  const userLists = [
-    // REMINDER: Change to fetch using getListById later
-    {
-      id: 0,
-      name: "Personal",
-      color: "#ff6b6b",
-    },
-    {
-      id: 1,
-      name: "Work",
-      color: "#66d9e8",
-    },
-    {
-      id: 2,
-      name: "List 1",
-      color: "#ffd43b",
-    },
-  ];
+  const userLists = mockLists;
 
-  const availableTags = [
-    { id: 0, title: "Tag 1", color: "#d1eaed" },
-    { id: 1, title: "Tag 2", color: "#ffdada" },
-  ];
+  const availableTags = mockTags;
 
   useEffect(() => {
     if (!selectedTask) return;
@@ -145,7 +127,7 @@ function TaskForm({ selectedTask, updateTask }) {
       {/* Subtasks */}
       <SubtaskSection control={control} watch={watch} setValue={setValue} />
 
-      <ButtonBar />
+      <ButtonBar selectedTaskId={selectedTask?.id} deleteTask={deleteTask} />
     </form>
   );
 }

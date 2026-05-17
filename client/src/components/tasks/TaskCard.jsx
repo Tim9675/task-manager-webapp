@@ -2,7 +2,9 @@ import { useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { ChevronRight } from "lucide-react";
 
-function TaskCard({ task, onSelect, isSelected }) {
+import { mockLists } from "../../mock/lists";
+
+function TaskCard({ task, setTasks, onSelect, isSelected }) {
   const label = { slotProps: { input: { "aria-label": "Checkbox" } } };
   const sx = {
     color: "#dddddd",
@@ -19,25 +21,16 @@ function TaskCard({ task, onSelect, isSelected }) {
     },
     "& .MuiSvgIcon-root": { fontSize: 18 },
   };
-  const userLists = [
-    // REMINDER: Change to fetch using getListById later
-    {
-      id: 0,
-      name: "Personal",
-      color: "#ff6b6b",
-    },
-    {
-      id: 1,
-      name: "Work",
-      color: "#66d9e8",
-    },
-    {
-      id: 2,
-      name: "List 1",
-      color: "#ffd43b",
-    },
-  ];
+
+  const userLists = mockLists;
+
   const listDetails = userLists.find((list) => list.id === task.listId) || null;
+
+  function toggleTaskChecked(taskId, checked) {
+    setTasks((prev) =>
+      prev.map((task) => (task.id === taskId ? { ...task, checked } : task)),
+    );
+  }
 
   return (
     <div
@@ -47,7 +40,9 @@ function TaskCard({ task, onSelect, isSelected }) {
         <Checkbox
           {...label}
           checked={task.checked}
-          onChange={() => {}}
+          onChange={(e) => {
+            toggleTaskChecked(task.id, e.target.checked);
+          }}
           sx={sx}
         />
         <button
