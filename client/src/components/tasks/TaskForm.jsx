@@ -37,7 +37,7 @@ function TaskForm({ selectedTask }) {
 
   const availableTags = [
     { id: 0, title: "Tag 1", color: "#d1eaed" },
-    { id: 2, title: "Tag 2", color: "#ffdada" },
+    { id: 1, title: "Tag 2", color: "#ffdada" },
   ];
 
   useEffect(() => {
@@ -53,8 +53,19 @@ function TaskForm({ selectedTask }) {
     });
   }, [selectedTask, reset]);
 
+  function onSubmit(data) {
+    console.log(data);
+  }
+
   return (
-    <form className="flex w-full flex-col">
+    <form
+      className="flex w-full flex-col"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && e.target.tagName !== "TEXTAREA")
+          e.preventDefault();
+      }}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       {/* Title */}
       <input
         {...register("title", { required: true })}
@@ -99,7 +110,18 @@ function TaskForm({ selectedTask }) {
               <DatePicker
                 id="dueDate"
                 selected={field.value}
-                onChange={field.onChange}
+                onChange={(date) => {
+                  if (!date) {
+                    field.onChange(null);
+                    return;
+                  }
+
+                  const normalizedDate = new Date(date);
+
+                  normalizedDate.setHours(23, 59, 59, 999);
+
+                  field.onChange(normalizedDate);
+                }}
                 className="h-full w-full rounded-md px-2 outline-none"
               />
             )}

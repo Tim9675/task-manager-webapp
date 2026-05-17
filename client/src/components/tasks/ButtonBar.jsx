@@ -7,7 +7,10 @@ function ButtonBar() {
       >
         Delete Task
       </button>
-      <button className="h-10 flex-1 cursor-pointer rounded-md bg-[#ffd43b] hover:brightness-95">
+      <button
+        type="submit"
+        className="h-10 flex-1 cursor-pointer rounded-md bg-[#ffd43b] hover:brightness-95"
+      >
         Save changes
       </button>
     </div>

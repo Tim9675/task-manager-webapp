@@ -5,7 +5,7 @@ function AddSubtask({ append }) {
   const [subtask, setSubtask] = useState("");
 
   function addSubtask(subtask) {
-    if (!subtask) return;
+    if (!subtask.trim()) return;
     append({
       title: subtask,
       checked: false,
@@ -26,6 +26,12 @@ function AddSubtask({ append }) {
         type="text"
         value={subtask}
         onChange={(e) => setSubtask(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            addSubtask(subtask);
+          }
+        }}
         className="ms-1 size-full flex-1 bg-transparent text-sm outline-none"
         placeholder="Add New Subtask"
       />

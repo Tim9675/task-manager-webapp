@@ -1,5 +1,6 @@
 import Checkbox from "@mui/material/Checkbox";
 import { Controller } from "react-hook-form";
+import { Trash2 } from "lucide-react";
 
 function SubtaskCard({ subtask, control, index, remove }) {
   const label = { slotProps: { input: { "aria-label": "Checkbox" } } };
@@ -41,11 +42,18 @@ function SubtaskCard({ subtask, control, index, remove }) {
           render={({ field }) => (
             <input
               {...field}
-              className="flex-1 bg-transparent text-sm outline-none"
+              className="h-8 flex-1 bg-transparent text-sm outline-none focus:border-neutral-700"
             />
           )}
         />
         {/* Add delete functionality later */}
+        <button
+          type="button"
+          className="flex size-10 cursor-pointer items-center justify-center"
+          onClick={() => remove(index)}
+        >
+          <Trash2 color="#7c7c7c" size={18} strokeWidth={3} />
+        </button>
       </div>
     </div>
   );
