@@ -3,10 +3,17 @@ import TaskList from "../components/tasks/TaskList";
 import Sidebar from "../components/sidebar/Sidebar";
 import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
 
-function DashboardLayout({ children, selectedTask, updateTask, deleteTask }) {
+function DashboardLayout({
+  children,
+  selectedTask,
+  updateTask,
+  deleteTask,
+  activeView,
+  setActiveView,
+}) {
   return (
     <div className="flex h-screen w-screen">
-      <Sidebar />
+      <Sidebar activeView={activeView} setActiveView={setActiveView} />
       <main className="flex-1">{children}</main>
       <TaskDetailsPanel
         selectedTask={selectedTask}

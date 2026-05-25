@@ -12,7 +12,7 @@ import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
 import { mockTags } from "../../mock/tags";
 
-function Sidebar() {
+function Sidebar({ activeView, setActiveView }) {
   // Should be the only one hardcoded
   const tasksSection = [
     { id: 0, title: "Upcoming", count: 12, icon: ChevronsRight },
@@ -49,9 +49,24 @@ function Sidebar() {
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto">
-        <SidebarSection title="Tasks" type={"tasks"} navList={tasksSection} />
-        <SidebarSection title="Lists" type={"lists"} navList={listsSection} />
-        <SidebarSection title="Tags" type={"tags"} navList={tagsSection} />
+        <SidebarSection
+          title="Tasks"
+          type={"tasks"}
+          navList={tasksSection}
+          setActiveView={setActiveView}
+        />
+        <SidebarSection
+          title="Lists"
+          type={"lists"}
+          navList={listsSection}
+          setActiveView={setActiveView}
+        />
+        <SidebarSection
+          title="Tags"
+          type={"tags"}
+          navList={tagsSection}
+          setActiveView={setActiveView}
+        />
       </div>
 
       {/* Footer */}

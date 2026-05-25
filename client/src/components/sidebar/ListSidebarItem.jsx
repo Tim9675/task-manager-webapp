@@ -1,6 +1,11 @@
-function ListSidebarItem({ nav }) {
+function ListSidebarItem({ nav, setActiveView }) {
   return (
-    <button className="group flex w-full cursor-pointer items-center justify-between rounded-md px-3 hover:bg-[#ebebeb] md:h-9">
+    <button
+      onClick={() =>
+        setActiveView({ type: "List", id: nav.id, title: nav.title })
+      }
+      className="group flex w-full cursor-pointer items-center justify-between rounded-md px-3 hover:bg-[#ebebeb] md:h-9"
+    >
       <div className="flex min-w-0 items-center">
         <div
           className={"size-4 shrink-0 rounded"}
