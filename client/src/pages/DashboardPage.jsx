@@ -9,24 +9,31 @@ function DashboardPage() {
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [tasks, setTasks] = useState(mockTasks);
   const [activeView, setActiveView] = useState({
-    type: "Today",
+    type: "today",
   });
+  const [searchQuery, setSearchQuery] = useState("");
 
   // REMINDER: To be removed when backend connected
   const filteredTasks = tasks.filter((task) => {
     switch (activeView.type) {
-      case "Today":
+      case "today":
         return isToday(task.dueDate);
-      case "Upcoming":
+      case "upcoming":
         return isUpcoming(task.dueDate);
-      case "List":
+      case "list":
         return task.listId === activeView.id;
-      case "Tag":
+      case "tag":
         return task.tagIds.includes(activeView.id);
       default:
-        true;
+        return true;
     }
   });
+
+  const searchedTasks = tasks.filter((task) =>
+    task.title.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const visibleTasks = searchQuery ? searchedTasks : filteredTasks;
 
   const selectedTask = tasks.find((task) => task.id === selectedTaskId) || null;
 
@@ -68,14 +75,17 @@ function DashboardPage() {
       deleteTask={deleteTask}
       activeView={activeView}
       setActiveView={setActiveView}
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
     >
       <TaskList
-        tasks={filteredTasks}
+        tasks={visibleTasks}
         activeView={activeView}
         setTasks={setTasks}
         selectedTaskId={selectedTaskId}
         setSelectedTaskId={setSelectedTaskId}
         createTask={createTask}
+        searchQuery={searchQuery}
       />
     </DashboardLayout>
   );

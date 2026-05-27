@@ -10,10 +10,17 @@ function DashboardLayout({
   deleteTask,
   activeView,
   setActiveView,
+  searchQuery,
+  setSearchQuery,
 }) {
   return (
     <div className="flex h-screen w-screen">
-      <Sidebar activeView={activeView} setActiveView={setActiveView} />
+      <Sidebar
+        activeView={activeView}
+        setActiveView={setActiveView}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
       <main className="flex-1">{children}</main>
       <TaskDetailsPanel
         selectedTask={selectedTask}

@@ -3,7 +3,7 @@ function TaskSidebarItem({ nav, setActiveView }) {
   return (
     <button
       className="group flex w-full cursor-pointer items-center justify-between rounded-md px-3 hover:bg-[#ebebeb] md:h-9"
-      onClick={() => setActiveView({ type: nav.title })}
+      onClick={() => setActiveView({ type: nav.title.toLowerCase() })}
     >
       <div className="flex items-center">
         <Icon color="#7c7c7c" size={20} strokeWidth={3} />

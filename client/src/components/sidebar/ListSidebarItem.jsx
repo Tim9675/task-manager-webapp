@@ -2,7 +2,7 @@ function ListSidebarItem({ nav, setActiveView }) {
   return (
     <button
       onClick={() =>
-        setActiveView({ type: "List", id: nav.id, title: nav.title })
+        setActiveView({ type: "list", id: nav.id, title: nav.title })
       }
       className="group flex w-full cursor-pointer items-center justify-between rounded-md px-3 hover:bg-[#ebebeb] md:h-9"
     >

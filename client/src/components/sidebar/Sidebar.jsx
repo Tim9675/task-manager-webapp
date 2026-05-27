@@ -12,7 +12,7 @@ import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
 import { mockTags } from "../../mock/tags";
 
-function Sidebar({ activeView, setActiveView }) {
+function Sidebar({ setActiveView, searchQuery, setSearchQuery }) {
   // Should be the only one hardcoded
   const tasksSection = [
     { id: 0, title: "Upcoming", count: 12, icon: ChevronsRight },
@@ -45,7 +45,7 @@ function Sidebar({ activeView, setActiveView }) {
         </button>
       </header>
 
-      <SearchBar />
+      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto">
