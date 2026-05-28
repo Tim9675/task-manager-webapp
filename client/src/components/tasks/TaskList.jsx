@@ -4,12 +4,18 @@ import AddTask from "./AddTask";
 function TaskList({
   tasks,
   activeView,
-  setTasks,
   selectedTaskId,
   setSelectedTaskId,
   createTask,
+  toggleTask,
   searchQuery,
 }) {
+  let remainingTasksCounter = 0;
+
+  for (let task of tasks) {
+    if (!task.checked) remainingTasksCounter++;
+  }
+
   function renderHeader() {
     if (searchQuery) return "Search results";
     switch (activeView.type) {
@@ -29,9 +35,9 @@ function TaskList({
       {/* REMINDER: Make header font size adjust based on list title length */}
       <header className="mb-5 flex w-full px-5">
         <h3 className="ms-2.5 text-[2.5rem] font-bold">{renderHeader()}</h3>
-        {tasks.length > 0 && (
+        {remainingTasksCounter > 0 && (
           <div className="ms-7.5 h-fit rounded-md border px-2.5 py-1 text-4xl">
-            {tasks.length}
+            {remainingTasksCounter}
           </div>
         )}
       </header>
@@ -42,7 +48,7 @@ function TaskList({
             <TaskCard
               key={task.id}
               task={task}
-              setTasks={setTasks}
+              toggleTask={toggleTask}
               onSelect={() => setSelectedTaskId(task.id)}
               isSelected={selectedTaskId === task.id}
             />

@@ -1,7 +1,13 @@
 function TagSelectModal({ availableTags, selectedTagIds, toggleTag, onClose }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
-      <div className="w-72 rounded-xl bg-white p-4 shadow-lg">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/20"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-72 rounded-xl bg-white p-4 shadow-lg"
+      >
         {/* Header */}
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-neutral-800">

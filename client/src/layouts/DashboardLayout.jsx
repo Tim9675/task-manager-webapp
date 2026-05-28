@@ -1,5 +1,3 @@
-import { useState } from "react";
-import TaskList from "../components/tasks/TaskList";
 import Sidebar from "../components/sidebar/Sidebar";
 import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
 
@@ -12,14 +10,17 @@ function DashboardLayout({
   setActiveView,
   searchQuery,
   setSearchQuery,
+  isHideCompleted,
+  setIsHideCompleted,
 }) {
   return (
     <div className="flex h-screen w-screen">
       <Sidebar
-        activeView={activeView}
         setActiveView={setActiveView}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        isHideCompleted={isHideCompleted}
+        setIsHideCompleted={setIsHideCompleted}
       />
       <main className="flex-1">{children}</main>
       <TaskDetailsPanel

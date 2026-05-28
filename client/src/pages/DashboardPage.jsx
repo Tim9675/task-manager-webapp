@@ -12,9 +12,11 @@ function DashboardPage() {
     type: "today",
   });
   const [searchQuery, setSearchQuery] = useState("");
+  const [isHideCompleted, setIsHideCompleted] = useState(false);
 
   // REMINDER: To be removed when backend connected
   const filteredTasks = tasks.filter((task) => {
+    if (isHideCompleted && task.checked) return false;
     switch (activeView.type) {
       case "today":
         return isToday(task.dueDate);
@@ -29,19 +31,11 @@ function DashboardPage() {
     }
   });
 
-  const searchedTasks = tasks.filter((task) =>
+  const searchedTasks = filteredTasks.filter((task) =>
     task.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-
-  const visibleTasks = searchQuery ? searchedTasks : filteredTasks;
-
   const selectedTask = tasks.find((task) => task.id === selectedTaskId) || null;
-
-  function updateTask(updatedTask) {
-    setTasks((prev) =>
-      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
-    );
-  }
+  const visibleTasks = searchQuery ? searchedTasks : filteredTasks;
 
   function createTask(title) {
     const newTask = {
@@ -58,6 +52,20 @@ function DashboardPage() {
     setTasks((prev) => [newTask, ...prev]);
 
     setSelectedTaskId(newTask.id);
+  }
+
+  function toggleTask(taskToToggle, checked) {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskToToggle.id ? { ...task, checked } : task,
+      ),
+    );
+  }
+
+  function updateTask(updatedTask) {
+    setTasks((prev) =>
+      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
+    );
   }
 
   function deleteTask(taskId) {
@@ -77,14 +85,16 @@ function DashboardPage() {
       setActiveView={setActiveView}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
+      isHideCompleted={isHideCompleted}
+      setIsHideCompleted={setIsHideCompleted}
     >
       <TaskList
         tasks={visibleTasks}
         activeView={activeView}
-        setTasks={setTasks}
         selectedTaskId={selectedTaskId}
         setSelectedTaskId={setSelectedTaskId}
         createTask={createTask}
+        toggleTask={toggleTask}
         searchQuery={searchQuery}
       />
     </DashboardLayout>

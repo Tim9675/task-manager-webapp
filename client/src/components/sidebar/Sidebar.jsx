@@ -5,14 +5,24 @@ import {
   StickyNote,
   Menu,
 } from "lucide-react";
+import { useState } from "react";
 
 import SidebarSection from "./SidebarSection";
 import SearchBar from "./SearchBar";
 import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
 import { mockTags } from "../../mock/tags";
+import SettingsModal from "./SettingsModal";
 
-function Sidebar({ setActiveView, searchQuery, setSearchQuery }) {
+function Sidebar({
+  setActiveView,
+  searchQuery,
+  setSearchQuery,
+  isHideCompleted,
+  setIsHideCompleted,
+}) {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
   // Should be the only one hardcoded
   const tasksSection = [
     { id: 0, title: "Upcoming", count: 12, icon: ChevronsRight },
@@ -71,7 +81,14 @@ function Sidebar({ setActiveView, searchQuery, setSearchQuery }) {
 
       {/* Footer */}
       <footer className="md:h-18">
-        <SettingsButton />
+        <SettingsButton onOpen={() => setIsSettingsOpen(true)} />
+        {isSettingsOpen && (
+          <SettingsModal
+            isHideCompleted={isHideCompleted}
+            setIsHideCompleted={setIsHideCompleted}
+            onClose={() => setIsSettingsOpen(false)}
+          />
+        )}
         <SignOutButton />
       </footer>
     </aside>

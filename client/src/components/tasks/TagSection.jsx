@@ -29,7 +29,7 @@ function TagSection({ availableTags, watch, setValue }) {
         {selectedTags.map((tag) => (
           <SidebarItem key={tag.id} nav={tag} type={"tags"} />
         ))}
-        <AddTaskTags setIsModalOpen={setIsModalOpen} />
+        <AddTaskTags onOpen={() => setIsModalOpen(true)} />
         {isModalOpen && (
           <TagSelectModal
             availableTags={availableTags}
