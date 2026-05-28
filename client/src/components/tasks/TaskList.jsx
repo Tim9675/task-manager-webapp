@@ -9,6 +9,7 @@ function TaskList({
   createTask,
   toggleTask,
   searchQuery,
+  setIsTaskDetailsOpen,
 }) {
   let remainingTasksCounter = 0;
 
@@ -49,7 +50,10 @@ function TaskList({
               key={task.id}
               task={task}
               toggleTask={toggleTask}
-              onSelect={() => setSelectedTaskId(task.id)}
+              onSelect={() => {
+                setSelectedTaskId(task.id);
+                setIsTaskDetailsOpen(true);
+              }}
               isSelected={selectedTaskId === task.id}
             />
           ))

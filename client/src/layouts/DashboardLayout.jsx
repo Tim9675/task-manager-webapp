@@ -12,6 +12,8 @@ function DashboardLayout({
   setSearchQuery,
   isHideCompleted,
   setIsHideCompleted,
+  isTaskDetailsOpen,
+  setIsTaskDetailsOpen,
 }) {
   return (
     <div className="flex h-screen w-screen">
@@ -23,11 +25,15 @@ function DashboardLayout({
         setIsHideCompleted={setIsHideCompleted}
       />
       <main className="flex-1">{children}</main>
-      <TaskDetailsPanel
-        selectedTask={selectedTask}
-        updateTask={updateTask}
-        deleteTask={deleteTask}
-      />
+
+      {isTaskDetailsOpen && (
+        <TaskDetailsPanel
+          selectedTask={selectedTask}
+          updateTask={updateTask}
+          deleteTask={deleteTask}
+          onClose={() => setIsTaskDetailsOpen(false)}
+        />
+      )}
     </div>
   );
 }

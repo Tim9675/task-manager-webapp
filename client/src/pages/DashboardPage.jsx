@@ -6,6 +6,7 @@ import { mockTasks } from "../mock/tasks";
 import { isToday, isUpcoming } from "../utils/date";
 
 function DashboardPage() {
+  const [isTaskDetailsOpen, setIsTaskDetailsOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [tasks, setTasks] = useState(mockTasks);
   const [activeView, setActiveView] = useState({
@@ -49,9 +50,9 @@ function DashboardPage() {
       checked: false,
     };
 
-    setTasks((prev) => [newTask, ...prev]);
-
+    setTasks((prev) => [...prev, newTask]);
     setSelectedTaskId(newTask.id);
+    setIsTaskDetailsOpen(true);
   }
 
   function toggleTask(taskToToggle, checked) {
@@ -73,6 +74,7 @@ function DashboardPage() {
 
     if (selectedTaskId === taskId) {
       setSelectedTaskId(null);
+      setIsTaskDetailsOpen(false);
     }
   }
 
@@ -87,6 +89,8 @@ function DashboardPage() {
       setSearchQuery={setSearchQuery}
       isHideCompleted={isHideCompleted}
       setIsHideCompleted={setIsHideCompleted}
+      isTaskDetailsOpen={isTaskDetailsOpen}
+      setIsTaskDetailsOpen={setIsTaskDetailsOpen}
     >
       <TaskList
         tasks={visibleTasks}
@@ -96,6 +100,7 @@ function DashboardPage() {
         createTask={createTask}
         toggleTask={toggleTask}
         searchQuery={searchQuery}
+        setIsTaskDetailsOpen={setIsTaskDetailsOpen}
       />
     </DashboardLayout>
   );

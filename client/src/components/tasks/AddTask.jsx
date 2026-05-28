@@ -6,7 +6,10 @@ function AddTask({ createTask }) {
   return (
     <div className="mx-5 flex h-13 items-center rounded-md border border-[#ebebeb] px-3 focus-within:border-neutral-300">
       <button
-        onClick={() => createTask(taskToAdd)}
+        onClick={() => {
+          createTask(taskToAdd);
+          setTaskToAdd("");
+        }}
         className="flex size-9 cursor-pointer items-center justify-center"
       >
         <Plus color="#7c7c7c" size={18} strokeWidth={4} />
