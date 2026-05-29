@@ -1,6 +1,6 @@
 function ButtonBar({ selectedTaskId, deleteTask }) {
   return (
-    <div className="mt-4 flex w-full items-center justify-between gap-5 md:h-10">
+    <div className="mt-2 flex w-full items-center justify-between gap-5 md:h-10">
       <button
         type="button"
         onClick={() => deleteTask(selectedTaskId)}

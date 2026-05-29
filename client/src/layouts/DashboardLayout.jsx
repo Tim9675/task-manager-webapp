@@ -1,5 +1,7 @@
 import Sidebar from "../components/sidebar/Sidebar";
 import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
+import TaskDetailsPanelSkeleton from "../components/skeletons/TaskDetailsPanelSkeleton";
+import SidebarSkeleton from "../components/skeletons/SidebarSkeleton";
 
 function DashboardLayout({
   children,
@@ -14,26 +16,38 @@ function DashboardLayout({
   setIsHideCompleted,
   isTaskDetailsOpen,
   setIsTaskDetailsOpen,
+  isLoadingTaskDetails,
+  isLoadingSidebar,
 }) {
   return (
     <div className="flex h-screen w-screen">
-      <Sidebar
-        setActiveView={setActiveView}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        isHideCompleted={isHideCompleted}
-        setIsHideCompleted={setIsHideCompleted}
-      />
-      <main className="flex-1">{children}</main>
-
-      {isTaskDetailsOpen && (
-        <TaskDetailsPanel
-          selectedTask={selectedTask}
-          updateTask={updateTask}
-          deleteTask={deleteTask}
-          onClose={() => setIsTaskDetailsOpen(false)}
+      {isLoadingSidebar ? (
+        <SidebarSkeleton />
+      ) : (
+        <Sidebar
+          setActiveView={setActiveView}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isHideCompleted={isHideCompleted}
+          setIsHideCompleted={setIsHideCompleted}
         />
       )}
+      <main className="flex-1">{children}</main>
+
+      {isTaskDetailsOpen ? (
+        isLoadingTaskDetails ? (
+          <TaskDetailsPanelSkeleton
+            onClose={() => setIsTaskDetailsOpen(false)}
+          />
+        ) : (
+          <TaskDetailsPanel
+            selectedTask={selectedTask}
+            updateTask={updateTask}
+            deleteTask={deleteTask}
+            onClose={() => setIsTaskDetailsOpen(false)}
+          />
+        )
+      ) : null}
     </div>
   );
 }

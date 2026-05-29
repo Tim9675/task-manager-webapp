@@ -4,16 +4,27 @@ import TaskList from "../components/tasks/TaskList";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { mockTasks } from "../mock/tasks";
 import { isToday, isUpcoming } from "../utils/date";
+import TaskListSkeleton from "../components/skeletons/TaskListSkeleton";
 
 function DashboardPage() {
+  // Load state
+  const [isLoadingTasks, setIsLoadingTasks] = useState(false);
+  const [isLoadingTaskDetails, setIsLoadingTaskDetails] = useState(false);
+  const [isLoadingSidebar, setIsLoadingSidebar] = useState(true);
+
+  // TaskDetailsPanel
   const [isTaskDetailsOpen, setIsTaskDetailsOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
+
+  // TaskList
   const [tasks, setTasks] = useState(mockTasks);
+  const [isHideCompleted, setIsHideCompleted] = useState(false);
   const [activeView, setActiveView] = useState({
     type: "today",
   });
+
+  // Sidebar
   const [searchQuery, setSearchQuery] = useState("");
-  const [isHideCompleted, setIsHideCompleted] = useState(false);
 
   // REMINDER: To be removed when backend connected
   const filteredTasks = tasks.filter((task) => {
@@ -35,8 +46,9 @@ function DashboardPage() {
   const searchedTasks = filteredTasks.filter((task) =>
     task.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  // Task to display in TaskDetailsPanel
   const selectedTask = tasks.find((task) => task.id === selectedTaskId) || null;
-  const visibleTasks = searchQuery ? searchedTasks : filteredTasks;
 
   function createTask(title) {
     const newTask = {
@@ -78,6 +90,31 @@ function DashboardPage() {
     }
   }
 
+  // REMINDER: Change criteria to createdAt when backend is integrated
+  function compare(a, b) {
+    if (a.checked === b.checked) return 0;
+
+    return a.checked ? 1 : -1;
+  }
+
+  function renderHeader() {
+    if (searchQuery) return "Search results";
+    switch (activeView.type) {
+      case "upcoming":
+        return "Upcoming";
+      case "list":
+        return activeView.title;
+      case "tag":
+        return activeView.title;
+      default:
+        return "Today";
+    }
+  }
+
+  const visibleTasks = searchQuery
+    ? [...searchedTasks].sort(compare)
+    : [...filteredTasks].sort(compare);
+
   return (
     <DashboardLayout
       selectedTask={selectedTask}
@@ -91,17 +128,25 @@ function DashboardPage() {
       setIsHideCompleted={setIsHideCompleted}
       isTaskDetailsOpen={isTaskDetailsOpen}
       setIsTaskDetailsOpen={setIsTaskDetailsOpen}
+      isLoadingTaskDetails={isLoadingTaskDetails}
+      isLoadingSidebar={isLoadingSidebar}
     >
-      <TaskList
-        tasks={visibleTasks}
-        activeView={activeView}
-        selectedTaskId={selectedTaskId}
-        setSelectedTaskId={setSelectedTaskId}
-        createTask={createTask}
-        toggleTask={toggleTask}
-        searchQuery={searchQuery}
-        setIsTaskDetailsOpen={setIsTaskDetailsOpen}
-      />
+      {isLoadingTasks ? (
+        <TaskListSkeleton header={renderHeader()} />
+      ) : (
+        <TaskList
+          tasks={visibleTasks}
+          activeView={activeView}
+          header={renderHeader()}
+          selectedTaskId={selectedTaskId}
+          setSelectedTaskId={setSelectedTaskId}
+          createTask={createTask}
+          toggleTask={toggleTask}
+          searchQuery={searchQuery}
+          setIsTaskDetailsOpen={setIsTaskDetailsOpen}
+          isLoadingTasks={isLoadingTasks}
+        />
+      )}
     </DashboardLayout>
   );
 }
