@@ -9,7 +9,7 @@ import TagSection from "./TagSection";
 import { mockLists } from "../../mock/lists";
 import { mockTags } from "../../mock/tags";
 
-function TaskForm({ selectedTask, updateTask, deleteTask }) {
+function TaskForm({ selectedTask, updateTask, setIsDeleteModalOpen }) {
   const { register, control, handleSubmit, reset, watch, setValue } = useForm({
     defaultValues: {
       title: "",
@@ -127,7 +127,7 @@ function TaskForm({ selectedTask, updateTask, deleteTask }) {
       {/* Subtasks */}
       <SubtaskSection control={control} watch={watch} setValue={setValue} />
 
-      <ButtonBar selectedTaskId={selectedTask?.id} deleteTask={deleteTask} />
+      <ButtonBar onOpen={() => setIsDeleteModalOpen(true)} />
     </form>
   );
 }

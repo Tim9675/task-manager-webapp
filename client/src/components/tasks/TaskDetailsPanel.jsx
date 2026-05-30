@@ -1,7 +1,12 @@
 import { X } from "lucide-react";
+import { useState } from "react";
+
 import TaskForm from "./TaskForm";
+import DeleteTaskModal from "./DeleteTaskModal";
 
 function TaskDetailsPanel({ selectedTask, updateTask, deleteTask, onClose }) {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   return (
     <aside className="my-5 me-5 flex h-[calc(100vh-2.5rem)] w-100 flex-col rounded-2xl bg-neutral-100 px-5 py-5">
       <header className="flex items-center justify-between">
@@ -14,12 +19,21 @@ function TaskDetailsPanel({ selectedTask, updateTask, deleteTask, onClose }) {
         <TaskForm
           selectedTask={selectedTask}
           updateTask={updateTask}
-          deleteTask={deleteTask}
+          setIsDeleteModalOpen={setIsDeleteModalOpen}
         />
       ) : (
         <div className="flex flex-1 items-center justify-center text-sm text-neutral-500">
           Select a task to view details.
         </div>
+      )}
+
+      {isDeleteModalOpen && (
+        <DeleteTaskModal
+          onDelete={() => {
+            if (selectedTask) deleteTask(selectedTask.id);
+          }}
+          onClose={() => setIsDeleteModalOpen(false)}
+        />
       )}
     </aside>
   );
