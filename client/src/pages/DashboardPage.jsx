@@ -25,6 +25,7 @@ function DashboardPage() {
 
   // Sidebar
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // REMINDER: To be removed when backend connected
   const filteredTasks = tasks.filter((task) => {
@@ -130,6 +131,8 @@ function DashboardPage() {
       setIsTaskDetailsOpen={setIsTaskDetailsOpen}
       isLoadingTaskDetails={isLoadingTaskDetails}
       isLoadingSidebar={isLoadingSidebar}
+      isSidebarOpen={isSidebarOpen}
+      setIsSidebarOpen={setIsSidebarOpen}
     >
       {isLoadingTasks ? (
         <TaskListSkeleton header={renderHeader()} />

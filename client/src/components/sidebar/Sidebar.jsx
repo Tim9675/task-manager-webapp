@@ -21,6 +21,7 @@ function Sidebar({
   setSearchQuery,
   isHideCompleted,
   setIsHideCompleted,
+  onClose,
 }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -51,7 +52,7 @@ function Sidebar({
       <header className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-neutral-900">Menu</h2>
 
-        <button className="cursor-pointer">
+        <button onClick={onClose} className="cursor-pointer">
           <Menu color="#7c7c7c" size={21} strokeWidth={3} />
         </button>
       </header>

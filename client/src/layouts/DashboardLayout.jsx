@@ -1,3 +1,5 @@
+import { Menu } from "lucide-react";
+
 import Sidebar from "../components/sidebar/Sidebar";
 import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
 import TaskDetailsPanelSkeleton from "../components/skeletons/TaskDetailsPanelSkeleton";
@@ -18,20 +20,32 @@ function DashboardLayout({
   setIsTaskDetailsOpen,
   isLoadingTaskDetails,
   isLoadingSidebar,
+  isSidebarOpen,
+  setIsSidebarOpen,
 }) {
   return (
     <div className="flex h-screen w-screen">
-      {isLoadingSidebar ? (
-        <SidebarSkeleton />
+      {isSidebarOpen ? (
+        isLoadingSidebar ? (
+          <SidebarSkeleton />
+        ) : (
+          <Sidebar
+            activeView={activeView}
+            setActiveView={setActiveView}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isHideCompleted={isHideCompleted}
+            setIsHideCompleted={setIsHideCompleted}
+            onClose={() => setIsSidebarOpen(false)}
+          />
+        )
       ) : (
-        <Sidebar
-          activeView={activeView}
-          setActiveView={setActiveView}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          isHideCompleted={isHideCompleted}
-          setIsHideCompleted={setIsHideCompleted}
-        />
+        <button
+          onClick={() => setIsSidebarOpen(true)}
+          className="mx-9 mt-9 flex h-7.5 w-7.5 cursor-pointer items-center justify-center bg-amber-500"
+        >
+          <Menu color="#7c7c7c" size={21} strokeWidth={3} />
+        </button>
       )}
       <main className="flex-1">{children}</main>
 
