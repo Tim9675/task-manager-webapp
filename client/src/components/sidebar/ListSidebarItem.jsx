@@ -1,10 +1,10 @@
-function ListSidebarItem({ nav, setActiveView }) {
+function ListSidebarItem({ nav, activeView, setActiveView }) {
   return (
     <button
       onClick={() =>
         setActiveView({ type: "list", id: nav.id, title: nav.title })
       }
-      className="group flex w-full cursor-pointer items-center justify-between rounded-md px-3 hover:bg-[#ebebeb] md:h-9"
+      className={`group flex w-full cursor-pointer items-center justify-between rounded-md px-3 ${activeView.type === "list" && nav.id === activeView.id ? "bg-[#ebebeb]" : ""} hover:bg-[#ebebeb] md:h-9`}
     >
       <div className="flex min-w-0 items-center">
         <div
@@ -16,7 +16,9 @@ function ListSidebarItem({ nav, setActiveView }) {
         </h3>
       </div>
       {nav.count > 0 && (
-        <div className="flex h-5 w-7.5 shrink-0 items-center justify-center rounded-sm bg-[#ebebeb] group-hover:bg-[#fafafa]">
+        <div
+          className={`flex h-5 w-7.5 shrink-0 items-center justify-center rounded-sm ${activeView.type === "list" && nav.id === activeView.id ? "bg-[#fafafa]" : "bg-[#ebebeb]"} group-hover:bg-[#fafafa]`}
+        >
           <p className="text-xs">{nav.count}</p>
         </div>
       )}

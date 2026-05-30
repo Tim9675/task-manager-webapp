@@ -15,6 +15,7 @@ import { mockTags } from "../../mock/tags";
 import SettingsModal from "./SettingsModal";
 
 function Sidebar({
+  activeView,
   setActiveView,
   searchQuery,
   setSearchQuery,
@@ -63,18 +64,21 @@ function Sidebar({
           title="Tasks"
           type={"tasks"}
           navList={tasksSection}
+          activeView={activeView}
           setActiveView={setActiveView}
         />
         <SidebarSection
           title="Lists"
           type={"lists"}
           navList={listsSection}
+          activeView={activeView}
           setActiveView={setActiveView}
         />
         <SidebarSection
           title="Tags"
           type={"tags"}
           navList={tagsSection}
+          activeView={activeView}
           setActiveView={setActiveView}
         />
       </div>

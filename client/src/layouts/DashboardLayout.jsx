@@ -25,6 +25,7 @@ function DashboardLayout({
         <SidebarSkeleton />
       ) : (
         <Sidebar
+          activeView={activeView}
           setActiveView={setActiveView}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}

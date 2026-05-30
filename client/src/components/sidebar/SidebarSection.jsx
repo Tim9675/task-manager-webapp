@@ -2,7 +2,13 @@ import SidebarItem from "./SidebarItem";
 import AddList from "./AddList";
 import AddTag from "./AddTag";
 
-function SidebarSection({ title, type, navList = [], setActiveView }) {
+function SidebarSection({
+  title,
+  type,
+  navList = [],
+  activeView,
+  setActiveView,
+}) {
   return (
     <section className="mb-5">
       <h2 className="mb-1 ps-3 text-xs text-neutral-500 uppercase">{title}</h2>
@@ -13,6 +19,7 @@ function SidebarSection({ title, type, navList = [], setActiveView }) {
               key={nav.id}
               nav={nav}
               type={type}
+              activeView={activeView}
               setActiveView={setActiveView}
             />
           ))}
@@ -25,6 +32,7 @@ function SidebarSection({ title, type, navList = [], setActiveView }) {
               key={nav.id}
               nav={nav}
               type={type}
+              activeView={activeView}
               setActiveView={setActiveView}
             />
           ))}
