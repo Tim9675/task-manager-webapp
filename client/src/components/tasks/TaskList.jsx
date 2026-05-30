@@ -29,7 +29,12 @@ function TaskList({
           </div>
         )}
       </header>
-      {!searchQuery && <AddTask createTask={createTask} />}
+      {!searchQuery && (
+        <AddTask
+          key={`${activeView.type}-${activeView.id ?? ""}`}
+          createTask={createTask}
+        />
+      )}
       <div className="mx-5 flex-1 overflow-y-auto">
         {tasks.length > 0 ? (
           tasks.map((task) => (

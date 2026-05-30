@@ -10,7 +10,7 @@ function DashboardPage() {
   // Load state
   const [isLoadingTasks, setIsLoadingTasks] = useState(false);
   const [isLoadingTaskDetails, setIsLoadingTaskDetails] = useState(false);
-  const [isLoadingSidebar, setIsLoadingSidebar] = useState(true);
+  const [isLoadingSidebar, setIsLoadingSidebar] = useState(false);
 
   // TaskDetailsPanel
   const [isTaskDetailsOpen, setIsTaskDetailsOpen] = useState(false);
@@ -55,9 +55,9 @@ function DashboardPage() {
       id: crypto.randomUUID(),
       title: title,
       description: "",
-      dueDate: null,
-      listId: null,
-      tagIds: [],
+      dueDate: activeView.type === "today" ? new Date() : null,
+      listId: activeView.type === "list" ? activeView.id : null,
+      tagIds: activeView.type === "tag" ? [activeView.id] : [],
       subtasks: [],
       checked: false,
     };
