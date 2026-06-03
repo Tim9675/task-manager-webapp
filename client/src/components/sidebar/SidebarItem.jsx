@@ -2,14 +2,7 @@ import TaskSidebarItem from "./TaskSidebarItem";
 import ListSidebarItem from "./ListSidebarItem";
 import TagSidebarItem from "./TagSidebarItem";
 
-function SidebarItem({
-  nav,
-  type,
-  activeView,
-  setActiveView,
-  updateList = () => {},
-  deleteList = () => {},
-}) {
+function SidebarItem({ nav, type, activeView, setActiveView }) {
   function renderItem() {
     switch (type) {
       case "tasks":
@@ -26,8 +19,6 @@ function SidebarItem({
             nav={nav}
             activeView={activeView}
             setActiveView={setActiveView}
-            updateList={updateList}
-            deleteList={deleteList}
           />
         );
       case "tags":

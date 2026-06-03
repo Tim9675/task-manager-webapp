@@ -22,11 +22,6 @@ function DashboardLayout({
   isLoadingSidebar,
   isSidebarOpen,
   setIsSidebarOpen,
-  userLists,
-  userListsWithCounts,
-  createList,
-  updateList,
-  deleteList,
 }) {
   return (
     <div className="flex h-screen w-screen">
@@ -42,16 +37,12 @@ function DashboardLayout({
             isHideCompleted={isHideCompleted}
             setIsHideCompleted={setIsHideCompleted}
             onClose={() => setIsSidebarOpen(false)}
-            userLists={userListsWithCounts}
-            createList={createList}
-            updateList={updateList}
-            deleteList={deleteList}
           />
         )
       ) : (
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="mx-9 mt-9 flex h-7.5 w-7.5 cursor-pointer items-center justify-center bg-amber-500"
+          className="mx-9 mt-9 flex h-7.5 w-7.5 cursor-pointer items-center justify-center rounded hover:bg-[#f5f5f5]"
         >
           <Menu color="#7c7c7c" size={21} strokeWidth={3} />
         </button>
@@ -69,7 +60,6 @@ function DashboardLayout({
             updateTask={updateTask}
             deleteTask={deleteTask}
             onClose={() => setIsTaskDetailsOpen(false)}
-            userLists={userLists}
           />
         )
       ) : null}

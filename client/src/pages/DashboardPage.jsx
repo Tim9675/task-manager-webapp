@@ -5,6 +5,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import { mockTasks } from "../mock/tasks";
 import { isToday, isUpcoming } from "../utils/date";
 import TaskListSkeleton from "../components/skeletons/TaskListSkeleton";
+import { ListsContext } from "../contexts/ListsContext";
 
 function DashboardPage() {
   // Load state
@@ -185,46 +186,51 @@ function DashboardPage() {
     : [...filteredTasks].sort(compare);
 
   return (
-    <DashboardLayout
-      selectedTask={selectedTask}
-      updateTask={updateTask}
-      deleteTask={deleteTask}
-      activeView={activeView}
-      setActiveView={setActiveView}
-      searchQuery={searchQuery}
-      setSearchQuery={setSearchQuery}
-      isHideCompleted={isHideCompleted}
-      setIsHideCompleted={setIsHideCompleted}
-      isTaskDetailsOpen={isTaskDetailsOpen}
-      setIsTaskDetailsOpen={setIsTaskDetailsOpen}
-      isLoadingTaskDetails={isLoadingTaskDetails}
-      isLoadingSidebar={isLoadingSidebar}
-      isSidebarOpen={isSidebarOpen}
-      setIsSidebarOpen={setIsSidebarOpen}
-      userLists={userLists}
-      userListsWithCounts={userListsWithCounts}
-      createList={createList}
-      updateList={updateList}
-      deleteList={deleteList}
+    <ListsContext.Provider
+      value={{
+        userLists,
+        userListsWithCounts,
+        createList,
+        updateList,
+        deleteList,
+      }}
     >
-      {isLoadingTasks ? (
-        <TaskListSkeleton header={renderHeader()} />
-      ) : (
-        <TaskList
-          tasks={visibleTasks}
-          activeView={activeView}
-          header={renderHeader()}
-          selectedTaskId={selectedTaskId}
-          setSelectedTaskId={setSelectedTaskId}
-          createTask={createTask}
-          toggleTask={toggleTask}
-          searchQuery={searchQuery}
-          setIsTaskDetailsOpen={setIsTaskDetailsOpen}
-          isLoadingTasks={isLoadingTasks}
-          userLists={userLists}
-        />
-      )}
-    </DashboardLayout>
+      <DashboardLayout
+        selectedTask={selectedTask}
+        updateTask={updateTask}
+        deleteTask={deleteTask}
+        activeView={activeView}
+        setActiveView={setActiveView}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        isHideCompleted={isHideCompleted}
+        setIsHideCompleted={setIsHideCompleted}
+        isTaskDetailsOpen={isTaskDetailsOpen}
+        setIsTaskDetailsOpen={setIsTaskDetailsOpen}
+        isLoadingTaskDetails={isLoadingTaskDetails}
+        isLoadingSidebar={isLoadingSidebar}
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      >
+        {isLoadingTasks ? (
+          <TaskListSkeleton header={renderHeader()} />
+        ) : (
+          <TaskList
+            tasks={visibleTasks}
+            activeView={activeView}
+            header={renderHeader()}
+            selectedTaskId={selectedTaskId}
+            setSelectedTaskId={setSelectedTaskId}
+            createTask={createTask}
+            toggleTask={toggleTask}
+            searchQuery={searchQuery}
+            setIsTaskDetailsOpen={setIsTaskDetailsOpen}
+            isLoadingTasks={isLoadingTasks}
+            userLists={userLists}
+          />
+        )}
+      </DashboardLayout>
+    </ListsContext.Provider>
   );
 }
 

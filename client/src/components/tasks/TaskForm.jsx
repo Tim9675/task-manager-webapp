@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,13 +7,9 @@ import ButtonBar from "./ButtonBar";
 import SubtaskSection from "./SubtaskSection";
 import TagSection from "./TagSection";
 import { mockTags } from "../../mock/tags";
+import { ListsContext } from "../../contexts/ListsContext";
 
-function TaskForm({
-  selectedTask,
-  updateTask,
-  setIsDeleteModalOpen,
-  userLists,
-}) {
+function TaskForm({ selectedTask, updateTask, setIsDeleteModalOpen }) {
   const { register, control, handleSubmit, reset, watch, setValue } = useForm({
     defaultValues: {
       title: "",
@@ -24,6 +20,8 @@ function TaskForm({
       subtasks: [],
     },
   });
+
+  const { userLists } = useContext(ListsContext);
 
   const availableTags = mockTags;
 

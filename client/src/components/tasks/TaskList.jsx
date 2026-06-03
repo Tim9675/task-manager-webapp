@@ -1,5 +1,7 @@
 import TaskCard from "./TaskCard";
 import AddTask from "./AddTask";
+import { useContext } from "react";
+import { ListsContext } from "../../contexts/ListsContext";
 
 function TaskList({
   tasks,
@@ -11,14 +13,13 @@ function TaskList({
   toggleTask,
   searchQuery,
   setIsTaskDetailsOpen,
-  userLists,
 }) {
   let remainingTasksCounter = 0;
 
   for (let task of tasks) {
     if (!task.checked) remainingTasksCounter++;
   }
-
+  const { userLists } = useContext(ListsContext);
   return (
     <div className="flex h-full grow flex-col py-5">
       {/* REMINDER: Make header font size adjust based on list title length */}

@@ -5,7 +5,7 @@ import {
   StickyNote,
   Menu,
 } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import SidebarSection from "./SidebarSection";
 import SearchBar from "./SearchBar";
@@ -14,6 +14,7 @@ import SignOutButton from "./SignOutButton";
 import { mockTags } from "../../mock/tags";
 import SettingsModal from "./SettingsModal";
 import ListModal from "./ListModal";
+import { ListsContext } from "../../contexts/ListsContext";
 
 function Sidebar({
   activeView,
@@ -23,10 +24,6 @@ function Sidebar({
   isHideCompleted,
   setIsHideCompleted,
   onClose,
-  userLists,
-  createList,
-  updateList,
-  deleteList,
 }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddListOpen, setIsAddListOpen] = useState(false);
@@ -40,6 +37,8 @@ function Sidebar({
     { id: 3, title: "Sticky Wall", icon: StickyNote },
   ];
 
+  const { userListsWithCounts, createList } = useContext(ListsContext);
+
   const tagsSection = mockTags;
 
   return (
@@ -48,7 +47,10 @@ function Sidebar({
       <header className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-neutral-900">Menu</h2>
 
-        <button onClick={onClose} className="cursor-pointer">
+        <button
+          onClick={onClose}
+          className="flex size-6 cursor-pointer items-center justify-center rounded hover:bg-[#dddddd]"
+        >
           <Menu color="#7c7c7c" size={21} strokeWidth={3} />
         </button>
       </header>
@@ -67,12 +69,10 @@ function Sidebar({
         <SidebarSection
           title="Lists"
           type={"lists"}
-          navList={userLists}
+          navList={userListsWithCounts}
           activeView={activeView}
           setActiveView={setActiveView}
           setIsAddListOpen={setIsAddListOpen}
-          updateList={updateList}
-          deleteList={deleteList}
         />
         <SidebarSection
           title="Tags"

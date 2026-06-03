@@ -1,22 +1,20 @@
 import { EllipsisVertical } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import ListModal from "./ListModal";
 import DeleteListModal from "./DeleteListModal";
+import { ListsContext } from "../../contexts/ListsContext";
 
-function ListSidebarItem({
-  nav,
-  activeView,
-  setActiveView,
-  updateList,
-  deleteList,
-}) {
+function ListSidebarItem({ nav, activeView, setActiveView }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditListOpen, setIsEditListOpen] = useState(false);
   const [isDeleteListOpen, setIsDeleteListOpen] = useState(false);
 
+  const { updateList, deleteList } = useContext(ListsContext);
+
   return (
     <>
+      {/* REMINDER: Decide which elements should be div and button */}
       <button
         onClick={() => setActiveView({ type: "list", id: nav.id })}
         className={`group flex w-full cursor-pointer items-center justify-between rounded-md ps-3 ${activeView.type === "list" && nav.id === activeView.id && "bg-[#ebebeb]"} hover:bg-[#ebebeb] md:h-9`}

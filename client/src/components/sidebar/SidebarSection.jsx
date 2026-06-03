@@ -10,8 +10,6 @@ function SidebarSection({
   setActiveView,
   setIsAddListOpen = () => {},
   setIsAddTagOpen = () => {},
-  updateList = () => {},
-  deleteList = () => {},
 }) {
   return (
     <section className="mb-5">
@@ -38,8 +36,6 @@ function SidebarSection({
               type={type}
               activeView={activeView}
               setActiveView={setActiveView}
-              updateList={updateList}
-              deleteList={deleteList}
             />
           ))}
         </nav>

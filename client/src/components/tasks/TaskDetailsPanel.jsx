@@ -4,13 +4,7 @@ import { useState } from "react";
 import TaskForm from "./TaskForm";
 import DeleteTaskModal from "./DeleteTaskModal";
 
-function TaskDetailsPanel({
-  selectedTask,
-  updateTask,
-  deleteTask,
-  onClose,
-  userLists,
-}) {
+function TaskDetailsPanel({ selectedTask, updateTask, deleteTask, onClose }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   return (
@@ -26,7 +20,6 @@ function TaskDetailsPanel({
           selectedTask={selectedTask}
           updateTask={updateTask}
           setIsDeleteModalOpen={setIsDeleteModalOpen}
-          userLists={userLists}
         />
       ) : (
         <div className="flex flex-1 items-center justify-center text-sm text-neutral-500">
