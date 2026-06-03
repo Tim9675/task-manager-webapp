@@ -8,6 +8,10 @@ function SidebarSection({
   navList = [],
   activeView,
   setActiveView,
+  setIsAddListOpen = () => {},
+  setIsAddTagOpen = () => {},
+  updateList = () => {},
+  deleteList = () => {},
 }) {
   return (
     <section className="mb-5">
@@ -23,7 +27,7 @@ function SidebarSection({
               setActiveView={setActiveView}
             />
           ))}
-          <AddTag />
+          <AddTag onOpen={() => setIsAddTagOpen(true)} />
         </nav>
       ) : (
         <nav className="flex flex-col">
@@ -34,12 +38,14 @@ function SidebarSection({
               type={type}
               activeView={activeView}
               setActiveView={setActiveView}
+              updateList={updateList}
+              deleteList={deleteList}
             />
           ))}
         </nav>
       )}
 
-      {type === "lists" && <AddList />}
+      {type === "lists" && <AddList onOpen={() => setIsAddListOpen(true)} />}
       {type !== "tags" && <hr className="mx-auto mt-4 w-64 border-[#ebebeb]" />}
     </section>
   );

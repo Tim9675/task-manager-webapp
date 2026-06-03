@@ -26,6 +26,28 @@ function DashboardPage() {
   // Sidebar
   const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [userLists, setUserLists] = useState([
+    {
+      id: "a898ca19-a1d0-40ea-aa88-e4f4378049f2",
+      title: "Personally long list for a very personal person",
+      color: "#ff6b6b",
+    },
+    {
+      id: "c9c8614c-db60-45d7-bd75-1963166d7e39",
+      title: "Work",
+      color: "#66d9e8",
+    },
+    {
+      id: "8ebae8d4-5d61-4497-9714-5f521b10154c",
+      title: "List 1",
+      color: "#ffd43b",
+    },
+  ]);
+
+  const userListsWithCounts = userLists.map((list) => ({
+    ...list,
+    count: tasks.filter((task) => task.listId === list.id).length,
+  }));
 
   // REMINDER: To be removed when backend connected
   const filteredTasks = tasks.filter((task) => {
@@ -91,6 +113,51 @@ function DashboardPage() {
     }
   }
 
+  function createList(title, color) {
+    const normalizedTitle = title.trim().toLowerCase();
+    const duplicate = userLists.some(
+      (list) => list.title.trim().toLowerCase() === normalizedTitle,
+    );
+    if (!normalizedTitle) return { success: false, error: "empty" };
+    if (duplicate) return { success: false, error: "duplicate" };
+    const newList = {
+      id: crypto.randomUUID(),
+      title: title,
+      color: color,
+    };
+    setUserLists((prev) => [...prev, newList]);
+    return { success: true };
+  }
+
+  function updateList(updatedList) {
+    const normalizedTitle = updatedList.title.trim().toLowerCase();
+    if (!normalizedTitle) return { success: false, error: "empty" };
+    const duplicate = userLists.some(
+      (list) =>
+        list.id !== updatedList.id &&
+        list.title.trim().toLowerCase() === normalizedTitle,
+    );
+    if (duplicate) return { success: false, error: "duplicate" };
+    setUserLists((prev) =>
+      prev.map((list) => (list.id === updatedList.id ? updatedList : list)),
+    );
+    return { success: true };
+  }
+
+  function deleteList(listId) {
+    setUserLists((prev) => prev.filter((list) => list.id !== listId));
+
+    setTasks((prev) =>
+      prev.map((task) => {
+        return listId === task.listId ? { ...task, listId: null } : task;
+      }),
+    );
+
+    if (activeView.type === "list" && activeView.id === listId) {
+      setActiveView({ type: "today" });
+    }
+  }
+
   // REMINDER: Change criteria to createdAt when backend is integrated
   function compare(a, b) {
     if (a.checked === b.checked) return 0;
@@ -104,9 +171,10 @@ function DashboardPage() {
       case "upcoming":
         return "Upcoming";
       case "list":
-        return activeView.title;
+        const list = userLists.find((list) => list.id === activeView.id);
+        return list.title;
       case "tag":
-        return activeView.title;
+        return activeView.id;
       default:
         return "Today";
     }
@@ -133,6 +201,11 @@ function DashboardPage() {
       isLoadingSidebar={isLoadingSidebar}
       isSidebarOpen={isSidebarOpen}
       setIsSidebarOpen={setIsSidebarOpen}
+      userLists={userLists}
+      userListsWithCounts={userListsWithCounts}
+      createList={createList}
+      updateList={updateList}
+      deleteList={deleteList}
     >
       {isLoadingTasks ? (
         <TaskListSkeleton header={renderHeader()} />
@@ -148,6 +221,7 @@ function DashboardPage() {
           searchQuery={searchQuery}
           setIsTaskDetailsOpen={setIsTaskDetailsOpen}
           isLoadingTasks={isLoadingTasks}
+          userLists={userLists}
         />
       )}
     </DashboardLayout>

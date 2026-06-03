@@ -22,6 +22,11 @@ function DashboardLayout({
   isLoadingSidebar,
   isSidebarOpen,
   setIsSidebarOpen,
+  userLists,
+  userListsWithCounts,
+  createList,
+  updateList,
+  deleteList,
 }) {
   return (
     <div className="flex h-screen w-screen">
@@ -37,6 +42,10 @@ function DashboardLayout({
             isHideCompleted={isHideCompleted}
             setIsHideCompleted={setIsHideCompleted}
             onClose={() => setIsSidebarOpen(false)}
+            userLists={userListsWithCounts}
+            createList={createList}
+            updateList={updateList}
+            deleteList={deleteList}
           />
         )
       ) : (
@@ -60,6 +69,7 @@ function DashboardLayout({
             updateTask={updateTask}
             deleteTask={deleteTask}
             onClose={() => setIsTaskDetailsOpen(false)}
+            userLists={userLists}
           />
         )
       ) : null}

@@ -1,9 +1,7 @@
 import Checkbox from "@mui/material/Checkbox";
 import { ChevronRight } from "lucide-react";
 
-import { mockLists } from "../../mock/lists";
-
-function TaskCard({ task, toggleTask, onSelect, isSelected }) {
+function TaskCard({ task, toggleTask, onSelect, isSelected, listDetails }) {
   const label = { slotProps: { input: { "aria-label": "Checkbox" } } };
   const sx = {
     color: "#dddddd",
@@ -16,10 +14,6 @@ function TaskCard({ task, toggleTask, onSelect, isSelected }) {
       textDecoration: "line-through",
     },
   };
-
-  const userLists = mockLists;
-
-  const listDetails = userLists.find((list) => list.id === task.listId) || null;
 
   // NEXT TASK: Style Task Card for completed tasks
 
@@ -50,17 +44,14 @@ function TaskCard({ task, toggleTask, onSelect, isSelected }) {
       {(listDetails || task.subtasks.length > 0) && (
         <div className="ms-9 flex items-center gap-3 pb-2 text-neutral-500">
           {/* List */}
-          {/* REMINDER: This is inefficient, we should fetch list details when fetching tasks instead of searching through lists on every card render
-          ERROR: This causes a bug where if you add a task to a list, the task won't show the list color until you refresh or change views, because the list details aren't updated in the task card
-          REMINDER: We also need to do this for tags when we implement them, so we should probably just change our data structure to include list and tag details in the task object when we fetch tasks
-          REMINDER: Don't render list details at all for tasks in the "List" view, since we already know the list details from the active view, we can just pass it down as a prop to avoid unnecessary searching through lists */}
+          {/* REMINDER: Don't render list details at all for tasks in the "List" view, since we already know the list details from the active view, we can just pass it down as a prop to avoid unnecessary searching through lists */}
           {listDetails && (
             <div className="flex items-center gap-2">
               <div
                 className="size-3 rounded"
                 style={{ backgroundColor: listDetails.color }}
               ></div>
-              <p className="text-xs">{listDetails.name}</p>
+              <p className="text-xs">{listDetails.title}</p>
             </div>
           )}
 

@@ -4,7 +4,7 @@ export const mockTasks = [
     title: "Research content ideas",
     description: "Description 1",
     dueDate: new Date(),
-    listId: 0,
+    listId: "c9c8614c-db60-45d7-bd75-1963166d7e39",
     tagIds: [],
     subtasks: [],
     checked: false,
@@ -14,7 +14,7 @@ export const mockTasks = [
     title: "Create a database of guest authors",
     description: "Description 2",
     dueDate: new Date(),
-    listId: 2,
+    listId: "8ebae8d4-5d61-4497-9714-5f521b10154c",
     tagIds: [],
     subtasks: [],
     checked: true,
@@ -24,7 +24,7 @@ export const mockTasks = [
     title: "Renew driver's license",
     description: "Description 3",
     dueDate: new Date(),
-    listId: 1,
+    listId: "a898ca19-a1d0-40ea-aa88-e4f4378049f2",
     tagIds: [0],
     subtasks: [
       {
@@ -40,7 +40,7 @@ export const mockTasks = [
     title: "Consult accountant",
     description: "Description 4",
     dueDate: new Date(),
-    listId: 2,
+    listId: "8ebae8d4-5d61-4497-9714-5f521b10154c",
     tagIds: [],
     subtasks: [
       {

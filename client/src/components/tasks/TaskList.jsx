@@ -11,6 +11,7 @@ function TaskList({
   toggleTask,
   searchQuery,
   setIsTaskDetailsOpen,
+  userLists,
 }) {
   let remainingTasksCounter = 0;
 
@@ -47,6 +48,12 @@ function TaskList({
                 setIsTaskDetailsOpen(true);
               }}
               isSelected={selectedTaskId === task.id}
+              listDetails={
+                // REMINDER: This is inefficient, we should fetch list details when fetching tasks instead of searching through lists on every card render
+                // ERROR: This causes a bug where if you add a task to a list, the task won't show the list color until you refresh or change views, because the list details aren't updated in the task card
+                // REMINDER: We also need to do this for tags when we implement them, so we should probably just change our data structure to include list and tag details in the task object when we fetch tasks
+                userLists.find((list) => list.id === task.listId) || null
+              }
             />
           ))
         ) : (

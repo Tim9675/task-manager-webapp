@@ -1,4 +1,4 @@
-function DeleteTaskModal({ onDelete, onClose }) {
+function DeleteListModal({ onDelete, onClose }) {
   return (
     <div
       onClick={onClose}
@@ -21,7 +21,7 @@ function DeleteTaskModal({ onDelete, onClose }) {
           </button>
         </div>
 
-        <p className="my-5 text-center">Delete this task?</p>
+        <p className="my-5 text-center">Delete this list?</p>
 
         {/* Footer */}
         <div className="mt-4 flex justify-evenly">
@@ -48,4 +48,4 @@ function DeleteTaskModal({ onDelete, onClose }) {
   );
 }
 
-export default DeleteTaskModal;
+export default DeleteListModal;

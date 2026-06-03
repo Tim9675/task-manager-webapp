@@ -13,6 +13,7 @@ import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
 import { mockTags } from "../../mock/tags";
 import SettingsModal from "./SettingsModal";
+import ListModal from "./ListModal";
 
 function Sidebar({
   activeView,
@@ -22,8 +23,14 @@ function Sidebar({
   isHideCompleted,
   setIsHideCompleted,
   onClose,
+  userLists,
+  createList,
+  updateList,
+  deleteList,
 }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAddListOpen, setIsAddListOpen] = useState(false);
+  const [isAddTagOpen, setIsAddTagOpen] = useState(false);
 
   // Should be the only one hardcoded
   const tasksSection = [
@@ -31,17 +38,6 @@ function Sidebar({
     { id: 1, title: "Today", count: 5, icon: ListCheck },
     { id: 2, title: "Calendar", icon: CalendarDays },
     { id: 3, title: "Sticky Wall", icon: StickyNote },
-  ];
-  // Change to fetch later, Can't use mockLists yet, needs hardcoded list count
-  const listsSection = [
-    {
-      id: 0,
-      title: "Personally long list for a very personal person",
-      color: "#ff6b6b",
-      count: 3,
-    },
-    { id: 1, title: "Work", color: "#66d9e8", count: 6 },
-    { id: 2, title: "List 1", color: "#ffd43b", count: 3 },
   ];
 
   const tagsSection = mockTags;
@@ -71,9 +67,12 @@ function Sidebar({
         <SidebarSection
           title="Lists"
           type={"lists"}
-          navList={listsSection}
+          navList={userLists}
           activeView={activeView}
           setActiveView={setActiveView}
+          setIsAddListOpen={setIsAddListOpen}
+          updateList={updateList}
+          deleteList={deleteList}
         />
         <SidebarSection
           title="Tags"
@@ -81,8 +80,20 @@ function Sidebar({
           navList={tagsSection}
           activeView={activeView}
           setActiveView={setActiveView}
+          setIsAddTagOpen={setIsAddTagOpen}
         />
       </div>
+
+      {/* Modals */}
+      {isAddListOpen && (
+        <ListModal
+          mode="create"
+          listFunction={createList}
+          onClose={() => setIsAddListOpen(false)}
+        />
+      )}
+
+      {/* {isAddTagOpen && <AddTagModal />} */}
 
       {/* Footer */}
       <footer className="md:h-18">

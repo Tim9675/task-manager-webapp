@@ -6,10 +6,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import ButtonBar from "./ButtonBar";
 import SubtaskSection from "./SubtaskSection";
 import TagSection from "./TagSection";
-import { mockLists } from "../../mock/lists";
 import { mockTags } from "../../mock/tags";
 
-function TaskForm({ selectedTask, updateTask, setIsDeleteModalOpen }) {
+function TaskForm({
+  selectedTask,
+  updateTask,
+  setIsDeleteModalOpen,
+  userLists,
+}) {
   const { register, control, handleSubmit, reset, watch, setValue } = useForm({
     defaultValues: {
       title: "",
@@ -20,8 +24,6 @@ function TaskForm({ selectedTask, updateTask, setIsDeleteModalOpen }) {
       subtasks: [],
     },
   });
-
-  const userLists = mockLists;
 
   const availableTags = mockTags;
 
@@ -74,7 +76,7 @@ function TaskForm({ selectedTask, updateTask, setIsDeleteModalOpen }) {
         </label>
         <select
           {...register("listId", {
-            setValueAs: (value) => (value === "" ? null : Number(value)),
+            setValueAs: (value) => (value === "" ? null : value),
           })}
           id="list"
           className="h-7 w-25 rounded-md border border-[#ebebeb] px-2 text-sm"
@@ -82,7 +84,7 @@ function TaskForm({ selectedTask, updateTask, setIsDeleteModalOpen }) {
           <option value="">--unlisted--</option>
           {userLists.map((list) => (
             <option key={list.id} value={list.id}>
-              {list.name}
+              {list.title}
             </option>
           ))}
         </select>
