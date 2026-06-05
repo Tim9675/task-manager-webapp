@@ -11,10 +11,11 @@ import SidebarSection from "./SidebarSection";
 import SearchBar from "./SearchBar";
 import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
-import { mockTags } from "../../mock/tags";
 import SettingsModal from "./SettingsModal";
 import ListModal from "./ListModal";
 import { ListsContext } from "../../contexts/ListsContext";
+import { TagsContext } from "../../contexts/TagsContext";
+import TagModal from "./TagModal";
 
 function Sidebar({
   activeView,
@@ -39,7 +40,7 @@ function Sidebar({
 
   const { userListsWithCounts, createList } = useContext(ListsContext);
 
-  const tagsSection = mockTags;
+  const { userTags, createTag } = useContext(TagsContext);
 
   return (
     <aside className="my-5 ms-5 flex h-[calc(100vh-2.5rem)] w-72 flex-col rounded-2xl bg-neutral-100 px-4 py-5">
@@ -77,7 +78,7 @@ function Sidebar({
         <SidebarSection
           title="Tags"
           type={"tags"}
-          navList={tagsSection}
+          navList={userTags}
           activeView={activeView}
           setActiveView={setActiveView}
           setIsAddTagOpen={setIsAddTagOpen}
@@ -93,7 +94,13 @@ function Sidebar({
         />
       )}
 
-      {/* {isAddTagOpen && <AddTagModal />} */}
+      {isAddTagOpen && (
+        <TagModal
+          mode="create"
+          tagFunction={createTag}
+          onClose={() => setIsAddTagOpen(false)}
+        />
+      )}
 
       {/* Footer */}
       <footer className="md:h-18">

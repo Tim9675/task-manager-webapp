@@ -14,8 +14,13 @@ function ListSidebarItem({ nav, activeView, setActiveView }) {
 
   return (
     <>
-      {/* REMINDER: Decide which elements should be div and button */}
+      {/*
+      REMINDER: Decide which elements should be div and button; 
+      Ellipsis can't be keyboard-navigated;
+      Also add Dropdown menu keyboard navigation
+      */}
       <button
+        type="button"
         onClick={() => setActiveView({ type: "list", id: nav.id })}
         className={`group flex w-full cursor-pointer items-center justify-between rounded-md ps-3 ${activeView.type === "list" && nav.id === activeView.id && "bg-[#ebebeb]"} hover:bg-[#ebebeb] md:h-9`}
       >

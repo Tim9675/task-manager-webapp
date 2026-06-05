@@ -6,8 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import ButtonBar from "./ButtonBar";
 import SubtaskSection from "./SubtaskSection";
 import TagSection from "./TagSection";
-import { mockTags } from "../../mock/tags";
 import { ListsContext } from "../../contexts/ListsContext";
+import { TagsContext } from "../../contexts/TagsContext";
 
 function TaskForm({ selectedTask, updateTask, setIsDeleteModalOpen }) {
   const { register, control, handleSubmit, reset, watch, setValue } = useForm({
@@ -23,7 +23,7 @@ function TaskForm({ selectedTask, updateTask, setIsDeleteModalOpen }) {
 
   const { userLists } = useContext(ListsContext);
 
-  const availableTags = mockTags;
+  const { userTags } = useContext(TagsContext);
 
   useEffect(() => {
     if (!selectedTask) return;
@@ -119,11 +119,7 @@ function TaskForm({ selectedTask, updateTask, setIsDeleteModalOpen }) {
         </div>
       </div>
       {/* Tags */}
-      <TagSection
-        availableTags={availableTags}
-        watch={watch}
-        setValue={setValue}
-      />
+      <TagSection availableTags={userTags} watch={watch} setValue={setValue} />
       {/* Subtasks */}
       <SubtaskSection control={control} watch={watch} setValue={setValue} />
 

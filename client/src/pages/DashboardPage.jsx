@@ -6,6 +6,8 @@ import { mockTasks } from "../mock/tasks";
 import { isToday, isUpcoming } from "../utils/date";
 import TaskListSkeleton from "../components/skeletons/TaskListSkeleton";
 import { ListsContext } from "../contexts/ListsContext";
+import { TagsContext } from "../contexts/TagsContext";
+import { mockTags } from "../mock/tags";
 
 function DashboardPage() {
   // Load state
@@ -44,11 +46,11 @@ function DashboardPage() {
       color: "#ffd43b",
     },
   ]);
-
   const userListsWithCounts = userLists.map((list) => ({
     ...list,
     count: tasks.filter((task) => task.listId === list.id).length,
   }));
+  const [userTags, setUserTags] = useState(mockTags);
 
   // REMINDER: To be removed when backend connected
   const filteredTasks = tasks.filter((task) => {
@@ -74,6 +76,7 @@ function DashboardPage() {
   // Task to display in TaskDetailsPanel
   const selectedTask = tasks.find((task) => task.id === selectedTaskId) || null;
 
+  // Task functions
   function createTask(title) {
     const newTask = {
       id: crypto.randomUUID(),
@@ -114,6 +117,7 @@ function DashboardPage() {
     }
   }
 
+  // List functions
   function createList(title, color) {
     const normalizedTitle = title.trim().toLowerCase();
     const duplicate = userLists.some(
@@ -159,6 +163,55 @@ function DashboardPage() {
     }
   }
 
+  // Tag functions
+  function createTag(title, color) {
+    const normalizedTitle = title.trim().toLowerCase();
+    const duplicate = userTags.some(
+      (tag) => tag.title.trim().toLowerCase() === normalizedTitle,
+    );
+    if (!normalizedTitle) return { success: false, error: "empty" };
+    if (duplicate) return { success: false, error: "duplicate" };
+    const newTag = {
+      id: crypto.randomUUID(),
+      title: title,
+      color: color,
+    };
+    setUserTags((prev) => [...prev, newTag]);
+    return { success: true };
+  }
+
+  function updateTag(updatedTag) {
+    const normalizedTitle = updatedTag.title.trim().toLowerCase();
+    if (!normalizedTitle) return { success: false, error: "empty" };
+    const duplicate = userTags.some(
+      (tag) =>
+        tag.id !== updatedTag.id &&
+        tag.title.trim().toLowerCase() === normalizedTitle,
+    );
+    if (duplicate) return { success: false, error: "duplicate" };
+    setUserTags((prev) =>
+      prev.map((tag) => (tag.id === updatedTag.id ? updatedTag : tag)),
+    );
+    return { success: true };
+  }
+
+  function deleteTag(tagId) {
+    setUserTags((prev) => prev.filter((tag) => tag.id !== tagId));
+    setTasks((prev) =>
+      prev.map((task) => {
+        const tagList = task.tagIds;
+        if (tagList.includes(tagId)) {
+          const updatedTagList = tagList.filter((id) => id !== tagId);
+          return { ...task, tagIds: updatedTagList };
+        }
+        return task;
+      }),
+    );
+
+    if (activeView.type === "tag" && activeView.id === tagId) {
+      setActiveView({ type: "today" });
+    }
+  }
   // REMINDER: Change criteria to createdAt when backend is integrated
   function compare(a, b) {
     if (a.checked === b.checked) return 0;
@@ -173,9 +226,10 @@ function DashboardPage() {
         return "Upcoming";
       case "list":
         const list = userLists.find((list) => list.id === activeView.id);
-        return list.title;
+        return list?.title ?? "List";
       case "tag":
-        return activeView.id;
+        const tag = userTags.find((tag) => tag.id === activeView.id);
+        return tag?.title ?? "Tag";
       default:
         return "Today";
     }
@@ -186,6 +240,7 @@ function DashboardPage() {
     : [...filteredTasks].sort(compare);
 
   return (
+    // Memoize in the future
     <ListsContext.Provider
       value={{
         userLists,
@@ -195,41 +250,44 @@ function DashboardPage() {
         deleteList,
       }}
     >
-      <DashboardLayout
-        selectedTask={selectedTask}
-        updateTask={updateTask}
-        deleteTask={deleteTask}
-        activeView={activeView}
-        setActiveView={setActiveView}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        isHideCompleted={isHideCompleted}
-        setIsHideCompleted={setIsHideCompleted}
-        isTaskDetailsOpen={isTaskDetailsOpen}
-        setIsTaskDetailsOpen={setIsTaskDetailsOpen}
-        isLoadingTaskDetails={isLoadingTaskDetails}
-        isLoadingSidebar={isLoadingSidebar}
-        isSidebarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
+      <TagsContext.Provider
+        value={{ userTags, createTag, updateTag, deleteTag }}
       >
-        {isLoadingTasks ? (
-          <TaskListSkeleton header={renderHeader()} />
-        ) : (
-          <TaskList
-            tasks={visibleTasks}
-            activeView={activeView}
-            header={renderHeader()}
-            selectedTaskId={selectedTaskId}
-            setSelectedTaskId={setSelectedTaskId}
-            createTask={createTask}
-            toggleTask={toggleTask}
-            searchQuery={searchQuery}
-            setIsTaskDetailsOpen={setIsTaskDetailsOpen}
-            isLoadingTasks={isLoadingTasks}
-            userLists={userLists}
-          />
-        )}
-      </DashboardLayout>
+        <DashboardLayout
+          selectedTask={selectedTask}
+          updateTask={updateTask}
+          deleteTask={deleteTask}
+          activeView={activeView}
+          setActiveView={setActiveView}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isHideCompleted={isHideCompleted}
+          setIsHideCompleted={setIsHideCompleted}
+          isTaskDetailsOpen={isTaskDetailsOpen}
+          setIsTaskDetailsOpen={setIsTaskDetailsOpen}
+          isLoadingTaskDetails={isLoadingTaskDetails}
+          isLoadingSidebar={isLoadingSidebar}
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        >
+          {isLoadingTasks ? (
+            <TaskListSkeleton header={renderHeader()} />
+          ) : (
+            <TaskList
+              tasks={visibleTasks}
+              activeView={activeView}
+              header={renderHeader()}
+              selectedTaskId={selectedTaskId}
+              setSelectedTaskId={setSelectedTaskId}
+              createTask={createTask}
+              toggleTask={toggleTask}
+              searchQuery={searchQuery}
+              setIsTaskDetailsOpen={setIsTaskDetailsOpen}
+              isLoadingTasks={isLoadingTasks}
+            />
+          )}
+        </DashboardLayout>
+      </TagsContext.Provider>
     </ListsContext.Provider>
   );
 }

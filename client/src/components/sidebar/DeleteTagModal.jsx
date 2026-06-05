@@ -1,4 +1,4 @@
-function DeleteListModal({ onDelete, onClose }) {
+function DeleteTagModal({ onDelete, onClose }) {
   return (
     <div
       onClick={onClose}
@@ -11,7 +11,6 @@ function DeleteListModal({ onDelete, onClose }) {
         {/* Header */}
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-neutral-800">Warning!</h2>
-
           <button
             type="button"
             onClick={onClose}
@@ -20,8 +19,8 @@ function DeleteListModal({ onDelete, onClose }) {
             ✕
           </button>
         </div>
-        {/* REMINDER: Add no. of tasks with this list */}
-        <p className="my-5 text-center">Delete this list?</p>
+        {/* REMINDER: Add no. of tasks with this tag */}
+        <p className="my-5 text-center">Delete this tag?</p>
 
         {/* Footer */}
         <div className="mt-4 flex justify-evenly">
@@ -48,4 +47,4 @@ function DeleteListModal({ onDelete, onClose }) {
   );
 }
 
-export default DeleteListModal;
+export default DeleteTagModal;
