@@ -1,4 +1,13 @@
-function DeleteTagModal({ onDelete, onClose }) {
+import { useContext } from "react";
+import { TasksContext } from "../../contexts/TasksContext";
+
+function DeleteTagModal({ nav, onDelete, onClose }) {
+  const { userTasks } = useContext(TasksContext);
+  const tasksWithThisTag = userTasks.filter((task) =>
+    task.tagIds.includes(nav.id),
+  );
+  const taskCount = tasksWithThisTag.length;
+
   return (
     <div
       onClick={onClose}
@@ -19,8 +28,17 @@ function DeleteTagModal({ onDelete, onClose }) {
             ✕
           </button>
         </div>
-        {/* REMINDER: Add no. of tasks with this tag */}
-        <p className="my-5 text-center">Delete this tag?</p>
+
+        <p className="my-5 text-center">Delete "{nav.title}" tag?</p>
+
+        {taskCount > 0 && (
+          <div className="text-xs text-red-600">
+            <p>
+              {taskCount} task{taskCount > 1 && "s"} currently use this tag.
+            </p>
+            <p>The tag will be removed from those tasks.</p>
+          </div>
+        )}
 
         {/* Footer */}
         <div className="mt-4 flex justify-evenly">

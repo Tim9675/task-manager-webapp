@@ -1,4 +1,11 @@
-function DeleteListModal({ onDelete, onClose }) {
+import { useContext } from "react";
+import { TasksContext } from "../../contexts/TasksContext";
+
+function DeleteListModal({ nav, onDelete, onClose }) {
+  const { userTasks } = useContext(TasksContext);
+  const tasksWithThisList = userTasks.filter((task) => task.listId === nav.id);
+  const taskCount = tasksWithThisList.length;
+
   return (
     <div
       onClick={onClose}
@@ -20,8 +27,18 @@ function DeleteListModal({ onDelete, onClose }) {
             ✕
           </button>
         </div>
-        {/* REMINDER: Add no. of tasks with this list */}
-        <p className="my-5 text-center">Delete this list?</p>
+
+        <p className="my-5 text-center">Delete "{nav.title}" list?</p>
+
+        {taskCount > 0 && (
+          <div className="text-xs text-red-600">
+            <p>
+              {taskCount} task{taskCount > 1 && "s"} currently belong
+              {taskCount === 1 && "s"} to this list.
+            </p>
+            <p>They will become unlisted.</p>
+          </div>
+        )}
 
         {/* Footer */}
         <div className="mt-4 flex justify-evenly">

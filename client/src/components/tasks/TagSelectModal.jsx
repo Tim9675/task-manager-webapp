@@ -73,7 +73,7 @@ function TagSelectModal({ availableTags, selectedTagIds, toggleTag, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95"
+            className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95"
           >
             Done
           </button>

@@ -7,9 +7,6 @@ import SidebarSkeleton from "../components/skeletons/SidebarSkeleton";
 
 function DashboardLayout({
   children,
-  selectedTask,
-  updateTask,
-  deleteTask,
   activeView,
   setActiveView,
   searchQuery,
@@ -55,12 +52,7 @@ function DashboardLayout({
             onClose={() => setIsTaskDetailsOpen(false)}
           />
         ) : (
-          <TaskDetailsPanel
-            selectedTask={selectedTask}
-            updateTask={updateTask}
-            deleteTask={deleteTask}
-            onClose={() => setIsTaskDetailsOpen(false)}
-          />
+          <TaskDetailsPanel onClose={() => setIsTaskDetailsOpen(false)} />
         )
       ) : null}
     </div>

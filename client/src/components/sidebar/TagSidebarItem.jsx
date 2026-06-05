@@ -69,6 +69,7 @@ function TagSidebarItem({ nav, activeView, setActiveView }) {
       )}
       {isDeleteTagOpen && (
         <DeleteTagModal
+          nav={nav}
           onDelete={() => deleteTag(nav.id)}
           onClose={() => setIsDeleteTagOpen(false)}
         />

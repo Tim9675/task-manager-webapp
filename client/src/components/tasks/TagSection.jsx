@@ -25,7 +25,7 @@ function TagSection({ availableTags, watch, setValue }) {
   return (
     <div className="flex h-20 w-full items-start justify-between">
       <label className="my-2 text-sm">Tags</label>
-      <div className="flex max-h-20 flex-wrap gap-1 overflow-y-auto rounded-md border border-[#ebebeb] md:w-65">
+      <div className="flex max-h-20 flex-wrap gap-1 overflow-y-auto rounded-md border border-[#ebebeb] px-2.5 md:w-65">
         {selectedTags.map((tag) => (
           <SidebarItem key={tag.id} nav={tag} type={"tags"} />
         ))}

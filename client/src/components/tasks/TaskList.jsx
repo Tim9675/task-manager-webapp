@@ -7,10 +7,7 @@ function TaskList({
   tasks,
   activeView,
   header,
-  selectedTaskId,
   setSelectedTaskId,
-  createTask,
-  toggleTask,
   searchQuery,
   setIsTaskDetailsOpen,
 }) {
@@ -32,10 +29,7 @@ function TaskList({
         )}
       </header>
       {!searchQuery && (
-        <AddTask
-          key={`${activeView.type}-${activeView.id ?? ""}`}
-          createTask={createTask}
-        />
+        <AddTask key={`${activeView.type}-${activeView.id ?? ""}`} />
       )}
       <div className="mx-5 flex-1 overflow-y-auto">
         {tasks.length > 0 ? (
@@ -43,12 +37,10 @@ function TaskList({
             <TaskCard
               key={task.id}
               task={task}
-              toggleTask={toggleTask}
               onSelect={() => {
                 setSelectedTaskId(task.id);
                 setIsTaskDetailsOpen(true);
               }}
-              isSelected={selectedTaskId === task.id}
               listDetails={
                 // REMINDER: This is inefficient, we should fetch list details when fetching tasks instead of searching through lists on every card render
                 // ERROR: This causes a bug where if you add a task to a list, the task won't show the list color until you refresh or change views, because the list details aren't updated in the task card

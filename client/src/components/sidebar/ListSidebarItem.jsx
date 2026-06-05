@@ -86,6 +86,7 @@ function ListSidebarItem({ nav, activeView, setActiveView }) {
       )}
       {isDeleteListOpen && (
         <DeleteListModal
+          nav={nav}
           onDelete={() => deleteList(nav.id)}
           onClose={() => setIsDeleteListOpen(false)}
         />

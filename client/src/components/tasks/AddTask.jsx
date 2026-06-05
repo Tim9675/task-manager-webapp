@@ -1,8 +1,10 @@
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { TasksContext } from "../../contexts/TasksContext";
 
-function AddTask({ createTask }) {
+function AddTask() {
   const [taskToAdd, setTaskToAdd] = useState("");
+  const { createTask } = useContext(TasksContext);
   return (
     <div className="mx-5 flex h-13 items-center rounded-md border border-[#ebebeb] px-3 focus-within:border-neutral-300">
       <button
