@@ -47,10 +47,6 @@ function DashboardPage() {
       color: "#ffd43b",
     },
   ]);
-  const userListsWithCounts = userLists.map((list) => ({
-    ...list,
-    count: userTasks.filter((task) => task.listId === list.id).length,
-  }));
   const [userTags, setUserTags] = useState(mockTags);
 
   // REMINDER: To be removed when backend connected
@@ -73,10 +69,6 @@ function DashboardPage() {
   const searchedTasks = filteredTasks.filter((task) =>
     task.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-
-  // Task to display in TaskDetailsPanel
-  const selectedTask =
-    userTasks.find((task) => task.id === selectedTaskId) || null;
 
   // Task functions
   function createTask(title) {
@@ -257,14 +249,11 @@ function DashboardPage() {
         toggleTask,
         // deleteTask only used inside TaskDetailsPanel.jsx
         deleteTask,
-        // selectedTask used in TaskDetailsPanel.jsx & TaskForm.jsx
-        selectedTask,
       }}
     >
       <ListsContext.Provider
         value={{
           userLists,
-          userListsWithCounts,
           createList,
           updateList,
           deleteList,

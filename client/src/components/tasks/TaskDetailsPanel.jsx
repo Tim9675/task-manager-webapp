@@ -8,7 +8,11 @@ import { TasksContext } from "../../contexts/TasksContext";
 function TaskDetailsPanel({ onClose }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const { deleteTask, selectedTask } = useContext(TasksContext);
+  const { userTasks, selectedTaskId, deleteTask } = useContext(TasksContext);
+
+  // Task to display in TaskDetailsPanel
+  const selectedTask =
+    userTasks.find((task) => task.id === selectedTaskId) || null;
 
   return (
     <aside className="my-5 me-5 flex h-[calc(100vh-2.5rem)] w-100 flex-col rounded-2xl bg-neutral-100 px-5 py-5">
