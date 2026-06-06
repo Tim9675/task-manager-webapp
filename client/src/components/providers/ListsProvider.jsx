@@ -1,0 +1,84 @@
+import { useContext, useState, useMemo, useCallback } from "react";
+
+import { ListsContext } from "../../contexts/ListsContext";
+import { mockLists } from "../../mock/lists";
+import { TasksContext } from "../../contexts/TasksContext";
+
+function ListsProvider({ children }) {
+  const [userLists, setUserLists] = useState(mockLists);
+  const { userTasks, removeListFromTasks } = useContext(TasksContext);
+
+  const userListsWithCounts = useMemo(() => {
+    const taskCounter = {};
+
+    for (const task of userTasks) {
+      taskCounter[task.listId] = (taskCounter[task.listId] ?? 0) + 1;
+    }
+
+    return userLists.map((list) => ({
+      ...list,
+      count: taskCounter[list.id] ?? 0,
+    }));
+  }, [userLists, userTasks]);
+
+  // CRUD functions
+  function createList(title, color) {
+    const normalizedTitle = title.trim().toLowerCase();
+    const duplicate = userLists.some(
+      (list) => list.title.trim().toLowerCase() === normalizedTitle,
+    );
+    if (!normalizedTitle) return { success: false, error: "empty" };
+    if (duplicate) return { success: false, error: "duplicate" };
+    const newList = {
+      id: crypto.randomUUID(),
+      title: title,
+      color: color,
+    };
+    setUserLists((prev) => [...prev, newList]);
+    return { success: true };
+  }
+
+  function updateList(updatedList) {
+    const normalizedTitle = updatedList.title.trim().toLowerCase();
+    if (!normalizedTitle) return { success: false, error: "empty" };
+    const duplicate = userLists.some(
+      (list) =>
+        list.id !== updatedList.id &&
+        list.title.trim().toLowerCase() === normalizedTitle,
+    );
+    if (duplicate) return { success: false, error: "duplicate" };
+    setUserLists((prev) =>
+      prev.map((list) => (list.id === updatedList.id ? updatedList : list)),
+    );
+    return { success: true };
+  }
+
+  function deleteList(listId) {
+    setUserLists((prev) => prev.filter((list) => list.id !== listId));
+
+    removeListFromTasks(listId);
+  }
+
+  // Helper functions
+  const getTasksByList = useCallback(
+    (listId) => userTasks.filter((task) => task.listId === listId),
+    [userTasks],
+  );
+
+  return (
+    <ListsContext.Provider
+      value={{
+        userLists,
+        userListsWithCounts,
+        createList,
+        updateList,
+        deleteList,
+        getTasksByList,
+      }}
+    >
+      {children}
+    </ListsContext.Provider>
+  );
+}
+
+export default ListsProvider;

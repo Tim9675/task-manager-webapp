@@ -16,7 +16,6 @@ import ListModal from "./ListModal";
 import { ListsContext } from "../../contexts/ListsContext";
 import { TagsContext } from "../../contexts/TagsContext";
 import TagModal from "./TagModal";
-import { TasksContext } from "../../contexts/TasksContext";
 
 function Sidebar({
   activeView,
@@ -39,13 +38,7 @@ function Sidebar({
     { id: 3, title: "Sticky Wall", icon: StickyNote },
   ];
 
-  const { userLists, createList } = useContext(ListsContext);
-  const { userTasks } = useContext(TasksContext);
-
-  const userListsWithCounts = userLists.map((list) => ({
-    ...list,
-    count: userTasks.filter((task) => task.listId === list.id).length,
-  }));
+  const { userListsWithCounts, createList } = useContext(ListsContext);
 
   const { userTags, createTag } = useContext(TagsContext);
 

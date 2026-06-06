@@ -87,7 +87,11 @@ function ListSidebarItem({ nav, activeView, setActiveView }) {
       {isDeleteListOpen && (
         <DeleteListModal
           nav={nav}
-          onDelete={() => deleteList(nav.id)}
+          onDelete={() => {
+            deleteList(nav.id);
+            if (activeView.type === "list" && activeView.id === nav.id)
+              setActiveView({ type: "today" });
+          }}
           onClose={() => setIsDeleteListOpen(false)}
         />
       )}

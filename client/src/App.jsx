@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import TasksProvider from "./components/providers/TasksProvider";
+import ListsProvider from "./components/providers/ListsProvider";
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
           element={
             <ProtectedRoute>
               <TasksProvider>
-                <DashboardPage />
+                <ListsProvider>
+                  <DashboardPage />
+                </ListsProvider>
               </TasksProvider>
             </ProtectedRoute>
           }

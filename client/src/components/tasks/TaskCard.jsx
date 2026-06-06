@@ -34,7 +34,7 @@ function TaskCard({ task, onSelect, listDetails }) {
           sx={sx}
         />
         <button
-          onClick={() => onSelect(task.id)}
+          onClick={onSelect}
           className="flex grow cursor-pointer items-center justify-between py-2 pe-2"
         >
           <p className="task-title line-clamp-1 text-sm text-neutral-800">

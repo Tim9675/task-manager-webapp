@@ -8,6 +8,10 @@ function TasksProvider({ children }) {
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [isTaskDetailsOpen, setisTaskDetailsOpen] = useState(false);
 
+  // Task to display in TaskDetailsPanel
+  const selectedTask =
+    userTasks.find((task) => task.id === selectedTaskId) || null;
+
   // CRUD functions
   function createTask(title, activeView) {
     if (!title.trim()) return;
@@ -83,8 +87,7 @@ function TasksProvider({ children }) {
         userTasks,
         // selectedTaskId only used inside TaskCard.jsx
         selectedTaskId,
-        // setSelectedTaskId only used inside TaskList.jsx
-        setSelectedTaskId,
+        selectedTask,
         isTaskDetailsOpen,
         openTask,
         closeTask,

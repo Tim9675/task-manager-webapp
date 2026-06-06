@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 
 import TaskList from "../components/tasks/TaskList";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { mockTasks } from "../mock/tasks";
 import { isToday, isUpcoming } from "../utils/date";
 import TaskListSkeleton from "../components/skeletons/TaskListSkeleton";
 import { TasksContext } from "../contexts/TasksContext";
@@ -17,8 +16,8 @@ function DashboardPage() {
   const [isLoadingSidebar, setIsLoadingSidebar] = useState(false);
 
   // TaskList
-  const { userTasks, removeListFromTasks, removeTagFromTasks } =
-    useContext(TasksContext);
+  const { userTasks, removeTagFromTasks } = useContext(TasksContext);
+  const { userLists } = useContext(ListsContext);
   const [isHideCompleted, setIsHideCompleted] = useState(false);
   const [activeView, setActiveView] = useState({
     type: "today",
@@ -27,23 +26,6 @@ function DashboardPage() {
   // Sidebar
   const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [userLists, setUserLists] = useState([
-    {
-      id: "a898ca19-a1d0-40ea-aa88-e4f4378049f2",
-      title: "Personally long list for a very personal person",
-      color: "#ff6b6b",
-    },
-    {
-      id: "c9c8614c-db60-45d7-bd75-1963166d7e39",
-      title: "Work",
-      color: "#66d9e8",
-    },
-    {
-      id: "8ebae8d4-5d61-4497-9714-5f521b10154c",
-      title: "List 1",
-      color: "#ffd43b",
-    },
-  ]);
   const [userTags, setUserTags] = useState(mockTags);
 
   // REMINDER: To be removed when backend connected
@@ -66,48 +48,6 @@ function DashboardPage() {
   const searchedTasks = filteredTasks.filter((task) =>
     task.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-
-  // List functions
-  function createList(title, color) {
-    const normalizedTitle = title.trim().toLowerCase();
-    const duplicate = userLists.some(
-      (list) => list.title.trim().toLowerCase() === normalizedTitle,
-    );
-    if (!normalizedTitle) return { success: false, error: "empty" };
-    if (duplicate) return { success: false, error: "duplicate" };
-    const newList = {
-      id: crypto.randomUUID(),
-      title: title,
-      color: color,
-    };
-    setUserLists((prev) => [...prev, newList]);
-    return { success: true };
-  }
-
-  function updateList(updatedList) {
-    const normalizedTitle = updatedList.title.trim().toLowerCase();
-    if (!normalizedTitle) return { success: false, error: "empty" };
-    const duplicate = userLists.some(
-      (list) =>
-        list.id !== updatedList.id &&
-        list.title.trim().toLowerCase() === normalizedTitle,
-    );
-    if (duplicate) return { success: false, error: "duplicate" };
-    setUserLists((prev) =>
-      prev.map((list) => (list.id === updatedList.id ? updatedList : list)),
-    );
-    return { success: true };
-  }
-
-  function deleteList(listId) {
-    setUserLists((prev) => prev.filter((list) => list.id !== listId));
-
-    removeListFromTasks(listId);
-
-    if (activeView.type === "list" && activeView.id === listId) {
-      setActiveView({ type: "today" });
-    }
-  }
 
   // Tag functions
   function createTag(title, color) {
@@ -176,43 +116,32 @@ function DashboardPage() {
     : [...filteredTasks].sort(compare);
 
   return (
-    <ListsContext.Provider
-      value={{
-        userLists,
-        createList,
-        updateList,
-        deleteList,
-      }}
-    >
-      <TagsContext.Provider
-        value={{ userTags, createTag, updateTag, deleteTag }}
+    <TagsContext.Provider value={{ userTags, createTag, updateTag, deleteTag }}>
+      <DashboardLayout
+        activeView={activeView}
+        setActiveView={setActiveView}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        isHideCompleted={isHideCompleted}
+        setIsHideCompleted={setIsHideCompleted}
+        isLoadingTaskDetails={isLoadingTaskDetails}
+        isLoadingSidebar={isLoadingSidebar}
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
       >
-        <DashboardLayout
-          activeView={activeView}
-          setActiveView={setActiveView}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          isHideCompleted={isHideCompleted}
-          setIsHideCompleted={setIsHideCompleted}
-          isLoadingTaskDetails={isLoadingTaskDetails}
-          isLoadingSidebar={isLoadingSidebar}
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        >
-          {isLoadingTasks ? (
-            <TaskListSkeleton header={renderHeader()} />
-          ) : (
-            <TaskList
-              tasks={visibleTasks}
-              activeView={activeView}
-              header={renderHeader()}
-              searchQuery={searchQuery}
-              isLoadingTasks={isLoadingTasks}
-            />
-          )}
-        </DashboardLayout>
-      </TagsContext.Provider>
-    </ListsContext.Provider>
+        {isLoadingTasks ? (
+          <TaskListSkeleton header={renderHeader()} />
+        ) : (
+          <TaskList
+            tasks={visibleTasks}
+            activeView={activeView}
+            header={renderHeader()}
+            searchQuery={searchQuery}
+            isLoadingTasks={isLoadingTasks}
+          />
+        )}
+      </DashboardLayout>
+    </TagsContext.Provider>
   );
 }
 

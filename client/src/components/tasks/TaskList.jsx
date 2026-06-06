@@ -1,6 +1,6 @@
 import TaskCard from "./TaskCard";
 import AddTask from "./AddTask";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { ListsContext } from "../../contexts/ListsContext";
 import { TasksContext } from "../../contexts/TasksContext";
 
@@ -12,7 +12,11 @@ function TaskList({ tasks, activeView, header, searchQuery }) {
   }
 
   const { userLists } = useContext(ListsContext);
-  const { openTask, setSelectedTaskId } = useContext(TasksContext);
+  const { openTask } = useContext(TasksContext);
+  const listsMap = useMemo(
+    () => Object.fromEntries(userLists.map((list) => [list.id, list])),
+    [userLists],
+  );
 
   return (
     <div className="flex h-full grow flex-col py-5">
@@ -38,12 +42,12 @@ function TaskList({ tasks, activeView, header, searchQuery }) {
             <TaskCard
               key={task.id}
               task={task}
-              onSelect={openTask}
+              onSelect={() => openTask(task.id)}
+              // Tag condition in case a tag has same id as list
               listDetails={
-                // REMINDER: This is inefficient, we should fetch list details when fetching tasks instead of searching through lists on every card render
-                // ERROR: This causes a bug where if you add a task to a list, the task won't show the list color until you refresh or change views, because the list details aren't updated in the task card
-                // REMINDER: We also need to do this for tags when we implement them, so we should probably just change our data structure to include list and tag details in the task object when we fetch tasks
-                userLists.find((list) => list.id === task.listId) || null
+                activeView.type !== "tag" &&
+                activeView.id !== task.listId &&
+                listsMap[task.listId]
               }
             />
           ))
