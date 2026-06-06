@@ -4,6 +4,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import TasksProvider from "./components/providers/TasksProvider";
 
 function App() {
   return (
@@ -15,7 +16,9 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <DashboardPage />
+              <TasksProvider>
+                <DashboardPage />
+              </TasksProvider>
             </ProtectedRoute>
           }
         />

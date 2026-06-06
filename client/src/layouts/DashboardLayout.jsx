@@ -4,6 +4,8 @@ import Sidebar from "../components/sidebar/Sidebar";
 import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
 import TaskDetailsPanelSkeleton from "../components/skeletons/TaskDetailsPanelSkeleton";
 import SidebarSkeleton from "../components/skeletons/SidebarSkeleton";
+import { useContext } from "react";
+import { TasksContext } from "../contexts/TasksContext";
 
 function DashboardLayout({
   children,
@@ -13,13 +15,13 @@ function DashboardLayout({
   setSearchQuery,
   isHideCompleted,
   setIsHideCompleted,
-  isTaskDetailsOpen,
-  setIsTaskDetailsOpen,
   isLoadingTaskDetails,
   isLoadingSidebar,
   isSidebarOpen,
   setIsSidebarOpen,
 }) {
+  const { isTaskDetailsOpen, closeTask } = useContext(TasksContext);
+
   return (
     <div className="flex h-screen w-screen">
       {isSidebarOpen ? (
@@ -48,11 +50,9 @@ function DashboardLayout({
 
       {isTaskDetailsOpen ? (
         isLoadingTaskDetails ? (
-          <TaskDetailsPanelSkeleton
-            onClose={() => setIsTaskDetailsOpen(false)}
-          />
+          <TaskDetailsPanelSkeleton onClose={closeTask} />
         ) : (
-          <TaskDetailsPanel onClose={() => setIsTaskDetailsOpen(false)} />
+          <TaskDetailsPanel onClose={closeTask} />
         )
       ) : null}
     </div>

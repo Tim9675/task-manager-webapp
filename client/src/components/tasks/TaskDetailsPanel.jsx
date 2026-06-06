@@ -37,6 +37,7 @@ function TaskDetailsPanel({ onClose }) {
         <DeleteTaskModal
           onDelete={() => {
             if (selectedTask) deleteTask(selectedTask.id);
+            onClose();
           }}
           onClose={() => setIsDeleteModalOpen(false)}
         />

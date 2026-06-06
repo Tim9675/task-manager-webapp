@@ -2,14 +2,14 @@ import { Plus } from "lucide-react";
 import { useContext, useState } from "react";
 import { TasksContext } from "../../contexts/TasksContext";
 
-function AddTask() {
+function AddTask({ activeView, onOpen }) {
   const [taskToAdd, setTaskToAdd] = useState("");
   const { createTask } = useContext(TasksContext);
   return (
     <div className="mx-5 flex h-13 items-center rounded-md border border-[#ebebeb] px-3 focus-within:border-neutral-300">
       <button
         onClick={() => {
-          createTask(taskToAdd);
+          createTask(taskToAdd, activeView);
           setTaskToAdd("");
         }}
         className="flex size-9 cursor-pointer items-center justify-center"
@@ -23,7 +23,7 @@ function AddTask() {
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
-            createTask(taskToAdd);
+            createTask(taskToAdd, activeView);
             setTaskToAdd("");
           }
         }}

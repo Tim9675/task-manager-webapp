@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import TaskList from "../components/tasks/TaskList";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -16,12 +16,9 @@ function DashboardPage() {
   const [isLoadingTaskDetails, setIsLoadingTaskDetails] = useState(false);
   const [isLoadingSidebar, setIsLoadingSidebar] = useState(false);
 
-  // TaskDetailsPanel
-  const [isTaskDetailsOpen, setIsTaskDetailsOpen] = useState(false);
-  const [selectedTaskId, setSelectedTaskId] = useState(null);
-
   // TaskList
-  const [userTasks, setUserTasks] = useState(mockTasks);
+  const { userTasks, removeListFromTasks, removeTagFromTasks } =
+    useContext(TasksContext);
   const [isHideCompleted, setIsHideCompleted] = useState(false);
   const [activeView, setActiveView] = useState({
     type: "today",
@@ -70,48 +67,6 @@ function DashboardPage() {
     task.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  // Task functions
-  function createTask(title) {
-    if (!title.trim()) return;
-    const newTask = {
-      id: crypto.randomUUID(),
-      title: title,
-      description: "",
-      dueDate: activeView.type === "today" ? new Date() : null,
-      listId: activeView.type === "list" ? activeView.id : null,
-      tagIds: activeView.type === "tag" ? [activeView.id] : [],
-      subtasks: [],
-      checked: false,
-    };
-
-    setUserTasks((prev) => [...prev, newTask]);
-    setSelectedTaskId(newTask.id);
-    setIsTaskDetailsOpen(true);
-  }
-
-  function toggleTask(taskToToggle, checked) {
-    setUserTasks((prev) =>
-      prev.map((task) =>
-        task.id === taskToToggle.id ? { ...task, checked } : task,
-      ),
-    );
-  }
-
-  function updateTask(updatedTask) {
-    setUserTasks((prev) =>
-      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
-    );
-  }
-
-  function deleteTask(taskId) {
-    setUserTasks((prev) => prev.filter((task) => task.id !== taskId));
-
-    if (selectedTaskId === taskId) {
-      setSelectedTaskId(null);
-      setIsTaskDetailsOpen(false);
-    }
-  }
-
   // List functions
   function createList(title, color) {
     const normalizedTitle = title.trim().toLowerCase();
@@ -147,11 +102,7 @@ function DashboardPage() {
   function deleteList(listId) {
     setUserLists((prev) => prev.filter((list) => list.id !== listId));
 
-    setUserTasks((prev) =>
-      prev.map((task) => {
-        return listId === task.listId ? { ...task, listId: null } : task;
-      }),
-    );
+    removeListFromTasks(listId);
 
     if (activeView.type === "list" && activeView.id === listId) {
       setActiveView({ type: "today" });
@@ -192,17 +143,7 @@ function DashboardPage() {
 
   function deleteTag(tagId) {
     setUserTags((prev) => prev.filter((tag) => tag.id !== tagId));
-    setUserTasks((prev) =>
-      prev.map((task) => {
-        const tagList = task.tagIds;
-        if (tagList.includes(tagId)) {
-          const updatedTagList = tagList.filter((id) => id !== tagId);
-          return { ...task, tagIds: updatedTagList };
-        }
-        return task;
-      }),
-    );
-
+    removeTagFromTasks(tagId);
     if (activeView.type === "tag" && activeView.id === tagId) {
       setActiveView({ type: "today" });
     }
@@ -235,64 +176,43 @@ function DashboardPage() {
     : [...filteredTasks].sort(compare);
 
   return (
-    // Memoize in the future
-    <TasksContext.Provider
+    <ListsContext.Provider
       value={{
-        userTasks,
-        // selectedTaskId only used inside TaskCard.jsx
-        selectedTaskId,
-        // createTask only used inside AddTask.jsx
-        createTask,
-        // updateTask only used inside TaskForm.jsx
-        updateTask,
-        // toggleTask only used inside TaskCard.jsx
-        toggleTask,
-        // deleteTask only used inside TaskDetailsPanel.jsx
-        deleteTask,
+        userLists,
+        createList,
+        updateList,
+        deleteList,
       }}
     >
-      <ListsContext.Provider
-        value={{
-          userLists,
-          createList,
-          updateList,
-          deleteList,
-        }}
+      <TagsContext.Provider
+        value={{ userTags, createTag, updateTag, deleteTag }}
       >
-        <TagsContext.Provider
-          value={{ userTags, createTag, updateTag, deleteTag }}
+        <DashboardLayout
+          activeView={activeView}
+          setActiveView={setActiveView}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isHideCompleted={isHideCompleted}
+          setIsHideCompleted={setIsHideCompleted}
+          isLoadingTaskDetails={isLoadingTaskDetails}
+          isLoadingSidebar={isLoadingSidebar}
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
         >
-          <DashboardLayout
-            activeView={activeView}
-            setActiveView={setActiveView}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isHideCompleted={isHideCompleted}
-            setIsHideCompleted={setIsHideCompleted}
-            isTaskDetailsOpen={isTaskDetailsOpen}
-            setIsTaskDetailsOpen={setIsTaskDetailsOpen}
-            isLoadingTaskDetails={isLoadingTaskDetails}
-            isLoadingSidebar={isLoadingSidebar}
-            isSidebarOpen={isSidebarOpen}
-            setIsSidebarOpen={setIsSidebarOpen}
-          >
-            {isLoadingTasks ? (
-              <TaskListSkeleton header={renderHeader()} />
-            ) : (
-              <TaskList
-                tasks={visibleTasks}
-                activeView={activeView}
-                header={renderHeader()}
-                setSelectedTaskId={setSelectedTaskId}
-                searchQuery={searchQuery}
-                setIsTaskDetailsOpen={setIsTaskDetailsOpen}
-                isLoadingTasks={isLoadingTasks}
-              />
-            )}
-          </DashboardLayout>
-        </TagsContext.Provider>
-      </ListsContext.Provider>
-    </TasksContext.Provider>
+          {isLoadingTasks ? (
+            <TaskListSkeleton header={renderHeader()} />
+          ) : (
+            <TaskList
+              tasks={visibleTasks}
+              activeView={activeView}
+              header={renderHeader()}
+              searchQuery={searchQuery}
+              isLoadingTasks={isLoadingTasks}
+            />
+          )}
+        </DashboardLayout>
+      </TagsContext.Provider>
+    </ListsContext.Provider>
   );
 }
 

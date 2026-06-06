@@ -2,21 +2,18 @@ import TaskCard from "./TaskCard";
 import AddTask from "./AddTask";
 import { useContext } from "react";
 import { ListsContext } from "../../contexts/ListsContext";
+import { TasksContext } from "../../contexts/TasksContext";
 
-function TaskList({
-  tasks,
-  activeView,
-  header,
-  setSelectedTaskId,
-  searchQuery,
-  setIsTaskDetailsOpen,
-}) {
+function TaskList({ tasks, activeView, header, searchQuery }) {
   let remainingTasksCounter = 0;
 
   for (let task of tasks) {
     if (!task.checked) remainingTasksCounter++;
   }
+
   const { userLists } = useContext(ListsContext);
+  const { openTask, setSelectedTaskId } = useContext(TasksContext);
+
   return (
     <div className="flex h-full grow flex-col py-5">
       {/* REMINDER: Make header font size adjust based on list title length */}
@@ -29,7 +26,11 @@ function TaskList({
         )}
       </header>
       {!searchQuery && (
-        <AddTask key={`${activeView.type}-${activeView.id ?? ""}`} />
+        <AddTask
+          key={`${activeView.type}-${activeView.id ?? ""}`}
+          activeView={activeView}
+          onOpen={() => setIsTaskDetailsOpen(true)}
+        />
       )}
       <div className="mx-5 flex-1 overflow-y-auto">
         {tasks.length > 0 ? (
@@ -37,10 +38,7 @@ function TaskList({
             <TaskCard
               key={task.id}
               task={task}
-              onSelect={() => {
-                setSelectedTaskId(task.id);
-                setIsTaskDetailsOpen(true);
-              }}
+              onSelect={openTask}
               listDetails={
                 // REMINDER: This is inefficient, we should fetch list details when fetching tasks instead of searching through lists on every card render
                 // ERROR: This causes a bug where if you add a task to a list, the task won't show the list color until you refresh or change views, because the list details aren't updated in the task card
