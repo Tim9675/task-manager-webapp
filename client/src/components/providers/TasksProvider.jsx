@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { TasksContext } from "../../contexts/TasksContext.jsx";
 import { mockTasks } from "../../mock/tasks.js";
@@ -9,8 +9,10 @@ function TasksProvider({ children }) {
   const [isTaskDetailsOpen, setisTaskDetailsOpen] = useState(false);
 
   // Task to display in TaskDetailsPanel
-  const selectedTask =
-    userTasks.find((task) => task.id === selectedTaskId) || null;
+  const selectedTask = useMemo(
+    () => userTasks.find((task) => task.id === selectedTaskId) || null,
+    [userTasks, selectedTaskId],
+  );
 
   // CRUD functions
   function createTask(title, activeView) {

@@ -17,7 +17,7 @@ function DashboardPage() {
 
   // TaskList
   const { userTasks, removeTagFromTasks } = useContext(TasksContext);
-  const { userLists } = useContext(ListsContext);
+  const { userLists, getListName } = useContext(ListsContext);
   const [isHideCompleted, setIsHideCompleted] = useState(false);
   const [activeView, setActiveView] = useState({
     type: "today",
@@ -101,8 +101,8 @@ function DashboardPage() {
       case "upcoming":
         return "Upcoming";
       case "list":
-        const list = userLists.find((list) => list.id === activeView.id);
-        return list?.title ?? "List";
+        const list = getListName(activeView.id);
+        return list ?? "List";
       case "tag":
         const tag = userTags.find((tag) => tag.id === activeView.id);
         return tag?.title ?? "Tag";

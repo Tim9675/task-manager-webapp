@@ -21,6 +21,11 @@ function ListsProvider({ children }) {
     }));
   }, [userLists, userTasks]);
 
+  const userListsNames = useMemo(
+    () => Object.fromEntries(userLists.map((list) => [list.id, list.title])),
+    [userLists],
+  );
+
   // CRUD functions
   function createList(title, color) {
     const normalizedTitle = title.trim().toLowerCase();
@@ -65,6 +70,11 @@ function ListsProvider({ children }) {
     [userTasks],
   );
 
+  const getListName = useCallback(
+    (listId) => userListsNames[listId],
+    [userListsNames],
+  );
+
   return (
     <ListsContext.Provider
       value={{
@@ -74,6 +84,7 @@ function ListsProvider({ children }) {
         updateList,
         deleteList,
         getTasksByList,
+        getListName,
       }}
     >
       {children}
