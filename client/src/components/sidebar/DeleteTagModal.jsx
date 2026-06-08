@@ -1,11 +1,10 @@
 import { useContext } from "react";
-import { TasksContext } from "../../contexts/TasksContext";
+import { TagsContext } from "../../contexts/TagsContext";
 
 function DeleteTagModal({ nav, onDelete, onClose }) {
-  const { userTasks } = useContext(TasksContext);
-  const tasksWithThisTag = userTasks.filter((task) =>
-    task.tagIds.includes(nav.id),
-  );
+  const { getTasksByTag } = useContext(TagsContext);
+
+  const tasksWithThisTag = getTasksByTag(nav.id);
   const taskCount = tasksWithThisTag.length;
 
   return (

@@ -70,7 +70,15 @@ function TagSidebarItem({ nav, activeView, setActiveView }) {
       {isDeleteTagOpen && (
         <DeleteTagModal
           nav={nav}
-          onDelete={() => deleteTag(nav.id)}
+          onDelete={() => {
+            deleteTag(nav.id);
+            const isActiveTag =
+              activeView.type === "tag" && activeView.id === nav.id;
+
+            if (isActiveTag) {
+              setActiveView({ type: "today" });
+            }
+          }}
           onClose={() => setIsDeleteTagOpen(false)}
         />
       )}

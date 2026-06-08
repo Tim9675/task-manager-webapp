@@ -60,7 +60,6 @@ function ListsProvider({ children }) {
 
   function deleteList(listId) {
     setUserLists((prev) => prev.filter((list) => list.id !== listId));
-
     removeListFromTasks(listId);
   }
 
@@ -70,22 +69,25 @@ function ListsProvider({ children }) {
     [userTasks],
   );
 
-  const getListName = useCallback(
-    (id) => userListsMap[id]?.title,
-    [userListsMap],
-  );
+  function getListTitle(id) {
+    return userListsMap[id]?.title;
+  }
+
+  function getListById(id) {
+    return userListsMap[id];
+  }
 
   return (
     <ListsContext.Provider
       value={{
         userLists,
         userListsWithCounts,
-        userListsMap,
         createList,
         updateList,
         deleteList,
         getTasksByList,
-        getListName,
+        getListTitle,
+        getListById,
       }}
     >
       {children}

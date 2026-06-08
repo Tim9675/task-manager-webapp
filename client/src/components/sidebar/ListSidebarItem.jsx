@@ -89,8 +89,12 @@ function ListSidebarItem({ nav, activeView, setActiveView }) {
           nav={nav}
           onDelete={() => {
             deleteList(nav.id);
-            if (activeView.type === "list" && activeView.id === nav.id)
+            const isActiveList =
+              activeView.type === "list" && activeView.id === nav.id;
+
+            if (isActiveList) {
               setActiveView({ type: "today" });
+            }
           }}
           onClose={() => setIsDeleteListOpen(false)}
         />

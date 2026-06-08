@@ -11,7 +11,7 @@ function TaskList({ tasks, activeView, header, searchQuery }) {
     if (!task.checked) remainingTasksCounter++;
   }
 
-  const { userListsMap } = useContext(ListsContext);
+  const { getListById } = useContext(ListsContext);
   const { openTask } = useContext(TasksContext);
 
   return (
@@ -43,7 +43,7 @@ function TaskList({ tasks, activeView, header, searchQuery }) {
               listDetails={
                 activeView.type !== "tag" &&
                 activeView.id !== task.listId &&
-                userListsMap[task.listId]
+                getListById(task.listId)
               }
             />
           ))

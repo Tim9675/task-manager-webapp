@@ -6,6 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import TasksProvider from "./components/providers/TasksProvider";
 import ListsProvider from "./components/providers/ListsProvider";
+import TagsProvider from "./components/providers/TagsProvider";
 
 function App() {
   return (
@@ -19,7 +20,9 @@ function App() {
             <ProtectedRoute>
               <TasksProvider>
                 <ListsProvider>
-                  <DashboardPage />
+                  <TagsProvider>
+                    <DashboardPage />
+                  </TagsProvider>
                 </ListsProvider>
               </TasksProvider>
             </ProtectedRoute>
