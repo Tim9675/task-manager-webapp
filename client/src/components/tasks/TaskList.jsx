@@ -11,12 +11,8 @@ function TaskList({ tasks, activeView, header, searchQuery }) {
     if (!task.checked) remainingTasksCounter++;
   }
 
-  const { userLists } = useContext(ListsContext);
+  const { userListsMap } = useContext(ListsContext);
   const { openTask } = useContext(TasksContext);
-  const listsMap = useMemo(
-    () => Object.fromEntries(userLists.map((list) => [list.id, list])),
-    [userLists],
-  );
 
   return (
     <div className="flex h-full grow flex-col py-5">
@@ -47,7 +43,7 @@ function TaskList({ tasks, activeView, header, searchQuery }) {
               listDetails={
                 activeView.type !== "tag" &&
                 activeView.id !== task.listId &&
-                listsMap[task.listId]
+                userListsMap[task.listId]
               }
             />
           ))

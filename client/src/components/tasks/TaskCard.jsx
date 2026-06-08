@@ -17,8 +17,8 @@ function TaskCard({ task, onSelect, listDetails }) {
     },
   };
 
-  const { selectedTaskId, toggleTask } = useContext(TasksContext);
-  const isSelected = selectedTaskId === task.id;
+  const { isSelectedTask, toggleTask } = useContext(TasksContext);
+  const isSelected = isSelectedTask(task.id);
 
   return (
     <div
@@ -47,7 +47,6 @@ function TaskCard({ task, onSelect, listDetails }) {
       {(listDetails || task.subtasks.length > 0) && (
         <div className="ms-9 flex items-center gap-3 pb-2 text-neutral-500">
           {/* List */}
-          {/* REMINDER: Don't render list details at all for tasks in the "List" view, since we already know the list details from the active view, we can just pass it down as a prop to avoid unnecessary searching through lists */}
           {listDetails && (
             <div className="flex items-center gap-2">
               <div

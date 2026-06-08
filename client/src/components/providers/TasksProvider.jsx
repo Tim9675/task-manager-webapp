@@ -66,6 +66,10 @@ function TasksProvider({ children }) {
     setisTaskDetailsOpen(false);
   }
 
+  function isSelectedTask(taskId) {
+    return selectedTaskId === taskId;
+  }
+
   function removeListFromTasks(listId) {
     setUserTasks((prev) =>
       prev.map((task) =>
@@ -88,11 +92,11 @@ function TasksProvider({ children }) {
       value={{
         userTasks,
         // selectedTaskId only used inside TaskCard.jsx
-        selectedTaskId,
         selectedTask,
         isTaskDetailsOpen,
         openTask,
         closeTask,
+        isSelectedTask,
         // createTask only used inside AddTask.jsx
         createTask,
         // updateTask only used inside TaskForm.jsx

@@ -21,8 +21,8 @@ function ListsProvider({ children }) {
     }));
   }, [userLists, userTasks]);
 
-  const userListsNames = useMemo(
-    () => Object.fromEntries(userLists.map((list) => [list.id, list.title])),
+  const userListsMap = useMemo(
+    () => Object.fromEntries(userLists.map((list) => [list.id, list])),
     [userLists],
   );
 
@@ -71,8 +71,8 @@ function ListsProvider({ children }) {
   );
 
   const getListName = useCallback(
-    (listId) => userListsNames[listId],
-    [userListsNames],
+    (id) => userListsMap[id]?.title,
+    [userListsMap],
   );
 
   return (
@@ -80,6 +80,7 @@ function ListsProvider({ children }) {
       value={{
         userLists,
         userListsWithCounts,
+        userListsMap,
         createList,
         updateList,
         deleteList,
