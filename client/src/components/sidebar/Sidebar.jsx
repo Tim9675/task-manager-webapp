@@ -16,6 +16,7 @@ import ListModal from "./ListModal";
 import { ListsContext } from "../../contexts/ListsContext";
 import { TagsContext } from "../../contexts/TagsContext";
 import TagModal from "./TagModal";
+import { TasksContext } from "../../contexts/TasksContext";
 
 function Sidebar({
   activeView,
@@ -30,17 +31,17 @@ function Sidebar({
   const [isAddListOpen, setIsAddListOpen] = useState(false);
   const [isAddTagOpen, setIsAddTagOpen] = useState(false);
 
+  const { todayTaskCount, upcomingTaskCount } = useContext(TasksContext);
+  const { userListsWithCounts, createList } = useContext(ListsContext);
+  const { userTags, createTag } = useContext(TagsContext);
+
   // Should be the only one hardcoded
   const tasksSection = [
-    { id: 0, title: "Upcoming", count: 12, icon: ChevronsRight },
-    { id: 1, title: "Today", count: 5, icon: ListCheck },
+    { id: 0, title: "Upcoming", count: upcomingTaskCount, icon: ChevronsRight },
+    { id: 1, title: "Today", count: todayTaskCount, icon: ListCheck },
     { id: 2, title: "Calendar", icon: CalendarDays },
     { id: 3, title: "Sticky Wall", icon: StickyNote },
   ];
-
-  const { userListsWithCounts, createList } = useContext(ListsContext);
-
-  const { userTags, createTag } = useContext(TagsContext);
 
   return (
     <aside className="my-5 ms-5 flex h-[calc(100vh-2.5rem)] w-72 flex-col rounded-2xl bg-neutral-100 px-4 py-5">

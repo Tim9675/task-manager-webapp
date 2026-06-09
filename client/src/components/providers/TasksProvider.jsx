@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 
 import { TasksContext } from "../../contexts/TasksContext.jsx";
 import { mockTasks } from "../../mock/tasks.js";
+import { isToday, isUpcoming } from "../../utils/date.js";
 
 function TasksProvider({ children }) {
   const [userTasks, setUserTasks] = useState(mockTasks);
@@ -12,6 +13,19 @@ function TasksProvider({ children }) {
   const selectedTask = useMemo(
     () => userTasks.find((task) => task.id === selectedTaskId) || null,
     [userTasks, selectedTaskId],
+  );
+
+  const todayTaskCount = useMemo(
+    () =>
+      userTasks.filter((task) => !task.checked && isToday(task.dueDate)).length,
+    [userTasks],
+  );
+
+  const upcomingTaskCount = useMemo(
+    () =>
+      userTasks.filter((task) => !task.checked && isUpcoming(task.dueDate))
+        .length,
+    [userTasks],
   );
 
   // CRUD functions
@@ -110,9 +124,10 @@ function TasksProvider({ children }) {
     <TasksContext.Provider
       value={{
         userTasks,
-        // selectedTaskId only used inside TaskCard.jsx
-        selectedTask,
         isTaskDetailsOpen,
+        selectedTask,
+        todayTaskCount,
+        upcomingTaskCount,
         openTask,
         closeTask,
         isSelectedTask,
