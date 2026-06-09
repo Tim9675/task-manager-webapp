@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useMemo } from "react";
 
 import TaskList from "../components/tasks/TaskList";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -18,7 +18,6 @@ function DashboardPage() {
   const { userTasks } = useContext(TasksContext);
   const { getListTitle } = useContext(ListsContext);
   const { getTagTitle } = useContext(TagsContext);
-  const [isHideCompleted, setIsHideCompleted] = useState(false);
   const [activeView, setActiveView] = useState({
     type: "today",
   });
@@ -26,54 +25,48 @@ function DashboardPage() {
   // Sidebar
   const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isHideCompleted, setIsHideCompleted] = useState(false);
 
   // REMINDER: To be removed when backend connected
-  const filteredTasks = userTasks.filter((task) => {
-    if (isHideCompleted && task.checked) return false;
-    switch (activeView.type) {
-      case "today":
-        return isToday(task.dueDate);
-      case "upcoming":
-        return isUpcoming(task.dueDate);
-      case "list":
-        return task.listId === activeView.id;
-      case "tag":
-        return task.tagIds.includes(activeView.id);
-      default:
-        return true;
-    }
-  });
+  const visibleTasks = useMemo(() => {
+    const filtered = userTasks.filter((task) => {
+      if (isHideCompleted && task.checked) return false;
+      switch (activeView.type) {
+        case "today":
+          return isToday(task.dueDate);
+        case "upcoming":
+          return isUpcoming(task.dueDate);
+        case "list":
+          return task.listId === activeView.id;
+        case "tag":
+          return task.tagIds.includes(activeView.id);
+        default:
+          return true;
+      }
+    });
 
-  const searchedTasks = filteredTasks.filter((task) =>
-    task.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+    const searched = searchQuery
+      ? filtered.filter((task) =>
+          task.title.toLowerCase().includes(searchQuery.toLowerCase()),
+        )
+      : filtered;
 
-  // REMINDER: Change criteria to createdAt when backend is integrated
-  function compare(a, b) {
-    if (a.checked === b.checked) return 0;
+    return [...searched].sort(compareTasks);
+  }, [userTasks, activeView, searchQuery, isHideCompleted]);
 
-    return a.checked ? 1 : -1;
-  }
-
-  function renderHeader() {
+  const header = useMemo(() => {
     if (searchQuery) return "Search results";
     switch (activeView.type) {
       case "upcoming":
         return "Upcoming";
       case "list":
-        const list = getListTitle(activeView.id);
-        return list ?? "List";
+        return getListTitle(activeView.id) ?? "List";
       case "tag":
-        const tag = getTagTitle(activeView.id);
-        return tag ?? "Tag";
+        return getTagTitle(activeView.id) ?? "Tag";
       default:
         return "Today";
     }
-  }
-
-  const visibleTasks = searchQuery
-    ? [...searchedTasks].sort(compare)
-    : [...filteredTasks].sort(compare);
+  }, [searchQuery, activeView, getListTitle, getTagTitle]);
 
   return (
     <DashboardLayout
@@ -89,18 +82,23 @@ function DashboardPage() {
       setIsSidebarOpen={setIsSidebarOpen}
     >
       {isLoadingTasks ? (
-        <TaskListSkeleton header={renderHeader()} />
+        <TaskListSkeleton header={header} />
       ) : (
         <TaskList
           tasks={visibleTasks}
           activeView={activeView}
-          header={renderHeader()}
+          header={header}
           searchQuery={searchQuery}
-          isLoadingTasks={isLoadingTasks}
         />
       )}
     </DashboardLayout>
   );
+}
+
+// REMINDER: Add criteria "createdAt" when backend is integrated
+function compareTasks(a, b) {
+  if (a.checked === b.checked) return 0;
+  return a.checked ? 1 : -1;
 }
 
 export default DashboardPage;

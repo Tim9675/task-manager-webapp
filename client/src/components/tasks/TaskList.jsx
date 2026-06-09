@@ -1,8 +1,10 @@
+import { useContext } from "react";
+
 import TaskCard from "./TaskCard";
 import AddTask from "./AddTask";
-import { useContext, useMemo } from "react";
 import { ListsContext } from "../../contexts/ListsContext";
 import { TasksContext } from "../../contexts/TasksContext";
+import Upcoming from "./Upcoming";
 
 function TaskList({ tasks, activeView, header, searchQuery }) {
   let remainingTasksCounter = 0;
@@ -16,7 +18,6 @@ function TaskList({ tasks, activeView, header, searchQuery }) {
 
   return (
     <div className="flex h-full grow flex-col py-5">
-      {/* REMINDER: Make header font size adjust based on list title length */}
       <header className="mb-5 flex w-full px-5">
         <h3 className="ms-2.5 text-[2.5rem] font-bold">{header}</h3>
         {remainingTasksCounter > 0 && (
@@ -25,34 +26,40 @@ function TaskList({ tasks, activeView, header, searchQuery }) {
           </div>
         )}
       </header>
-      {!searchQuery && (
-        <AddTask
-          key={`${activeView.type}-${activeView.id ?? ""}`}
-          activeView={activeView}
-          onOpen={() => setIsTaskDetailsOpen(true)}
-        />
-      )}
-      <div className="mx-5 flex-1 overflow-y-auto">
-        {tasks.length > 0 ? (
-          tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onSelect={() => openTask(task.id)}
-              // Tag condition in case a tag has same id as list
-              listDetails={
-                activeView.type !== "tag" &&
-                activeView.id !== task.listId &&
-                getListById(task.listId)
-              }
+      {activeView.type === "upcoming" ? (
+        <Upcoming tasks={tasks} />
+      ) : (
+        <>
+          {/* REMINDER: Make header font size adjust based on list title length */}
+          {!searchQuery && (
+            <AddTask
+              key={`${activeView.type}-${activeView.id ?? ""}`}
+              activeView={activeView}
             />
-          ))
-        ) : (
-          <p className="my-2.5 w-full text-center">
-            No items match your search.
-          </p>
-        )}
-      </div>
+          )}
+          <div className="mx-5 flex-1 overflow-y-auto">
+            {tasks.length > 0 ? (
+              tasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onSelect={() => openTask(task.id)}
+                  // Tag condition in case a tag has same id as list
+                  listDetails={
+                    activeView.type !== "tag" &&
+                    activeView.id !== task.listId &&
+                    getListById(task.listId)
+                  }
+                />
+              ))
+            ) : (
+              <p className="my-2.5 w-full text-center">
+                No items match your search.
+              </p>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -13,9 +13,34 @@ export function isToday(date) {
 
 export function isUpcoming(date) {
   const now = DateTime.now().setZone(DEFAULT_TIMEZONE);
-  // Currently filters whole week; intended filter:
-  const weekStart = now.startOf("week");
+  // Currently filters whole week; intended filter: today, tomorrow, remaining days of the week
+  const todayStart = now.startOf("day");
+  const nextWeekStart = now.startOf("week").plus({ weeks: 1 });
+
+  return todayStart <= date && date < nextWeekStart;
+}
+
+export function getTaskDateBuckets(zone) {
+  const now = DateTime.now().setZone(zone);
+
+  const todayStart = now.startOf("day");
+  const tomorrowStart = todayStart.plus({ days: 1 });
+  const dayAfterTomorrow = tomorrowStart.plus({ days: 1 });
+  const weekStart = now.startOf("week"); // Monday (Luxon ISO default)
   const nextWeekStart = weekStart.plus({ weeks: 1 });
 
-  return weekStart <= date && date < nextWeekStart;
+  return {
+    today: {
+      start: todayStart.toUTC().toJSDate(),
+      end: tomorrowStart.toUTC().toJSDate(),
+    },
+    tomorrow: {
+      start: tomorrowStart.toUTC().toJSDate(),
+      end: dayAfterTomorrow.toUTC().toJSDate(),
+    },
+    thisWeek: {
+      start: dayAfterTomorrow.toUTC().toJSDate(),
+      end: nextWeekStart.toUTC().toJSDate(),
+    },
+  };
 }

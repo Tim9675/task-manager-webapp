@@ -17,11 +17,30 @@ function TasksProvider({ children }) {
   // CRUD functions
   function createTask(title, activeView) {
     if (!title.trim()) return;
+    const date = new Date();
+    const dayOfWeek = date.getDay();
+    switch (activeView.id) {
+      case "tomorrow":
+        date.setDate(date.getDate() + 1);
+        break;
+      // Sets date to day after tomorrow on weekdays, tomorrow for Saturday, and today for Sunday, to still adhere to "This Week"
+      case "thisWeek":
+        if (dayOfWeek === 6) {
+          date.setDate(date.getDate() + 1);
+        } else if (0 < dayOfWeek) {
+          date.setDate(date.getDate() + 2);
+        }
+        break;
+    }
+
     const newTask = {
       id: crypto.randomUUID(),
       title: title,
       description: "",
-      dueDate: activeView.type === "today" ? new Date() : null,
+      dueDate:
+        activeView.type === "today" || activeView.type === "upcoming"
+          ? date
+          : null,
       listId: activeView.type === "list" ? activeView.id : null,
       tagIds: activeView.type === "tag" ? [activeView.id] : [],
       subtasks: [],
