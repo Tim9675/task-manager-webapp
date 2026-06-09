@@ -1,6 +1,7 @@
 import { useContext, useState, useMemo } from "react";
 
 import TaskList from "../components/tasks/TaskList";
+import StickyWall from "../components/tasks/StickyWall";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { isToday, isUpcoming } from "../utils/date";
 import TaskListSkeleton from "../components/skeletons/TaskListSkeleton";
@@ -19,7 +20,7 @@ function DashboardPage() {
   const { getListTitle } = useContext(ListsContext);
   const { getTagTitle } = useContext(TagsContext);
   const [activeView, setActiveView] = useState({
-    type: "today",
+    type: "stickyWall",
   });
 
   // Sidebar
@@ -81,7 +82,9 @@ function DashboardPage() {
       isSidebarOpen={isSidebarOpen}
       setIsSidebarOpen={setIsSidebarOpen}
     >
-      {isLoadingTasks ? (
+      {activeView.type === "stickyWall" ? (
+        <StickyWall />
+      ) : isLoadingTasks ? (
         <TaskListSkeleton header={header} />
       ) : (
         <TaskList

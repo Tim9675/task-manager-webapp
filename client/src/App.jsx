@@ -7,6 +7,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import TasksProvider from "./components/providers/TasksProvider";
 import ListsProvider from "./components/providers/ListsProvider";
 import TagsProvider from "./components/providers/TagsProvider";
+import NotesProvider from "./components/providers/NotesProvider";
 
 function App() {
   return (
@@ -21,7 +22,9 @@ function App() {
               <TasksProvider>
                 <ListsProvider>
                   <TagsProvider>
-                    <DashboardPage />
+                    <NotesProvider>
+                      <DashboardPage />
+                    </NotesProvider>
                   </TagsProvider>
                 </ListsProvider>
               </TasksProvider>
