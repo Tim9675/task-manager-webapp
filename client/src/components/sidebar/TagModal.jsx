@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { TagsContext } from "../../contexts/TagsContext";
 
 function TagModal({ mode, tag = {}, tagFunction, onClose }) {
   const [tagTitle, setTagTitle] = useState(mode === "edit" ? tag.title : "");
@@ -7,7 +8,7 @@ function TagModal({ mode, tag = {}, tagFunction, onClose }) {
   );
   const [isTagDuplicate, setIsTagDuplicate] = useState(false);
 
-  const availableColors = ["#d1eaed", "#ffdada", "#fdf2b3", "#ffd4a9"];
+  const { availableTagColors } = useContext(TagsContext);
 
   function submitTag() {
     let result;
@@ -81,7 +82,7 @@ function TagModal({ mode, tag = {}, tagFunction, onClose }) {
             />
           </div>
           <div className="mt-2.5 flex h-5 w-full items-center justify-evenly">
-            {availableColors.map((color) => (
+            {availableTagColors.map((color) => (
               <button
                 key={color}
                 type="button"

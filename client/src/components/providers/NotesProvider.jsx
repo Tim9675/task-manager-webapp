@@ -6,13 +6,15 @@ import { mockNotes } from "../../mock/notes";
 function NotesProvider({ children }) {
   const [userNotes, setUserNotes] = useState(mockNotes);
 
+  const availableNoteColors = ["#d1eaed", "#ffdada", "#fdf2b3", "#ffd4a9"];
+
   // CRUD functions
   function createNote(title, content, color) {
     const normalizedTitle = title.trim().toLowerCase();
+    if (!normalizedTitle) return { success: false, error: "empty" };
     const duplicate = userNotes.some(
       (note) => note.title.trim().toLowerCase() === normalizedTitle,
     );
-    if (!normalizedTitle) return { success: false, error: "empty" };
     if (duplicate) return { success: false, error: "duplicate" };
     const newNote = {
       id: crypto.randomUUID(),
@@ -47,6 +49,7 @@ function NotesProvider({ children }) {
     <NotesContext.Provider
       value={{
         userNotes,
+        availableNoteColors,
         createNote,
         updateNote,
         deleteNote,

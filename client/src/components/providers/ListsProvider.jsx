@@ -12,6 +12,7 @@ function ListsProvider({ children }) {
     const taskCounter = {};
 
     for (const task of userTasks) {
+      if (task.checked) continue;
       taskCounter[task.listId] = (taskCounter[task.listId] ?? 0) + 1;
     }
 
@@ -25,6 +26,17 @@ function ListsProvider({ children }) {
     () => Object.fromEntries(userLists.map((list) => [list.id, list])),
     [userLists],
   );
+
+  const availableListColors = [
+    "#ff6b6b",
+    "#da77f2",
+    "#9775fa",
+    "#5c7cfa",
+    "#66d9e8",
+    "#8ce99a",
+    "#ffd43b",
+    "#ff922b",
+  ];
 
   // CRUD functions
   function createList(title, color) {
@@ -82,6 +94,7 @@ function ListsProvider({ children }) {
       value={{
         userLists,
         userListsWithCounts,
+        availableListColors,
         createList,
         updateList,
         deleteList,

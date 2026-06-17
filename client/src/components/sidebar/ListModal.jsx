@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ListsContext } from "../../contexts/ListsContext";
 
 function ListModal({ mode, list = {}, listFunction, onClose }) {
   const [listTitle, setListTitle] = useState(mode === "edit" ? list.title : "");
@@ -7,16 +8,7 @@ function ListModal({ mode, list = {}, listFunction, onClose }) {
   );
   const [isListDuplicate, setIsListDuplicate] = useState(false);
 
-  const availableColors = [
-    "#ff6b6b",
-    "#da77f2",
-    "#9775fa",
-    "#5c7cfa",
-    "#66d9e8",
-    "#8ce99a",
-    "#ffd43b",
-    "#ff922b",
-  ];
+  const { availableListColors } = useContext(ListsContext);
 
   function submitList() {
     let result;
@@ -91,7 +83,7 @@ function ListModal({ mode, list = {}, listFunction, onClose }) {
             />
           </div>
           <div className="mt-2.5 flex h-5 w-full items-center justify-evenly">
-            {availableColors.map((color) => (
+            {availableListColors.map((color) => (
               <button
                 key={color}
                 type="button"

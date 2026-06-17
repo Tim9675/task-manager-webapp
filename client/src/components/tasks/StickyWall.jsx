@@ -1,9 +1,16 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+
 import { NotesContext } from "../../contexts/NotesContext";
 import NoteCard from "./NoteCard";
+import AddNoteButton from "./AddNoteButton";
+import NoteInput from "./NoteInput";
 
 function StickyWall() {
-  const { userNotes } = useContext(NotesContext);
+  const { userNotes, createNote, updateNote, deleteNote, availableNoteColors } =
+    useContext(NotesContext);
+  const [isAddingNote, setIsAddingNote] = useState(false);
+  const [editNoteId, setEditNoteId] = useState(null);
+
   return (
     <div className="flex h-full flex-col py-5">
       <header className="mb-5 flex w-full px-5">
@@ -11,9 +18,38 @@ function StickyWall() {
       </header>
       {/* Idk why main is tabable. Is <main> automatically tabable or is it because of grid? */}
       <div className="mx-5 grid grid-cols-1 gap-5 overflow-y-auto rounded border border-[#ebebeb] px-6 py-5 md:grid-cols-2 xl:grid-cols-3">
-        {userNotes.map((note) => (
-          <NoteCard key={note.id} note={note} />
-        ))}
+        {userNotes.map((note) => {
+          if (note.id === editNoteId)
+            return (
+              <NoteInput
+                key={note.id}
+                mode="edit"
+                note={note}
+                onClose={() => setEditNoteId(null)}
+                noteFunction={updateNote}
+                availableNoteColors={availableNoteColors}
+              />
+            );
+          return (
+            <NoteCard
+              key={note.id}
+              note={note}
+              onEdit={() => setEditNoteId(note.id)}
+              onDelete={() => deleteNote(note.id)}
+            />
+          );
+        })}
+
+        {isAddingNote ? (
+          <NoteInput
+            mode="create"
+            onClose={() => setIsAddingNote(false)}
+            noteFunction={createNote}
+            availableNoteColors={availableNoteColors}
+          />
+        ) : (
+          <AddNoteButton onAdd={() => setIsAddingNote(true)} />
+        )}
       </div>
     </div>
   );

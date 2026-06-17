@@ -20,7 +20,7 @@ function DashboardPage() {
   const { getListTitle } = useContext(ListsContext);
   const { getTagTitle } = useContext(TagsContext);
   const [activeView, setActiveView] = useState({
-    type: "stickyWall",
+    type: "today",
   });
 
   // Sidebar
@@ -82,7 +82,7 @@ function DashboardPage() {
       isSidebarOpen={isSidebarOpen}
       setIsSidebarOpen={setIsSidebarOpen}
     >
-      {activeView.type === "stickyWall" ? (
+      {activeView.type === "stickywall" ? (
         <StickyWall />
       ) : isLoadingTasks ? (
         <TaskListSkeleton header={header} />

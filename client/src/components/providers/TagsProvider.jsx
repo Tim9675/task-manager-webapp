@@ -13,6 +13,8 @@ function TagsProvider({ children }) {
     [userTags],
   );
 
+  const availableTagColors = ["#d1eaed", "#ffdada", "#fdf2b3", "#ffd4a9"];
+
   // CRUD functions
   function createTag(title, color) {
     const normalizedTitle = title.trim().toLowerCase();
@@ -64,6 +66,7 @@ function TagsProvider({ children }) {
     <TagsContext.Provider
       value={{
         userTags,
+        availableTagColors,
         createTag,
         updateTag,
         deleteTag,
