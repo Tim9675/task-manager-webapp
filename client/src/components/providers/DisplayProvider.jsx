@@ -6,7 +6,7 @@ import { ListsContext } from "../../contexts/ListsContext.jsx";
 import { TagsContext } from "../../contexts/TagsContext.jsx";
 import { DisplayContext } from "../../contexts/DisplayContext.jsx";
 
-function DisplaysProvider({ children }) {
+function DisplayProvider({ children }) {
   const [activeView, setActiveView] = useState({
     type: "today",
   });
@@ -88,4 +88,4 @@ function compareTasks(a, b) {
   return a.checked ? 1 : -1;
 }
 
-export default DisplaysProvider;
+export default DisplayProvider;
