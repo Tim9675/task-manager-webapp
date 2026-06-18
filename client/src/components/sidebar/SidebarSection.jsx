@@ -6,8 +6,6 @@ function SidebarSection({
   title,
   type,
   navList = [],
-  activeView,
-  setActiveView,
   setIsAddListOpen = () => {},
   setIsAddTagOpen = () => {},
 }) {
@@ -17,26 +15,14 @@ function SidebarSection({
       {type === "tags" ? (
         <nav className="flex w-full flex-wrap gap-1">
           {navList.map((nav) => (
-            <SidebarItem
-              key={nav.id}
-              nav={nav}
-              type={type}
-              activeView={activeView}
-              setActiveView={setActiveView}
-            />
+            <SidebarItem key={nav.id} nav={nav} type={type} />
           ))}
           <AddTag onOpen={() => setIsAddTagOpen(true)} />
         </nav>
       ) : (
         <nav className="flex flex-col">
           {navList.map((nav) => (
-            <SidebarItem
-              key={nav.id}
-              nav={nav}
-              type={type}
-              activeView={activeView}
-              setActiveView={setActiveView}
-            />
+            <SidebarItem key={nav.id} nav={nav} type={type} />
           ))}
         </nav>
       )}

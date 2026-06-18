@@ -18,15 +18,7 @@ import { TagsContext } from "../../contexts/TagsContext";
 import TagModal from "./TagModal";
 import { TasksContext } from "../../contexts/TasksContext";
 
-function Sidebar({
-  activeView,
-  setActiveView,
-  searchQuery,
-  setSearchQuery,
-  isHideCompleted,
-  setIsHideCompleted,
-  onClose,
-}) {
+function Sidebar({ onClose }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddListOpen, setIsAddListOpen] = useState(false);
   const [isAddTagOpen, setIsAddTagOpen] = useState(false);
@@ -57,31 +49,21 @@ function Sidebar({
         </button>
       </header>
 
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <SearchBar />
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto">
-        <SidebarSection
-          title="Tasks"
-          type={"tasks"}
-          navList={tasksSection}
-          activeView={activeView}
-          setActiveView={setActiveView}
-        />
+        <SidebarSection title="Tasks" type={"tasks"} navList={tasksSection} />
         <SidebarSection
           title="Lists"
           type={"lists"}
           navList={userListsWithCounts}
-          activeView={activeView}
-          setActiveView={setActiveView}
           setIsAddListOpen={setIsAddListOpen}
         />
         <SidebarSection
           title="Tags"
           type={"tags"}
           navList={userTags}
-          activeView={activeView}
-          setActiveView={setActiveView}
           setIsAddTagOpen={setIsAddTagOpen}
         />
       </div>
@@ -107,11 +89,7 @@ function Sidebar({
       <footer className="md:h-18">
         <SettingsButton onOpen={() => setIsSettingsOpen(true)} />
         {isSettingsOpen && (
-          <SettingsModal
-            isHideCompleted={isHideCompleted}
-            setIsHideCompleted={setIsHideCompleted}
-            onClose={() => setIsSettingsOpen(false)}
-          />
+          <SettingsModal onClose={() => setIsSettingsOpen(false)} />
         )}
         <SignOutButton />
       </footer>

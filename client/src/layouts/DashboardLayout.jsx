@@ -1,26 +1,19 @@
+import { useContext, useState } from "react";
 import { Menu } from "lucide-react";
 
 import Sidebar from "../components/sidebar/Sidebar";
 import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
 import TaskDetailsPanelSkeleton from "../components/skeletons/TaskDetailsPanelSkeleton";
 import SidebarSkeleton from "../components/skeletons/SidebarSkeleton";
-import { useContext } from "react";
 import { TasksContext } from "../contexts/TasksContext";
+import { DisplayContext } from "../contexts/DisplayContext";
 
-function DashboardLayout({
-  children,
-  activeView,
-  setActiveView,
-  searchQuery,
-  setSearchQuery,
-  isHideCompleted,
-  setIsHideCompleted,
-  isLoadingTaskDetails,
-  isLoadingSidebar,
-  isSidebarOpen,
-  setIsSidebarOpen,
-}) {
+function DashboardLayout({ children }) {
+  const [isLoadingTaskDetails, setIsLoadingTaskDetails] = useState(false);
+  const [isLoadingSidebar, setIsLoadingSidebar] = useState(false);
+
   const { isTaskDetailsOpen, closeTask } = useContext(TasksContext);
+  const { isSidebarOpen, setIsSidebarOpen } = useContext(DisplayContext);
 
   return (
     <div className="flex h-screen w-screen">
@@ -28,15 +21,7 @@ function DashboardLayout({
         isLoadingSidebar ? (
           <SidebarSkeleton />
         ) : (
-          <Sidebar
-            activeView={activeView}
-            setActiveView={setActiveView}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isHideCompleted={isHideCompleted}
-            setIsHideCompleted={setIsHideCompleted}
-            onClose={() => setIsSidebarOpen(false)}
-          />
+          <Sidebar onClose={() => setIsSidebarOpen(false)} />
         )
       ) : (
         <button

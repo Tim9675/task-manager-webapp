@@ -5,13 +5,21 @@ import ListModal from "./ListModal";
 import DeleteListModal from "./DeleteListModal";
 import { ListsContext } from "../../contexts/ListsContext";
 
-function ListSidebarItem({ nav, activeView, setActiveView }) {
+function ListSidebarItem({
+  nav,
+  activeView,
+  setActiveView,
+  isSearching,
+  onDisplayChange,
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditListOpen, setIsEditListOpen] = useState(false);
   const [isDeleteListOpen, setIsDeleteListOpen] = useState(false);
 
   const { updateList, deleteList } = useContext(ListsContext);
 
+  const isCurrentDisplay =
+    activeView.type === "list" && nav.id === activeView.id && !isSearching;
   return (
     <>
       {/*
@@ -21,8 +29,8 @@ function ListSidebarItem({ nav, activeView, setActiveView }) {
       */}
       <button
         type="button"
-        onClick={() => setActiveView({ type: "list", id: nav.id })}
-        className={`group flex w-full cursor-pointer items-center justify-between rounded-md ps-3 ${activeView.type === "list" && nav.id === activeView.id && "bg-[#ebebeb]"} hover:bg-[#ebebeb] md:h-9`}
+        onClick={onDisplayChange}
+        className={`group flex w-full cursor-pointer items-center justify-between rounded-md ps-3 ${isCurrentDisplay && "bg-[#ebebeb]"} hover:bg-[#ebebeb] md:h-9`}
       >
         <div className="flex min-w-0 items-center">
           <div
@@ -36,7 +44,7 @@ function ListSidebarItem({ nav, activeView, setActiveView }) {
         <div className="flex w-12.5 items-center justify-end">
           {nav.count > 0 && (
             <div
-              className={`flex h-5 w-7.5 shrink-0 items-center justify-center rounded-sm ${activeView.type === "list" && nav.id === activeView.id ? "bg-[#fafafa]" : "bg-[#ebebeb]"} group-hover:bg-[#fafafa]`}
+              className={`flex h-5 w-7.5 shrink-0 items-center justify-center rounded-sm ${isCurrentDisplay ? "bg-[#fafafa]" : "bg-[#ebebeb]"} group-hover:bg-[#fafafa]`}
             >
               <p className="text-xs">{nav.count}</p>
             </div>

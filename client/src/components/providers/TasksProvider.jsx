@@ -33,6 +33,7 @@ function TasksProvider({ children }) {
     if (!title.trim()) return;
     const date = new Date();
     const dayOfWeek = date.getDay();
+    // can probably refactor this
     switch (activeView.id) {
       case "tomorrow":
         date.setDate(date.getDate() + 1);

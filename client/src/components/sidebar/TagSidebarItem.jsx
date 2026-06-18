@@ -5,12 +5,21 @@ import TagModal from "./TagModal";
 import { TagsContext } from "../../contexts/TagsContext";
 import DeleteTagModal from "./DeleteTagModal";
 
-function TagSidebarItem({ nav, activeView, setActiveView }) {
+function TagSidebarItem({
+  nav,
+  activeView,
+  setActiveView,
+  isSearching,
+  onDisplayChange,
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditTagOpen, setIsEditTagOpen] = useState(false);
   const [isDeleteTagOpen, setIsDeleteTagOpen] = useState(false);
 
   const { updateTag, deleteTag } = useContext(TagsContext);
+
+  const isCurrentDisplay =
+    activeView?.type === "tag" && activeView?.id === nav.id && !isSearching;
   return (
     <>
       {/*
@@ -20,8 +29,8 @@ function TagSidebarItem({ nav, activeView, setActiveView }) {
       */}
       <button
         type="button"
-        onClick={() => setActiveView({ type: "tag", id: nav.id })}
-        className={`group relative z-20 my-1 cursor-pointer rounded px-4 py-1 text-sm hover:brightness-95 ${activeView?.type === "tag" && activeView?.id === nav.id ? "inset-shadow-xs" : "shadow-xs"} shadow-[#aaaaaa] inset-shadow-[#aaaaaa] active:inset-shadow-xs ${isMenuOpen ? "z-50" : "z-0"}`}
+        onClick={onDisplayChange}
+        className={`group relative z-20 my-1 cursor-pointer rounded px-4 py-1 text-sm hover:brightness-95 ${isCurrentDisplay ? "inset-shadow-xs" : "shadow-xs"} shadow-[#aaaaaa] inset-shadow-[#aaaaaa] active:inset-shadow-xs ${isMenuOpen ? "z-50" : "z-0"}`}
         style={{ backgroundColor: nav.color }}
       >
         <h3>{nav.title}</h3>

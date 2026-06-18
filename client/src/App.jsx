@@ -8,6 +8,7 @@ import TasksProvider from "./components/providers/TasksProvider";
 import ListsProvider from "./components/providers/ListsProvider";
 import TagsProvider from "./components/providers/TagsProvider";
 import NotesProvider from "./components/providers/NotesProvider";
+import DisplaysProvider from "./components/providers/DisplaysProvider";
 
 function App() {
   return (
@@ -23,7 +24,9 @@ function App() {
                 <ListsProvider>
                   <TagsProvider>
                     <NotesProvider>
-                      <DashboardPage />
+                      <DisplaysProvider>
+                        <DashboardPage />
+                      </DisplaysProvider>
                     </NotesProvider>
                   </TagsProvider>
                 </ListsProvider>

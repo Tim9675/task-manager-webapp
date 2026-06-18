@@ -1,4 +1,9 @@
-function SettingsModal({ isHideCompleted, setIsHideCompleted, onClose }) {
+import { useContext } from "react";
+import { DisplayContext } from "../../contexts/DisplayContext";
+
+function SettingsModal({ onClose }) {
+  const { isHideCompleted, setIsHideCompleted } = useContext(DisplayContext);
+
   return (
     <div
       onClick={onClose}

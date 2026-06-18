@@ -17,7 +17,6 @@ function SubTaskList({ tasks, id, header }) {
       <AddTask
         key={`upcoming-${header}`}
         activeView={{ type: "upcoming", id: id }}
-        onOpen={() => {}}
       />
       <div className="mx-5 flex-1 overflow-y-auto">
         {tasks.length > 0 ? (

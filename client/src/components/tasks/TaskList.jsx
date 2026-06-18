@@ -5,8 +5,15 @@ import AddTask from "./AddTask";
 import { ListsContext } from "../../contexts/ListsContext";
 import { TasksContext } from "../../contexts/TasksContext";
 import Upcoming from "./Upcoming";
+import { DisplayContext } from "../../contexts/DisplayContext";
 
-function TaskList({ tasks, activeView, header, searchQuery }) {
+function TaskList({ header }) {
+  const {
+    activeView,
+    isSearching,
+    visibleTasks: tasks,
+  } = useContext(DisplayContext);
+
   let remainingTasksCounter = 0;
 
   for (let task of tasks) {
@@ -26,12 +33,12 @@ function TaskList({ tasks, activeView, header, searchQuery }) {
           </div>
         )}
       </header>
-      {activeView.type === "upcoming" ? (
+      {activeView.type === "upcoming" && !isSearching ? (
         <Upcoming tasks={tasks} />
       ) : (
         <>
           {/* REMINDER: Make header font size adjust based on list title length */}
-          {!searchQuery && (
+          {!isSearching && (
             <AddTask
               key={`${activeView.type}-${activeView.id ?? ""}`}
               activeView={activeView}

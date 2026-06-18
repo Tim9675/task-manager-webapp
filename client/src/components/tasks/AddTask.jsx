@@ -2,7 +2,7 @@ import { Plus } from "lucide-react";
 import { useContext, useState } from "react";
 import { TasksContext } from "../../contexts/TasksContext";
 
-function AddTask({ activeView, onOpen }) {
+function AddTask({ activeView }) {
   const [taskToAdd, setTaskToAdd] = useState("");
   const { createTask } = useContext(TasksContext);
   return (

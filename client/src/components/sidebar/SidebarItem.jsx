@@ -1,8 +1,14 @@
+import { useContext } from "react";
+import { DisplayContext } from "../../contexts/DisplayContext";
+
 import TaskSidebarItem from "./TaskSidebarItem";
 import ListSidebarItem from "./ListSidebarItem";
 import TagSidebarItem from "./TagSidebarItem";
 
-function SidebarItem({ nav, type, activeView, setActiveView }) {
+function SidebarItem({ nav, type }) {
+  const { activeView, setActiveView, isSearching, setIsSearching } =
+    useContext(DisplayContext);
+
   function renderItem() {
     switch (type) {
       case "tasks":
@@ -10,7 +16,13 @@ function SidebarItem({ nav, type, activeView, setActiveView }) {
           <TaskSidebarItem
             nav={nav}
             activeView={activeView}
-            setActiveView={setActiveView}
+            isSearching={isSearching}
+            onDisplayChange={() => {
+              setIsSearching(false);
+              setActiveView({
+                type: nav.title.toLowerCase().replaceAll(" ", ""),
+              });
+            }}
           />
         );
       case "lists":
@@ -19,6 +31,11 @@ function SidebarItem({ nav, type, activeView, setActiveView }) {
             nav={nav}
             activeView={activeView}
             setActiveView={setActiveView}
+            isSearching={isSearching}
+            onDisplayChange={() => {
+              setIsSearching(false);
+              setActiveView({ type: "list", id: nav.id });
+            }}
           />
         );
       case "tags":
@@ -26,7 +43,12 @@ function SidebarItem({ nav, type, activeView, setActiveView }) {
           <TagSidebarItem
             nav={nav}
             activeView={activeView}
-            setActiveView={setActiveView}
+            setActiveView
+            isSearching={isSearching}
+            onDisplayChange={() => {
+              setIsSearching(false);
+              setActiveView({ type: "tag", id: nav.id });
+            }}
           />
         );
       default:
