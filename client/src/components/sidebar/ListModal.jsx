@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { ListsContext } from "../../contexts/ListsContext";
 
-function ListModal({ mode, list = {}, listFunction, onClose }) {
+function ListModal({ mode, list = {}, onListSubmit, onClose }) {
   const [listTitle, setListTitle] = useState(mode === "edit" ? list.title : "");
   const [listColor, setListColor] = useState(
     mode === "edit" ? list.color : "#ff6b6b",
@@ -14,10 +14,10 @@ function ListModal({ mode, list = {}, listFunction, onClose }) {
     let result;
     switch (mode) {
       case "create":
-        result = listFunction(listTitle, listColor);
+        result = onListSubmit(listTitle, listColor);
         break;
       case "edit":
-        result = listFunction({
+        result = onListSubmit({
           id: list.id,
           title: listTitle,
           color: listColor,

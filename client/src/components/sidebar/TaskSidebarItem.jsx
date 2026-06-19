@@ -1,7 +1,8 @@
 function TaskSidebarItem({ nav, activeView, isSearching, onDisplayChange }) {
   const Icon = nav.icon;
   const isCurrentDisplay =
-    nav.title.toLowerCase() === activeView.type && !isSearching;
+    nav.title.toLowerCase().replaceAll(" ", "") === activeView.type &&
+    !isSearching;
   return (
     <button
       type="button"

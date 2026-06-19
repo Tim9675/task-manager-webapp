@@ -72,7 +72,7 @@ function Sidebar({ onClose }) {
       {isAddListOpen && (
         <ListModal
           mode="create"
-          listFunction={createList}
+          onListSubmit={createList}
           onClose={() => setIsAddListOpen(false)}
         />
       )}
@@ -80,7 +80,7 @@ function Sidebar({ onClose }) {
       {isAddTagOpen && (
         <TagModal
           mode="create"
-          tagFunction={createTag}
+          onTagSubmit={createTag}
           onClose={() => setIsAddTagOpen(false)}
         />
       )}

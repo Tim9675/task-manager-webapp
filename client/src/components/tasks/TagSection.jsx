@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import SidebarItem from "../sidebar/SidebarItem";
 import AddTaskTags from "./AddTaskTags";
 import TagSelectModal from "./TagSelectModal";
+import TagCard from "./TagCard";
 
 function TagSection({ availableTags, watch, setValue }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,7 +27,7 @@ function TagSection({ availableTags, watch, setValue }) {
       <label className="my-2 text-sm">Tags</label>
       <div className="flex max-h-20 flex-wrap gap-1 overflow-y-auto rounded-md border border-[#ebebeb] px-2.5 md:w-65">
         {selectedTags.map((tag) => (
-          <SidebarItem key={tag.id} nav={tag} type={"tags"} />
+          <TagCard tag={tag} />
         ))}
         <AddTaskTags onOpen={() => setIsModalOpen(true)} />
         {isModalOpen && (

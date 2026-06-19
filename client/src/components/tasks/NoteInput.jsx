@@ -4,7 +4,7 @@ function NoteInput({
   mode,
   note = {},
   onClose,
-  noteFunction,
+  onNoteSubmit,
   availableNoteColors,
 }) {
   const [noteTitle, setnoteTitle] = useState(note?.title ?? "");
@@ -17,10 +17,10 @@ function NoteInput({
     let result;
     switch (mode) {
       case "create":
-        result = noteFunction(noteTitle, noteContent, noteColor);
+        result = onNoteSubmit(noteTitle, noteContent, noteColor);
         break;
       case "edit":
-        result = noteFunction({
+        result = onNoteSubmit({
           id: note.id,
           title: noteTitle,
           content: noteContent,

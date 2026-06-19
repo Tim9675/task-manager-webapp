@@ -72,7 +72,7 @@ function TagSidebarItem({
         <TagModal
           mode="edit"
           tag={nav}
-          tagFunction={updateTag}
+          onTagSubmit={updateTag}
           onClose={() => setIsEditTagOpen(false)}
         />
       )}

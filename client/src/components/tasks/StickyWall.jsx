@@ -26,7 +26,7 @@ function StickyWall() {
                 mode="edit"
                 note={note}
                 onClose={() => setEditNoteId(null)}
-                noteFunction={updateNote}
+                onNoteSubmit={updateNote}
                 availableNoteColors={availableNoteColors}
               />
             );
@@ -44,7 +44,7 @@ function StickyWall() {
           <NoteInput
             mode="create"
             onClose={() => setIsAddingNote(false)}
-            noteFunction={createNote}
+            onNoteSubmit={createNote}
             availableNoteColors={availableNoteColors}
           />
         ) : (

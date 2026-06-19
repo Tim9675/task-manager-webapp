@@ -7,7 +7,6 @@ function NoteCard({ note, onEdit, onDelete }) {
   const [isDeleteNoteOpen, setIsDeleteNoteOpen] = useState(false);
 
   const iconSize = 20;
-  const iconColor = "#7c7c7c";
   return (
     <>
       <div
@@ -22,17 +21,17 @@ function NoteCard({ note, onEdit, onDelete }) {
             <div className="invisible flex w-20 justify-evenly group-hover:visible">
               <button
                 type="button"
-                className="flex aspect-square size-7.5 cursor-pointer items-center justify-center rounded hover:bg-[#ebebeb]"
+                className="flex aspect-square size-7.5 cursor-pointer items-center justify-center rounded text-[#7c7c7c] hover:text-blue-600"
                 onClick={onEdit}
               >
-                <Pencil size={iconSize} color={iconColor} />
+                <Pencil size={iconSize} />
               </button>
               <button
                 type="button"
-                className="flex aspect-square size-7.5 cursor-pointer items-center justify-center rounded hover:bg-[#ebebeb]"
+                className="flex aspect-square size-7.5 cursor-pointer items-center justify-center rounded text-[#7c7c7c] hover:text-red-600"
                 onClick={() => setIsDeleteNoteOpen(true)}
               >
-                <Trash2 size={iconSize} color={iconColor} />
+                <Trash2 size={iconSize} />
               </button>
             </div>
           </div>

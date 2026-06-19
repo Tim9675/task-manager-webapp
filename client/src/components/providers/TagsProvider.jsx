@@ -21,7 +21,6 @@ function TagsProvider({ children }) {
     const duplicate = userTags.some(
       (tag) => tag.title.trim().toLowerCase() === normalizedTitle,
     );
-    if (!normalizedTitle) return { success: false, error: "empty" };
     if (duplicate) return { success: false, error: "duplicate" };
     const newTag = {
       id: crypto.randomUUID(),
@@ -34,7 +33,6 @@ function TagsProvider({ children }) {
 
   function updateTag(updatedTag) {
     const normalizedTitle = updatedTag.title.trim().toLowerCase();
-    if (!normalizedTitle) return { success: false, error: "empty" };
     const duplicate = userTags.some(
       (tag) =>
         tag.id !== updatedTag.id &&

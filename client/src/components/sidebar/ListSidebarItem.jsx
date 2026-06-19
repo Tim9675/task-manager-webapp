@@ -88,7 +88,7 @@ function ListSidebarItem({
         <ListModal
           mode="edit"
           list={nav}
-          listFunction={updateList}
+          onListSubmit={updateList}
           onClose={() => setIsEditListOpen(false)}
         />
       )}

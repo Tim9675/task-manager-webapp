@@ -11,7 +11,6 @@ function NotesProvider({ children }) {
   // CRUD functions
   function createNote(title, content, color) {
     const normalizedTitle = title.trim().toLowerCase();
-    if (!normalizedTitle) return { success: false, error: "empty" };
     const duplicate = userNotes.some(
       (note) => note.title.trim().toLowerCase() === normalizedTitle,
     );
@@ -28,7 +27,6 @@ function NotesProvider({ children }) {
 
   function updateNote(updatedNote) {
     const normalizedTitle = updatedNote.title.trim().toLowerCase();
-    if (!normalizedTitle) return { success: false, error: "empty" };
     const duplicate = userNotes.some(
       (note) =>
         note.id !== updatedNote.id &&

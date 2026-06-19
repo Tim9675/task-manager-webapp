@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { TagsContext } from "../../contexts/TagsContext";
 
-function TagModal({ mode, tag = {}, tagFunction, onClose }) {
+function TagModal({ mode, tag = {}, onTagSubmit, onClose }) {
   const [tagTitle, setTagTitle] = useState(mode === "edit" ? tag.title : "");
   const [tagColor, setTagColor] = useState(
     mode === "edit" ? tag.color : "#d1eaed",
@@ -14,10 +14,10 @@ function TagModal({ mode, tag = {}, tagFunction, onClose }) {
     let result;
     switch (mode) {
       case "create":
-        result = tagFunction(tagTitle, tagColor);
+        result = onTagSubmit(tagTitle, tagColor);
         break;
       case "edit":
-        result = tagFunction({
+        result = onTagSubmit({
           id: tag.id,
           title: tagTitle,
           color: tagColor,

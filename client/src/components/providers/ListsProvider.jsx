@@ -44,7 +44,6 @@ function ListsProvider({ children }) {
     const duplicate = userLists.some(
       (list) => list.title.trim().toLowerCase() === normalizedTitle,
     );
-    if (!normalizedTitle) return { success: false, error: "empty" };
     if (duplicate) return { success: false, error: "duplicate" };
     const newList = {
       id: crypto.randomUUID(),
@@ -57,7 +56,6 @@ function ListsProvider({ children }) {
 
   function updateList(updatedList) {
     const normalizedTitle = updatedList.title.trim().toLowerCase();
-    if (!normalizedTitle) return { success: false, error: "empty" };
     const duplicate = userLists.some(
       (list) =>
         list.id !== updatedList.id &&
