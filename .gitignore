@@ -8,6 +8,9 @@ node_modules/
 logs
 *.log
 
+
+client/src/mock/
+
 # Build outputs
 client/build/
 server/dist/
