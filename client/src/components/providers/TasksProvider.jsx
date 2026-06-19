@@ -1,13 +1,20 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 
 import { TasksContext } from "../../contexts/TasksContext.jsx";
 import { mockTasks } from "../../mock/tasks.js";
 import { isToday, isUpcoming } from "../../utils/date.js";
+import { getUserTasks } from "../../api/taskApi.js";
 
 function TasksProvider({ children }) {
   const [userTasks, setUserTasks] = useState(mockTasks);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [isTaskDetailsOpen, setisTaskDetailsOpen] = useState(false);
+  const [isLoadingTasks, setIsLoadingTasks] = useState(true);
+
+  useEffect(() => {
+    const tasks = getUserTasks();
+  }, []);
 
   // Task to display in TaskDetailsPanel
   const selectedTask = useMemo(
