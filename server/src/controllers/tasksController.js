@@ -6,6 +6,7 @@ export async function getTasks(req, res) {
   try {
     const userId = req.user.userId;
     const tasks = await Task.find({ userId })
+      .select("-__v -createdAt -updatedAt -userId")
       .sort({ dueDate: 1, createdAt: 1 })
       .lean();
     res.status(200).json({ data: tasks });
@@ -68,7 +69,7 @@ export async function createTask(req, res) {
     const parsedDate =
       dueDate === undefined || dueDate === "" ? null : new Date(dueDate);
 
-    if (parsedDate && isNaN(parsedDate))
+    if (parsedDate && isNaN(parsedDate.getTime()))
       return res.status(400).json({ message: "Invalid dueDate" });
 
     const taskPayload = {
@@ -90,7 +91,12 @@ export async function createTask(req, res) {
     const task = new Task(taskPayload);
 
     await task.save();
-    res.status(201).json({ message: "Task created successfully", data: task });
+    const resp = task.toObject();
+    delete resp.__v;
+    delete resp.userId;
+    delete resp.createdAt;
+    delete resp.updatedAt;
+    res.status(201).json({ message: "Task created successfully", data: resp });
   } catch (error) {
     console.log("Error in createTask controller", error);
     res.status(500).json({ message: "Internal server error" });
@@ -140,7 +146,7 @@ export async function updateTask(req, res) {
       const parsedDate =
         dueDate === "" || dueDate === null ? null : new Date(dueDate);
 
-      if (parsedDate && isNaN(parsedDate)) {
+      if (parsedDate && isNaN(parsedDate.getTime())) {
         return res.status(400).json({ message: "Invalid dueDate" });
       }
 
@@ -156,7 +162,9 @@ export async function updateTask(req, res) {
       { _id: req.params.taskId, userId },
       updatePayload,
       { returnDocument: "after", runValidators: true },
-    ).lean();
+    )
+      .select("-__v -createdAt -updatedAt -userId")
+      .lean();
 
     if (!updatedTask)
       return res.status(404).json({ message: "Task not found" });

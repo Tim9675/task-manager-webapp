@@ -5,10 +5,11 @@ import StickyWall from "../components/tasks/StickyWall";
 import DashboardLayout from "../layouts/DashboardLayout";
 import TaskListSkeleton from "../components/skeletons/TaskListSkeleton";
 import { DisplayContext } from "../contexts/DisplayContext";
+import { TasksContext } from "../contexts/TasksContext";
 
 function DashboardPage() {
   // Load state
-  const [isLoadingTasks, setIsLoadingTasks] = useState(false);
+  const { isLoadingTasks } = useContext(TasksContext);
 
   const { activeView, header } = useContext(DisplayContext);
 

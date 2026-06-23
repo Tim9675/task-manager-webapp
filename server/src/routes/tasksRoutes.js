@@ -22,8 +22,9 @@ router.get("/upcoming", getTasksUpcoming);
 // CRUD routes
 router.get("/", getTasks);
 router.post("/", createTask);
+// getTaskById might not be needed
 router.get("/:taskId", validateObjectId("taskId"), getTaskById);
-router.put("/:taskId", validateObjectId("taskId"), updateTask);
+router.patch("/:taskId", validateObjectId("taskId"), updateTask);
 router.delete("/:taskId", validateObjectId("taskId"), deleteTask);
 
 export default router;

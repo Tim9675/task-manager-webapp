@@ -22,7 +22,7 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
     },
   });
 
-  const { updateTask } = useContext(TasksContext);
+  const { onUpdateTask } = useContext(TasksContext);
   const { userLists } = useContext(ListsContext);
   const { userTags } = useContext(TagsContext);
 
@@ -40,7 +40,7 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
   }, [selectedTask, reset]);
 
   function onSubmit(data) {
-    updateTask({
+    onUpdateTask({
       ...selectedTask,
       ...data,
     });

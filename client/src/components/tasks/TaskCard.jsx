@@ -17,8 +17,8 @@ function TaskCard({ task, onSelect, listDetails }) {
     },
   };
 
-  const { isSelectedTask, toggleTask } = useContext(TasksContext);
-  const isSelected = isSelectedTask(task.id);
+  const { isSelectedTask, onToggleTask } = useContext(TasksContext);
+  const isSelected = isSelectedTask(task._id);
 
   return (
     <div
@@ -29,7 +29,7 @@ function TaskCard({ task, onSelect, listDetails }) {
           {...label}
           checked={task.checked}
           onChange={(e) => {
-            toggleTask(task, e.target.checked);
+            onToggleTask(task._id, e.target.checked);
           }}
           sx={sx}
         />

@@ -22,9 +22,9 @@ function SubTaskList({ tasks, id, header }) {
         {tasks.length > 0 ? (
           tasks.map((task) => (
             <TaskCard
-              key={task.id}
+              key={task._id}
               task={task}
-              onSelect={() => openTask(task.id)}
+              onSelect={() => openTask(task._id)}
               listDetails={getListById(task.listId)}
             />
           ))

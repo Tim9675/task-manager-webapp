@@ -8,7 +8,7 @@ import { TasksContext } from "../../contexts/TasksContext";
 function TaskDetailsPanel({ onClose }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const { selectedTask, deleteTask } = useContext(TasksContext);
+  const { selectedTask, onDeleteTask } = useContext(TasksContext);
 
   return (
     <aside className="my-5 me-5 flex h-[calc(100vh-2.5rem)] w-100 flex-col rounded-2xl bg-neutral-100 px-5 py-5">
@@ -32,7 +32,7 @@ function TaskDetailsPanel({ onClose }) {
       {isDeleteModalOpen && (
         <DeleteTaskModal
           onDelete={() => {
-            if (selectedTask) deleteTask(selectedTask.id);
+            if (selectedTask) onDeleteTask(selectedTask._id);
             onClose();
           }}
           onClose={() => setIsDeleteModalOpen(false)}

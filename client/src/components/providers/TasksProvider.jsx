@@ -1,24 +1,43 @@
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 
 import { TasksContext } from "../../contexts/TasksContext.jsx";
-import { mockTasks } from "../../mock/tasks.js";
 import { isToday, isUpcoming } from "../../utils/date.js";
-import { getUserTasks } from "../../api/taskApi.js";
+import {
+  createTask,
+  deleteTask,
+  getUserTasks,
+  toggleTask,
+  updateTask,
+} from "../../api/taskApi.js";
 
 function TasksProvider({ children }) {
-  const [userTasks, setUserTasks] = useState(mockTasks);
+  const [userTasks, setUserTasks] = useState([]);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [isTaskDetailsOpen, setisTaskDetailsOpen] = useState(false);
   const [isLoadingTasks, setIsLoadingTasks] = useState(true);
+  const [isCreatingTask, setIsCreatingTask] = useState(false);
+  const [isUpdatingTask, setIsUpdatingTask] = useState(false);
 
   useEffect(() => {
-    const tasks = getUserTasks();
+    async function fetchTasks() {
+      try {
+        const tasks = await getUserTasks();
+        console.log(tasks);
+        setUserTasks(tasks);
+      } catch (error) {
+        console.log("Error fetching tasks");
+        console.log(error);
+      } finally {
+        setIsLoadingTasks(false);
+      }
+    }
+
+    fetchTasks();
   }, []);
 
   // Task to display in TaskDetailsPanel
   const selectedTask = useMemo(
-    () => userTasks.find((task) => task.id === selectedTaskId) || null,
+    () => userTasks.find((task) => task._id === selectedTaskId) || null,
     [userTasks, selectedTaskId],
   );
 
@@ -36,63 +55,66 @@ function TasksProvider({ children }) {
   );
 
   // CRUD functions
-  function createTask(title, activeView) {
+  async function onCreateTask(title, activeView) {
     if (!title.trim()) return;
-    const date = new Date();
-    const dayOfWeek = date.getDay();
-    // can probably refactor this
-    switch (activeView.id) {
-      case "tomorrow":
-        date.setDate(date.getDate() + 1);
-        break;
-      // Sets date to day after tomorrow on weekdays, tomorrow for Saturday, and today for Sunday, to still adhere to "This Week"
-      case "thisWeek":
-        if (dayOfWeek === 6) {
-          date.setDate(date.getDate() + 1);
-        } else if (0 < dayOfWeek) {
-          date.setDate(date.getDate() + 2);
-        }
-        break;
+    try {
+      setIsCreatingTask(true);
+      const res = await createTask(title, activeView);
+
+      console.log(res);
+      setUserTasks((prev) => [...prev, res]);
+      setSelectedTaskId(res._id);
+      setisTaskDetailsOpen(true);
+      return res;
+    } catch (error) {
+      console.log("Error in onCreateTask");
+      console.log(error);
+    } finally {
+      setIsCreatingTask(false);
     }
-
-    const newTask = {
-      id: crypto.randomUUID(),
-      title: title,
-      description: "",
-      dueDate:
-        activeView.type === "today" || activeView.type === "upcoming"
-          ? date
-          : null,
-      listId: activeView.type === "list" ? activeView.id : null,
-      tagIds: activeView.type === "tag" ? [activeView.id] : [],
-      subtasks: [],
-      checked: false,
-    };
-
-    setUserTasks((prev) => [...prev, newTask]);
-    setSelectedTaskId(newTask.id);
-    setisTaskDetailsOpen(true);
   }
 
-  function toggleTask(taskToToggle, checked) {
-    setUserTasks((prev) =>
-      prev.map((task) =>
-        task.id === taskToToggle.id ? { ...task, checked } : task,
-      ),
-    );
+  async function onToggleTask(taskId, checked) {
+    try {
+      const res = await toggleTask(taskId, checked);
+
+      setUserTasks((prev) =>
+        prev.map((task) => (task._id === res._id ? res : task)),
+      );
+    } catch (error) {
+      console.log("Error in onToggleTask");
+      console.log(error);
+    }
   }
 
-  function updateTask(updatedTask) {
-    setUserTasks((prev) =>
-      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
-    );
+  async function onUpdateTask(updatedTask) {
+    try {
+      setIsUpdatingTask(true);
+      const res = await updateTask(updatedTask);
+      console.log(res);
+      setUserTasks((prev) =>
+        prev.map((task) => {
+          return task._id === res._id ? res : task;
+        }),
+      );
+    } catch (error) {
+      console.log("Error in onUpdateTask");
+      console.log(error);
+    } finally {
+      setIsUpdatingTask(false);
+    }
   }
 
-  function deleteTask(taskId) {
-    setUserTasks((prev) => prev.filter((task) => task.id !== taskId));
-
-    if (selectedTaskId === taskId) {
-      setSelectedTaskId(null);
+  async function onDeleteTask(taskId) {
+    try {
+      await deleteTask(taskId);
+      setUserTasks((prev) => prev.filter((task) => task._id !== taskId));
+      if (selectedTaskId === taskId) {
+        setSelectedTaskId(null);
+      }
+    } catch (error) {
+      console.log("Error in onDeleteTask");
+      console.log(error);
     }
   }
 
@@ -139,16 +161,15 @@ function TasksProvider({ children }) {
         openTask,
         closeTask,
         isSelectedTask,
-        // createTask only used inside AddTask.jsx
-        createTask,
-        // updateTask only used inside TaskForm.jsx
-        updateTask,
-        // toggleTask only used inside TaskCard.jsx
-        toggleTask,
-        // deleteTask only used inside TaskDetailsPanel.jsx
-        deleteTask,
+        onCreateTask,
+        onUpdateTask,
+        onToggleTask,
+        onDeleteTask,
         removeListFromTasks,
         removeTagFromTasks,
+        isLoadingTasks,
+        isCreatingTask,
+        isUpdatingTask,
       }}
     >
       {children}

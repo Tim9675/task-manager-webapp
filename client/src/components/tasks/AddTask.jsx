@@ -1,30 +1,38 @@
-import { Plus } from "lucide-react";
+import { Plus, Loader } from "lucide-react";
 import { useContext, useState } from "react";
 import { TasksContext } from "../../contexts/TasksContext";
 
 function AddTask({ activeView }) {
-  const [taskToAdd, setTaskToAdd] = useState("");
-  const { createTask } = useContext(TasksContext);
+  const [taskTitle, setTaskTitle] = useState("");
+  const { onCreateTask, isCreatingTask } = useContext(TasksContext);
   return (
     <div className="mx-5 flex h-13 items-center rounded-md border border-[#ebebeb] px-3 focus-within:border-neutral-300">
       <button
-        onClick={() => {
-          createTask(taskToAdd, activeView);
-          setTaskToAdd("");
+        onClick={async () => {
+          // REMINDER: Clearing input immediately, only reset task title after getting valid response
+          const res = await onCreateTask(taskTitle, activeView);
+          if (res) setTaskTitle("");
         }}
-        className="flex size-9 cursor-pointer items-center justify-center"
+        disabled={isCreatingTask}
+        className="flex size-9 items-center justify-center enabled:cursor-pointer disabled:cursor-not-allowed"
       >
-        <Plus color="#7c7c7c" size={18} strokeWidth={4} />
+        {isCreatingTask ? (
+          <div className="motion-safe:animate-spin">
+            <Loader color="#7c7c7c" size={18} strokeWidth={4} />
+          </div>
+        ) : (
+          <Plus color="#7c7c7c" size={18} strokeWidth={4} />
+        )}
       </button>
       <input
         type="text"
-        value={taskToAdd}
-        onChange={(e) => setTaskToAdd(e.target.value)}
-        onKeyDown={(e) => {
+        value={taskTitle}
+        onChange={(e) => setTaskTitle(e.target.value)}
+        onKeyDown={async (e) => {
           if (e.key === "Enter") {
             e.preventDefault();
-            createTask(taskToAdd, activeView);
-            setTaskToAdd("");
+            const res = await onCreateTask(taskTitle, activeView);
+            if (res) setTaskTitle("");
           }
         }}
         className="ms-1 size-full flex-1 bg-transparent text-sm outline-none"

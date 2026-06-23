@@ -48,9 +48,9 @@ function TaskList({ header }) {
             {tasks.length > 0 ? (
               tasks.map((task) => (
                 <TaskCard
-                  key={task.id}
+                  key={task._id}
                   task={task}
-                  onSelect={() => openTask(task.id)}
+                  onSelect={() => openTask(task._id)}
                   // Tag condition in case a tag has same id as list
                   listDetails={
                     activeView.type !== "tag" &&
