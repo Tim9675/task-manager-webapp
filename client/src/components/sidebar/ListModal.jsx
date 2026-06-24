@@ -8,30 +8,36 @@ function ListModal({ mode, list = {}, onListSubmit, onClose }) {
   );
   const [isListDuplicate, setIsListDuplicate] = useState(false);
 
-  const { availableListColors } = useContext(ListsContext);
-
-  function submitList() {
+  const { availableListColors, isCreatingList, isUpdatingList } =
+    useContext(ListsContext);
+  async function submitList() {
     let result;
-    switch (mode) {
-      case "create":
-        result = onListSubmit(listTitle, listColor);
-        break;
-      case "edit":
-        result = onListSubmit({
-          id: list.id,
-          title: listTitle,
-          color: listColor,
-        });
-        break;
-      default:
-        result = { success: false, error: "Error in ListModal.jsx" };
-    }
-    if (!result.success && result.error === "duplicate") {
-      setIsListDuplicate(true);
-      return;
-    }
+    try {
+      switch (mode) {
+        case "create":
+          result = await onListSubmit(listTitle, listColor);
+          break;
+        case "edit":
+          result = await onListSubmit({
+            _id: list._id,
+            title: listTitle,
+            color: listColor,
+          });
+          break;
+        default:
+          result = { success: false, error: "Error in ListModal.jsx" };
+      }
+      if (!result.success && result.error === "duplicate") {
+        setIsListDuplicate(true);
+        return;
+      }
+      onClose();
+    } catch (error) {
+      console.log("Error in ListModal.jsx");
+      console.log(error);
 
-    onClose();
+      return { success: false, error: "Server error in ListModal.jsx" };
+    }
   }
 
   return (
@@ -104,13 +110,14 @@ function ListModal({ mode, list = {}, onListSubmit, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95"
+            disabled={isCreatingList || isUpdatingList}
+            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:hover:brightness-100"
           >
             Cancel
           </button>
           <button
             type="button"
-            disabled={!listTitle.trim()}
+            disabled={!listTitle.trim() || isCreatingList || isUpdatingList}
             onClick={submitList}
             className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
           >

@@ -7,7 +7,6 @@ import { validateObjectId } from "../middleware/validateObjectId.js";
 
 import {
   getTasks,
-  getTaskById,
   createTask,
   updateTask,
   deleteTask,
@@ -22,8 +21,6 @@ router.get("/upcoming", getTasksUpcoming);
 // CRUD routes
 router.get("/", getTasks);
 router.post("/", createTask);
-// getTaskById might not be needed
-router.get("/:taskId", validateObjectId("taskId"), getTaskById);
 router.patch("/:taskId", validateObjectId("taskId"), updateTask);
 router.delete("/:taskId", validateObjectId("taskId"), deleteTask);
 

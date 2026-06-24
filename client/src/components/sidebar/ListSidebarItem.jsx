@@ -16,10 +16,10 @@ function ListSidebarItem({
   const [isEditListOpen, setIsEditListOpen] = useState(false);
   const [isDeleteListOpen, setIsDeleteListOpen] = useState(false);
 
-  const { updateList, deleteList } = useContext(ListsContext);
+  const { onUpdateList, onDeleteList } = useContext(ListsContext);
 
   const isCurrentDisplay =
-    activeView.type === "list" && nav.id === activeView.id && !isSearching;
+    activeView.type === "list" && nav._id === activeView.id && !isSearching;
   return (
     <>
       {/*
@@ -88,17 +88,17 @@ function ListSidebarItem({
         <ListModal
           mode="edit"
           list={nav}
-          onListSubmit={updateList}
+          onListSubmit={onUpdateList}
           onClose={() => setIsEditListOpen(false)}
         />
       )}
       {isDeleteListOpen && (
         <DeleteListModal
           nav={nav}
-          onDelete={() => {
-            deleteList(nav.id);
+          onDelete={async () => {
+            await onDeleteList(nav._id);
             const isActiveList =
-              activeView.type === "list" && activeView.id === nav.id;
+              activeView.type === "list" && activeView.id === nav._id;
 
             if (isActiveList) {
               setActiveView({ type: "today" });

@@ -82,7 +82,7 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
         >
           <option value="">--unlisted--</option>
           {userLists.map((list) => (
-            <option key={list.id} value={list.id}>
+            <option key={list._id} value={list._id}>
               {list.title}
             </option>
           ))}

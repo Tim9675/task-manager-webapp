@@ -3,22 +3,20 @@ import { Menu } from "lucide-react";
 
 import Sidebar from "../components/sidebar/Sidebar";
 import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
-import TaskDetailsPanelSkeleton from "../components/skeletons/TaskDetailsPanelSkeleton";
 import SidebarSkeleton from "../components/skeletons/SidebarSkeleton";
 import { TasksContext } from "../contexts/TasksContext";
+import { ListsContext } from "../contexts/ListsContext";
 import { DisplayContext } from "../contexts/DisplayContext";
 
 function DashboardLayout({ children }) {
-  const [isLoadingTaskDetails, setIsLoadingTaskDetails] = useState(false);
-  const [isLoadingSidebar, setIsLoadingSidebar] = useState(false);
-
   const { isTaskDetailsOpen, closeTask } = useContext(TasksContext);
+  const { isLoadingLists } = useContext(ListsContext);
   const { isSidebarOpen, setIsSidebarOpen } = useContext(DisplayContext);
 
   return (
     <div className="flex h-screen w-screen">
       {isSidebarOpen ? (
-        isLoadingSidebar ? (
+        isLoadingLists ? (
           <SidebarSkeleton />
         ) : (
           <Sidebar onClose={() => setIsSidebarOpen(false)} />
@@ -33,13 +31,7 @@ function DashboardLayout({ children }) {
       )}
       <main className="flex-1">{children}</main>
 
-      {isTaskDetailsOpen ? (
-        isLoadingTaskDetails ? (
-          <TaskDetailsPanelSkeleton onClose={closeTask} />
-        ) : (
-          <TaskDetailsPanel onClose={closeTask} />
-        )
-      ) : null}
+      {isTaskDetailsOpen && <TaskDetailsPanel onClose={closeTask} />}
     </div>
   );
 }

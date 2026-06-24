@@ -22,7 +22,6 @@ function TasksProvider({ children }) {
     async function fetchTasks() {
       try {
         const tasks = await getUserTasks();
-        console.log(tasks);
         setUserTasks(tasks);
       } catch (error) {
         console.log("Error fetching tasks");
@@ -61,7 +60,6 @@ function TasksProvider({ children }) {
       setIsCreatingTask(true);
       const res = await createTask(title, activeView);
 
-      console.log(res);
       setUserTasks((prev) => [...prev, res]);
       setSelectedTaskId(res._id);
       setisTaskDetailsOpen(true);
@@ -91,7 +89,6 @@ function TasksProvider({ children }) {
     try {
       setIsUpdatingTask(true);
       const res = await updateTask(updatedTask);
-      console.log(res);
       setUserTasks((prev) =>
         prev.map((task) => {
           return task._id === res._id ? res : task;

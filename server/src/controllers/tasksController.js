@@ -16,18 +16,6 @@ export async function getTasks(req, res) {
   }
 }
 
-export async function getTaskById(req, res) {
-  try {
-    const userId = req.user.userId;
-    const task = await Task.findOne({ _id: req.params.taskId, userId }).lean();
-    if (!task) return res.status(404).json({ message: "Task not found" }); // Not unauthorized to prevent info leak about task existence
-    res.status(200).json({ data: task });
-  } catch (error) {
-    console.log("Error in getTaskById controller", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
-
 export async function createTask(req, res) {
   try {
     const userId = req.user.userId;

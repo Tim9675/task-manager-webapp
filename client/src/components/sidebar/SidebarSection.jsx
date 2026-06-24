@@ -22,7 +22,7 @@ function SidebarSection({
       ) : (
         <nav className="flex flex-col">
           {navList.map((nav) => (
-            <SidebarItem key={nav.id} nav={nav} type={type} />
+            <SidebarItem key={nav._id} nav={nav} type={type} />
           ))}
         </nav>
       )}

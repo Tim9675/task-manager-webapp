@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { ListsContext } from "../../contexts/ListsContext";
 
 function DeleteListModal({ nav, onDelete, onClose }) {
-  const { getTasksByList } = useContext(ListsContext);
+  const { getCachedTasksByList } = useContext(ListsContext);
 
-  const tasksWithThisList = getTasksByList(nav.id);
+  const tasksWithThisList = getCachedTasksByList(nav._id);
   const taskCount = tasksWithThisList.length;
 
   return (
@@ -52,8 +52,8 @@ function DeleteListModal({ nav, onDelete, onClose }) {
           </button>
           <button
             type="button"
-            onClick={() => {
-              onDelete();
+            onClick={async () => {
+              await onDelete();
               onClose();
             }}
             className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95"

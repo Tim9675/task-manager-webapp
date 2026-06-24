@@ -24,15 +24,20 @@ function Sidebar({ onClose }) {
   const [isAddTagOpen, setIsAddTagOpen] = useState(false);
 
   const { todayTaskCount, upcomingTaskCount } = useContext(TasksContext);
-  const { userListsWithCounts, createList } = useContext(ListsContext);
+  const { userListsWithCounts, onCreateList } = useContext(ListsContext);
   const { userTags, createTag } = useContext(TagsContext);
 
   // Should be the only one hardcoded
   const tasksSection = [
-    { id: 0, title: "Upcoming", count: upcomingTaskCount, icon: ChevronsRight },
-    { id: 1, title: "Today", count: todayTaskCount, icon: ListCheck },
-    { id: 2, title: "Calendar", icon: CalendarDays },
-    { id: 3, title: "Sticky Wall", icon: StickyNote },
+    {
+      _id: 0,
+      title: "Upcoming",
+      count: upcomingTaskCount,
+      icon: ChevronsRight,
+    },
+    { _id: 1, title: "Today", count: todayTaskCount, icon: ListCheck },
+    { _id: 2, title: "Calendar", icon: CalendarDays },
+    { _id: 3, title: "Sticky Wall", icon: StickyNote },
   ];
 
   return (
@@ -72,7 +77,7 @@ function Sidebar({ onClose }) {
       {isAddListOpen && (
         <ListModal
           mode="create"
-          onListSubmit={createList}
+          onListSubmit={onCreateList}
           onClose={() => setIsAddListOpen(false)}
         />
       )}

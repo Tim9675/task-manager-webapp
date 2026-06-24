@@ -5,13 +5,7 @@ import TagModal from "./TagModal";
 import { TagsContext } from "../../contexts/TagsContext";
 import DeleteTagModal from "./DeleteTagModal";
 
-function TagSidebarItem({
-  nav,
-  activeView,
-  setActiveView,
-  isSearching,
-  onDisplayChange,
-}) {
+function TagSidebarItem({ nav, activeView, isSearching, onDisplayChange }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditTagOpen, setIsEditTagOpen] = useState(false);
   const [isDeleteTagOpen, setIsDeleteTagOpen] = useState(false);
