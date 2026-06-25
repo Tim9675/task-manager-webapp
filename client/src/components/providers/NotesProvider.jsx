@@ -1,46 +1,94 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { NotesContext } from "../../contexts/NotesContext";
-import { mockNotes } from "../../mock/notes";
+import {
+  getUserNotes,
+  createNote,
+  updateNote,
+  deleteNote,
+} from "../../api/noteApi";
 
 function NotesProvider({ children }) {
-  const [userNotes, setUserNotes] = useState(mockNotes);
+  const [userNotes, setUserNotes] = useState([]);
+  const [isLoadingNotes, setIsLoadingNotes] = useState(true);
+  const [isCreatingNote, setIsCreatingNote] = useState(false);
+  const [isUpdatingNote, setIsUpdatingNote] = useState(false);
+
+  useEffect(() => {
+    async function fetchNotes() {
+      try {
+        const notes = await getUserNotes();
+        console.log(notes);
+        setUserNotes(notes);
+      } catch (error) {
+        console.log("Error fetching notes:");
+        console.log(error);
+      } finally {
+        setIsLoadingNotes(false);
+      }
+    }
+    fetchNotes();
+  }, []);
 
   const availableNoteColors = ["#d1eaed", "#ffdada", "#fdf2b3", "#ffd4a9"];
 
   // CRUD functions
-  function createNote(title, content, color) {
+  async function onCreateNote(title, content, color) {
     const normalizedTitle = title.trim().toLowerCase();
     const duplicate = userNotes.some(
       (note) => note.title.trim().toLowerCase() === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
-    const newNote = {
-      id: crypto.randomUUID(),
-      title: title,
-      content: content,
-      color: color,
-    };
-    setUserNotes((prev) => [...prev, newNote]);
-    return { success: true };
+
+    try {
+      setIsCreatingNote(true);
+      const res = await createNote(title, content, color);
+      console.log(res);
+      setUserNotes((prev) => [...prev, res]);
+      return { success: true };
+    } catch (error) {
+      console.log("Error in onCreateNote");
+      console.log(error);
+      return { success: false, error: "Server error in onCreateNote" };
+    } finally {
+      setIsCreatingNote(false);
+    }
   }
 
-  function updateNote(updatedNote) {
+  async function onUpdateNote(updatedNote) {
     const normalizedTitle = updatedNote.title.trim().toLowerCase();
     const duplicate = userNotes.some(
       (note) =>
-        note.id !== updatedNote.id &&
+        note._id !== updatedNote._id &&
         note.title.trim().toLowerCase() === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
-    setUserNotes((prev) =>
-      prev.map((note) => (note.id === updatedNote.id ? updatedNote : note)),
-    );
-    return { success: true };
+
+    try {
+      setIsUpdatingNote(true);
+      const res = await updateNote(updatedNote);
+      console.log(res);
+      setUserNotes((prev) =>
+        prev.map((note) => (note._id === res._id ? res : note)),
+      );
+      return { success: true };
+    } catch (error) {
+      console.log("Error in onUpdateNote");
+      console.log(error);
+      return { success: false, error: "Server error in onUpdateNote" };
+    } finally {
+      setIsUpdatingNote(false);
+    }
   }
 
-  function deleteNote(noteId) {
-    setUserNotes((prev) => prev.filter((note) => note.id !== noteId));
+  async function onDeleteNote(noteId) {
+    try {
+      await deleteNote(noteId);
+      setUserNotes((prev) => prev.filter((note) => note._id !== noteId));
+    } catch (error) {
+      console.log("Error in onDeleteNote");
+      console.log(error);
+    }
   }
 
   return (
@@ -48,9 +96,12 @@ function NotesProvider({ children }) {
       value={{
         userNotes,
         availableNoteColors,
-        createNote,
-        updateNote,
-        deleteNote,
+        onCreateNote,
+        onUpdateNote,
+        onDeleteNote,
+        isLoadingNotes,
+        isCreatingNote,
+        isUpdatingNote,
       }}
     >
       {children}

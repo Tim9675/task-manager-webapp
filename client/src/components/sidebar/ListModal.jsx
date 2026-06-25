@@ -27,8 +27,10 @@ function ListModal({ mode, list = {}, onListSubmit, onClose }) {
         default:
           result = { success: false, error: "Error in ListModal.jsx" };
       }
-      if (!result.success && result.error === "duplicate") {
-        setIsListDuplicate(true);
+      if (!result.success) {
+        if (result.error === "duplicate") {
+          setIsListDuplicate(true);
+        }
         return;
       }
       onClose();

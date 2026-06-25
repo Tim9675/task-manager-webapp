@@ -28,8 +28,10 @@ function TagModal({ mode, tag = {}, onTagSubmit, onClose }) {
         default:
           result = { success: false, error: "Error in TagModal.jsx" };
       }
-      if (!result.success && result.error === "duplicate") {
-        setIsTagDuplicate(true);
+      if (!result.success) {
+        if (result.error === "duplicate") {
+          setIsTagDuplicate(true);
+        }
         return;
       }
       onClose();

@@ -6,7 +6,7 @@ import AddNoteButton from "./AddNoteButton";
 import NoteInput from "./NoteInput";
 
 function StickyWall() {
-  const { userNotes, createNote, updateNote, deleteNote, availableNoteColors } =
+  const { userNotes, onCreateNote, onUpdateNote, onDeleteNote } =
     useContext(NotesContext);
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [editNoteId, setEditNoteId] = useState(null);
@@ -19,23 +19,22 @@ function StickyWall() {
       {/* Idk why main is tabable. Is <main> automatically tabable or is it because of grid? */}
       <div className="mx-5 grid grid-cols-1 gap-5 overflow-y-auto rounded border border-[#ebebeb] px-6 py-5 md:grid-cols-2 xl:grid-cols-3">
         {userNotes.map((note) => {
-          if (note.id === editNoteId)
+          if (note._id === editNoteId)
             return (
               <NoteInput
-                key={note.id}
+                key={note._id}
                 mode="edit"
                 note={note}
                 onClose={() => setEditNoteId(null)}
-                onNoteSubmit={updateNote}
-                availableNoteColors={availableNoteColors}
+                onNoteSubmit={onUpdateNote}
               />
             );
           return (
             <NoteCard
-              key={note.id}
+              key={note._id}
               note={note}
-              onEdit={() => setEditNoteId(note.id)}
-              onDelete={() => deleteNote(note.id)}
+              onEdit={() => setEditNoteId(note._id)}
+              onDelete={() => onDeleteNote(note._id)}
             />
           );
         })}
@@ -44,8 +43,7 @@ function StickyWall() {
           <NoteInput
             mode="create"
             onClose={() => setIsAddingNote(false)}
-            onNoteSubmit={createNote}
-            availableNoteColors={availableNoteColors}
+            onNoteSubmit={onCreateNote}
           />
         ) : (
           <AddNoteButton onAdd={() => setIsAddingNote(true)} />

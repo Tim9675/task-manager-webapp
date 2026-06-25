@@ -1,40 +1,46 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 
-function NoteInput({
-  mode,
-  note = {},
-  onClose,
-  onNoteSubmit,
-  availableNoteColors,
-}) {
-  const [noteTitle, setnoteTitle] = useState(note?.title ?? "");
+import { NotesContext } from "../../contexts/NotesContext";
+
+function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
+  const [noteTitle, setNoteTitle] = useState(note?.title ?? "");
   const [noteContent, setNoteContent] = useState(note?.content ?? "");
   const [noteColor, setNoteColor] = useState(note?.color ?? "#d1eaed");
 
   const [isNoteDuplicate, setIsNoteDuplicate] = useState(false);
 
-  function submitNote() {
+  const { availableNoteColors, isCreatingNote, isUpdatingNote } =
+    useContext(NotesContext);
+
+  async function submitNote() {
     let result;
-    switch (mode) {
-      case "create":
-        result = onNoteSubmit(noteTitle, noteContent, noteColor);
-        break;
-      case "edit":
-        result = onNoteSubmit({
-          id: note.id,
-          title: noteTitle,
-          content: noteContent,
-          color: noteColor,
-        });
-        break;
-      default:
-        result = { success: false, error: "Error in NoteInput.jsx" };
+    try {
+      switch (mode) {
+        case "create":
+          result = await onNoteSubmit(noteTitle, noteContent, noteColor);
+          break;
+        case "edit":
+          result = await onNoteSubmit({
+            _id: note._id,
+            title: noteTitle,
+            content: noteContent,
+            color: noteColor,
+          });
+          break;
+        default:
+          result = { success: false, error: "Error in NoteInput.jsx" };
+      }
+      if (!result.success) {
+        if (result.error === "duplicate") {
+          setIsNoteDuplicate(true);
+        }
+        return;
+      }
+      onClose();
+    } catch (error) {
+      console.log("Error in submitNote");
+      console.log(error);
     }
-    if (!result.success && result.error === "duplicate") {
-      setIsNoteDuplicate(true);
-      return;
-    }
-    onClose();
   }
 
   return (
@@ -49,7 +55,7 @@ function NoteInput({
             className="mb-0.5 rounded-md border border-[#7c7c7c] px-1 text-[1.25rem] font-semibold"
             value={noteTitle}
             onChange={(e) => {
-              setnoteTitle(e.target.value);
+              setNoteTitle(e.target.value);
               setIsNoteDuplicate(false);
             }}
             autoFocus
@@ -76,19 +82,21 @@ function NoteInput({
           <div className="mt-0.5 h-5 w-full text-center text-red-600">
             {isNoteDuplicate && "This note already exists."}
           </div>
+          {/* Footer */}
           <div className="flex h-10 items-center justify-between gap-7.5">
             <button
-              className="h-full flex-1 cursor-pointer rounded-md border border-[#dddddd] bg-[#f5f5f5] hover:brightness-95"
               type="button"
+              disabled={isCreatingNote || isUpdatingNote}
+              className="h-full flex-1 cursor-pointer rounded-md border border-[#dddddd] bg-[#f5f5f5] hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
-              className="h-full flex-1 cursor-pointer rounded-md bg-[#ffd43b] hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
               type="submit"
+              disabled={!noteTitle.trim() || isCreatingNote || isUpdatingNote}
+              className="h-full flex-1 cursor-pointer rounded-md bg-[#ffd43b] hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
               onClick={submitNote}
-              disabled={!noteTitle.trim()}
             >
               {mode === "create" ? "Add" : "Save"}
             </button>
