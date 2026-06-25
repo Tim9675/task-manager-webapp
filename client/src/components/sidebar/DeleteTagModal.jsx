@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { TagsContext } from "../../contexts/TagsContext";
 
 function DeleteTagModal({ nav, onDelete, onClose }) {
-  const { getTasksByTag } = useContext(TagsContext);
+  const { getCachedTasksByTag } = useContext(TagsContext);
 
-  const tasksWithThisTag = getTasksByTag(nav.id);
+  const tasksWithThisTag = getCachedTasksByTag(nav._id);
   const taskCount = tasksWithThisTag.length;
 
   return (

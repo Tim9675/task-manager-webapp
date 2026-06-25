@@ -35,8 +35,6 @@ function ListModal({ mode, list = {}, onListSubmit, onClose }) {
     } catch (error) {
       console.log("Error in ListModal.jsx");
       console.log(error);
-
-      return { success: false, error: "Server error in ListModal.jsx" };
     }
   }
 

@@ -43,10 +43,11 @@ function SidebarItem({ nav, type }) {
           <TagSidebarItem
             nav={nav}
             activeView={activeView}
+            setActiveView={setActiveView}
             isSearching={isSearching}
             onDisplayChange={() => {
               setIsSearching(false);
-              setActiveView({ type: "tag", id: nav.id });
+              setActiveView({ type: "tag", id: nav._id });
             }}
           />
         );

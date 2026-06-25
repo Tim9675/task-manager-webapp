@@ -8,29 +8,35 @@ function TagModal({ mode, tag = {}, onTagSubmit, onClose }) {
   );
   const [isTagDuplicate, setIsTagDuplicate] = useState(false);
 
-  const { availableTagColors } = useContext(TagsContext);
+  const { availableTagColors, isCreatingTag, isUpdatingTag } =
+    useContext(TagsContext);
 
-  function submitTag() {
+  async function submitTag() {
     let result;
-    switch (mode) {
-      case "create":
-        result = onTagSubmit(tagTitle, tagColor);
-        break;
-      case "edit":
-        result = onTagSubmit({
-          id: tag.id,
-          title: tagTitle,
-          color: tagColor,
-        });
-        break;
-      default:
-        result = { success: false, error: "Error in TagModal.jsx" };
+    try {
+      switch (mode) {
+        case "create":
+          result = await onTagSubmit(tagTitle, tagColor);
+          break;
+        case "edit":
+          result = await onTagSubmit({
+            _id: tag._id,
+            title: tagTitle,
+            color: tagColor,
+          });
+          break;
+        default:
+          result = { success: false, error: "Error in TagModal.jsx" };
+      }
+      if (!result.success && result.error === "duplicate") {
+        setIsTagDuplicate(true);
+        return;
+      }
+      onClose();
+    } catch (error) {
+      console.log("Error in TagModal.jsx");
+      console.log(error);
     }
-    if (!result.success && result.error === "duplicate") {
-      setIsTagDuplicate(true);
-      return;
-    }
-    onClose();
   }
 
   return (
@@ -103,13 +109,14 @@ function TagModal({ mode, tag = {}, onTagSubmit, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95"
+            disabled={isCreatingTag || isUpdatingTag}
+            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:hover:brightness-100"
           >
             Cancel
           </button>
           <button
             type="button"
-            disabled={!tagTitle.trim()}
+            disabled={!tagTitle.trim() || isCreatingTag || isUpdatingTag}
             onClick={submitTag}
             className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
           >

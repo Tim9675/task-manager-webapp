@@ -1,57 +1,102 @@
-import { useContext, useState, useMemo, useCallback } from "react";
+import { useContext, useState, useMemo, useCallback, useEffect } from "react";
 
 import { TagsContext } from "../../contexts/TagsContext";
-import { mockTags } from "../../mock/tags";
 import { TasksContext } from "../../contexts/TasksContext";
+import { getUserTags, createTag, updateTag, deleteTag } from "../../api/tagApi";
 
 function TagsProvider({ children }) {
-  const [userTags, setUserTags] = useState(mockTags);
+  const [userTags, setUserTags] = useState([]);
   const { userTasks, removeTagFromTasks } = useContext(TasksContext);
+  const [isLoadingTags, setIsLoadingTags] = useState(true);
+  const [isCreatingTag, setIsCreatingTag] = useState(false);
+  const [isUpdatingTag, setIsUpdatingTag] = useState(false);
+
+  useEffect(() => {
+    async function fetchTags() {
+      try {
+        const tags = await getUserTags();
+        console.log(tags);
+        setUserTags(tags);
+      } catch (error) {
+        console.log("Error fetching tags:");
+        console.log(error);
+      } finally {
+        setIsLoadingTags(false);
+      }
+    }
+
+    fetchTags();
+  }, []);
 
   const userTagsMap = useMemo(
-    () => Object.fromEntries(userTags.map((tag) => [tag.id, tag])),
+    () => Object.fromEntries(userTags.map((tag) => [tag._id, tag])),
     [userTags],
   );
 
   const availableTagColors = ["#d1eaed", "#ffdada", "#fdf2b3", "#ffd4a9"];
 
   // CRUD functions
-  function createTag(title, color) {
+  async function onCreateTag(title, color) {
     const normalizedTitle = title.trim().toLowerCase();
     const duplicate = userTags.some(
       (tag) => tag.title.trim().toLowerCase() === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
-    const newTag = {
-      id: crypto.randomUUID(),
-      title: title,
-      color: color,
-    };
-    setUserTags((prev) => [...prev, newTag]);
-    return { success: true };
+
+    try {
+      setIsCreatingTag(true);
+      const res = await createTag(title, color);
+      console.log(res);
+      setUserTags((prev) => [...prev, res]);
+      return { success: true };
+    } catch (error) {
+      console.log("Error in onCreateTag");
+      console.log(error);
+      return { success: false, error: "Server error in onCreateTag" };
+    } finally {
+      setIsCreatingTag(false);
+    }
   }
 
-  function updateTag(updatedTag) {
+  async function onUpdateTag(updatedTag) {
     const normalizedTitle = updatedTag.title.trim().toLowerCase();
     const duplicate = userTags.some(
       (tag) =>
-        tag.id !== updatedTag.id &&
+        tag._id !== updatedTag._id &&
         tag.title.trim().toLowerCase() === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
-    setUserTags((prev) =>
-      prev.map((tag) => (tag.id === updatedTag.id ? updatedTag : tag)),
-    );
-    return { success: true };
+
+    try {
+      setIsUpdatingTag(true);
+      const res = await updateTag(updatedTag);
+      console.log(res);
+      setUserTags((prev) =>
+        prev.map((tag) => (tag._id === res._id ? res : tag)),
+      );
+      return { success: true };
+    } catch (error) {
+      console.log("Error in onUpdateTag");
+      console.log(error);
+      return { success: false, error: "Server error in onUpdateTag" };
+    } finally {
+      setIsUpdatingTag(false);
+    }
   }
 
-  function deleteTag(tagId) {
-    setUserTags((prev) => prev.filter((tag) => tag.id !== tagId));
-    removeTagFromTasks(tagId);
+  async function onDeleteTag(tagId) {
+    try {
+      await deleteTag(tagId);
+      setUserTags((prev) => prev.filter((tag) => tag._id !== tagId));
+      removeTagFromTasks(tagId);
+    } catch (error) {
+      console.log("Error in onDeleteTag");
+      console.log(error);
+    }
   }
 
   // Helper functions
-  const getTasksByTag = useCallback(
+  const getCachedTasksByTag = useCallback(
     (tagId) => userTasks.filter((task) => task.tagIds.includes(tagId)),
     [userTasks],
   );
@@ -65,11 +110,14 @@ function TagsProvider({ children }) {
       value={{
         userTags,
         availableTagColors,
-        createTag,
-        updateTag,
-        deleteTag,
-        getTasksByTag,
+        onCreateTag,
+        onUpdateTag,
+        onDeleteTag,
+        getCachedTasksByTag,
         getTagTitle,
+        isLoadingTags,
+        isCreatingTag,
+        isUpdatingTag,
       }}
     >
       {children}

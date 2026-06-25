@@ -17,7 +17,7 @@ function ListsProvider({ children }) {
   const [isUpdatingList, setIsUpdatingList] = useState(false);
 
   useEffect(() => {
-    async function fetchlists() {
+    async function fetchLists() {
       try {
         const lists = await getUserLists();
         setUserLists(lists);
@@ -28,7 +28,7 @@ function ListsProvider({ children }) {
         setIsLoadingLists(false);
       }
     }
-    fetchlists();
+    fetchLists();
   }, []);
 
   const userListsWithCounts = useMemo(() => {
@@ -79,6 +79,10 @@ function ListsProvider({ children }) {
     } catch (error) {
       console.log("Error in onCreateList");
       console.log(error);
+      return {
+        success: false,
+        error: "Server error in onCreateList",
+      };
     } finally {
       setIsCreatingList(false);
     }
@@ -105,6 +109,10 @@ function ListsProvider({ children }) {
     } catch (error) {
       console.log("Error in onUpdateList");
       console.log(error);
+      return {
+        success: false,
+        error: "Server error in onUpdateList",
+      };
     } finally {
       setIsUpdatingList(false);
     }

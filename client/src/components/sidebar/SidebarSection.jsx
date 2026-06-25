@@ -15,7 +15,7 @@ function SidebarSection({
       {type === "tags" ? (
         <nav className="flex w-full flex-wrap gap-1">
           {navList.map((nav) => (
-            <SidebarItem key={nav.id} nav={nav} type={type} />
+            <SidebarItem key={nav._id} nav={nav} type={type} />
           ))}
           <AddTag onOpen={() => setIsAddTagOpen(true)} />
         </nav>

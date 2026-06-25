@@ -1,51 +1,16 @@
 import Task from "../models/Task.js";
 import Tag from "../models/Tag.js";
 
-export async function getTasksByTag(req, res) {
-  try {
-    const userId = req.user.userId;
-    const tagId = req.params.tagId;
-    const tagExists = await Tag.exists({
-      _id: tagId,
-      userId,
-    });
-    if (!tagExists) {
-      return res.status(404).json({
-        message: "Tag not found",
-      });
-    }
-    const tasks = await Task.find({
-      userId,
-      tagIds: tagId,
-    })
-      .sort({ dueDate: 1, createdAt: 1 })
-      .lean();
-    res.status(200).json({ data: tasks });
-  } catch (error) {
-    console.log("Error in getTasksByTag controller", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
-
 export async function getTags(req, res) {
   try {
     const userId = req.user.userId;
-    const tags = await Tag.find({ userId }).sort({ createdAt: 1 }).lean();
+    const tags = await Tag.find({ userId })
+      .select("-__v -createdAt -updatedAt -userId")
+      .sort({ createdAt: 1 })
+      .lean();
     res.status(200).json({ data: tags });
   } catch (error) {
     console.log("Error in getTags controller", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
-
-export async function getTagById(req, res) {
-  try {
-    const userId = req.user.userId;
-    const tag = await Tag.findOne({ _id: req.params.tagId, userId }).lean();
-    if (!tag) return res.status(404).json({ message: "Tag not found" });
-    res.status(200).json({ data: tag });
-  } catch (error) {
-    console.log("Error in getTagById controller", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
@@ -60,7 +25,12 @@ export async function createTag(req, res) {
       color, // validate color
     });
     await tag.save();
-    res.status(201).json({ message: "Tag created successfully", data: tag });
+    const resp = tag.toObject();
+    delete resp.__v;
+    delete resp.userId;
+    delete resp.createdAt;
+    delete resp.updatedAt;
+    res.status(201).json({ message: "Tag created successfully", data: resp });
   } catch (error) {
     console.log("Error in createTag controller", error);
     res.status(500).json({ message: "Internal server error" });
@@ -75,7 +45,9 @@ export async function updateTag(req, res) {
       { _id: req.params.tagId, userId },
       { title, color },
       { returnDocument: "after", runValidators: true },
-    ).lean();
+    )
+      .select("-__v -createdAt -updatedAt -userId")
+      .lean();
     if (!updatedTag) return res.status(404).json({ message: "Tag not found" });
     res
       .status(200)

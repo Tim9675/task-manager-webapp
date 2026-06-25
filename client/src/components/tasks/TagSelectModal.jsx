@@ -31,13 +31,13 @@ function TagSelectModal({ availableTags, selectedTagIds, toggleTag, onClose }) {
         ) : (
           <div className="flex max-h-60 flex-col gap-1 overflow-y-auto">
             {availableTags.map((tag) => {
-              const isSelected = selectedTagIds.includes(tag.id);
+              const isSelected = selectedTagIds.includes(tag._id);
 
               return (
                 <button
-                  key={tag.id}
+                  key={tag._id}
                   type="button"
-                  onClick={() => toggleTag(tag.id)}
+                  onClick={() => toggleTag(tag._id)}
                   className={`flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${
                     isSelected ? "bg-neutral-100" : "hover:bg-neutral-50"
                   }`}

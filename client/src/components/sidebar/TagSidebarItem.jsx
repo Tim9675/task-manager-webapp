@@ -10,10 +10,10 @@ function TagSidebarItem({ nav, activeView, isSearching, onDisplayChange }) {
   const [isEditTagOpen, setIsEditTagOpen] = useState(false);
   const [isDeleteTagOpen, setIsDeleteTagOpen] = useState(false);
 
-  const { updateTag, deleteTag } = useContext(TagsContext);
+  const { onUpdateTag, onDeleteTag } = useContext(TagsContext);
 
   const isCurrentDisplay =
-    activeView?.type === "tag" && activeView?.id === nav.id && !isSearching;
+    activeView?.type === "tag" && activeView?.id === nav._id && !isSearching;
   return (
     <>
       {/*
@@ -66,7 +66,7 @@ function TagSidebarItem({ nav, activeView, isSearching, onDisplayChange }) {
         <TagModal
           mode="edit"
           tag={nav}
-          onTagSubmit={updateTag}
+          onTagSubmit={onUpdateTag}
           onClose={() => setIsEditTagOpen(false)}
         />
       )}
@@ -74,9 +74,9 @@ function TagSidebarItem({ nav, activeView, isSearching, onDisplayChange }) {
         <DeleteTagModal
           nav={nav}
           onDelete={() => {
-            deleteTag(nav.id);
+            onDeleteTag(nav._id);
             const isActiveTag =
-              activeView.type === "tag" && activeView.id === nav.id;
+              activeView.type === "tag" && activeView.id === nav._id;
 
             if (isActiveTag) {
               setActiveView({ type: "today" });

@@ -6,17 +6,19 @@ import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
 import SidebarSkeleton from "../components/skeletons/SidebarSkeleton";
 import { TasksContext } from "../contexts/TasksContext";
 import { ListsContext } from "../contexts/ListsContext";
+import { TagsContext } from "../contexts/TagsContext";
 import { DisplayContext } from "../contexts/DisplayContext";
 
 function DashboardLayout({ children }) {
   const { isTaskDetailsOpen, closeTask } = useContext(TasksContext);
   const { isLoadingLists } = useContext(ListsContext);
+  const { isLoadingTags } = useContext(TagsContext);
   const { isSidebarOpen, setIsSidebarOpen } = useContext(DisplayContext);
 
   return (
     <div className="flex h-screen w-screen">
       {isSidebarOpen ? (
-        isLoadingLists ? (
+        isLoadingLists || isLoadingTags ? (
           <SidebarSkeleton />
         ) : (
           <Sidebar onClose={() => setIsSidebarOpen(false)} />

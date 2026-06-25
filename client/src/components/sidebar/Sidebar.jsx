@@ -25,7 +25,7 @@ function Sidebar({ onClose }) {
 
   const { todayTaskCount, upcomingTaskCount } = useContext(TasksContext);
   const { userListsWithCounts, onCreateList } = useContext(ListsContext);
-  const { userTags, createTag } = useContext(TagsContext);
+  const { userTags, onCreateTag } = useContext(TagsContext);
 
   // Should be the only one hardcoded
   const tasksSection = [
@@ -85,7 +85,7 @@ function Sidebar({ onClose }) {
       {isAddTagOpen && (
         <TagModal
           mode="create"
-          onTagSubmit={createTag}
+          onTagSubmit={onCreateTag}
           onClose={() => setIsAddTagOpen(false)}
         />
       )}
