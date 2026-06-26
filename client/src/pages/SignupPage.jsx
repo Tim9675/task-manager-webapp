@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { login } from "../api/authApi.js";
+import { register } from "../api/authApi.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
-function LoginPage() {
+function SignupPage() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,9 +23,11 @@ function LoginPage() {
     try {
       setLoading(true);
       setError("");
-      const response = await login({
+      const response = await register({
+        name,
         email,
         password,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       });
       localStorage.setItem("token", response.token);
       setUser(response.user);
@@ -41,37 +44,64 @@ function LoginPage() {
       <div className="flex h-full w-full justify-between">
         {/* Image placeholder */}
         <div className="rounded-2xl bg-[#111111] md:h-full md:w-[49%]"></div>
-        {/* Login form */}
+        {/* Signup form */}
         <main className="flex h-full w-full flex-col items-center justify-center rounded-2xl border border-[#ebebeb] bg-transparent md:h-full md:w-[49%]">
-          <div className="h-1/2 w-2/3">
+          <div className="h-2/3 w-2/3">
             <form onSubmit={handleSubmit} className="flex w-full flex-col">
               <h2 className="mb-5 text-[2.625rem] font-bold text-[#212529]">
-                Sign in
+                Sign up
               </h2>
+              <label
+                htmlFor="name"
+                className="mx-2 mb-1 text-sm font-semibold text-[#212529]"
+              >
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                className="mx-2 my-1.5 h-10 rounded-md border p-1"
+                onChange={(e) => setName(e.target.value)}
+              />
+              <label
+                htmlFor="email"
+                className="mx-2 mb-1 text-sm font-semibold text-[#212529]"
+              >
+                Email
+              </label>
               <input
                 type="email"
+                id="email"
                 value={email}
                 className="mx-2 my-1.5 h-10 rounded-md border p-1"
                 onChange={(e) => setEmail(e.target.value)}
               />
+              <label
+                htmlFor="password"
+                className="mx-2 mb-1 text-sm font-semibold text-[#212529]"
+              >
+                Password
+              </label>
               <input
                 type="password"
+                id="password"
                 value={password}
                 className="mx-2 my-1.5 h-10 rounded-md border p-1"
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <p
-                className="mx-2 my-2.5 h-2.5 text-sm text-red-500"
+              <pre
+                className="line-clamp mx-2 text-sm text-wrap text-red-500"
                 style={{ visibility: error ? "visible" : "hidden" }}
               >
                 {error}
-              </p>
+              </pre>
               <button
                 type="submit"
                 disabled={loading}
-                className="mx-2 mt-2.5 mb-2.5 h-10 cursor-pointer rounded-md bg-[#ffd43b] font-bold text-[#212529] hover:brightness-95 disabled:opacity-50"
+                className="mx-2 mt-3 mb-4.5 h-10 cursor-pointer rounded-md bg-[#ffd43b] font-bold text-[#212529] hover:brightness-95 disabled:opacity-50"
               >
-                Sign in
+                Sign up
               </button>
             </form>
             <div className="flex h-15 w-full flex-col items-center justify-between">
@@ -81,12 +111,12 @@ function LoginPage() {
                 <hr className="inline-block h-2 w-55 border-[#dddddd]" />
               </div>
               <p className="className=font-bold text-[#444444]">
-                Don't have an account?{" "}
+                Already have an account?{" "}
                 <Link
-                  to="/signup"
+                  to="/login"
                   className="hover:text-blue-500 focus:text-blue-500"
                 >
-                  Sign up
+                  Sign in
                 </Link>
               </p>
             </div>
@@ -97,4 +127,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignupPage;

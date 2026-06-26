@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true,
-      minlength: 3,
+      minlength: 2,
       maxlength: 30,
       lowercase: true,
     },
@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
 
     timezone: {
       type: String,
-      default: "Asia/Manila",
+      default: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   },
   { timestamps: true },

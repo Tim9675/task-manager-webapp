@@ -1,19 +1,39 @@
 import bcrypt from "bcrypt";
-import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+
+import User from "../models/User.js";
 import { sanitizeUser } from "../helpers/sanitizeUser.js";
+import { EMAILPATTERN, PASSWORDPATTERN } from "../constants/validation.js";
 
 export async function register(req, res) {
+  let errorMessage = [];
   try {
     const { name, email, password, timezone } = req.body;
-    const normalizedEmail = email.toLowerCase();
+    const normalizedEmail = email?.trim().toLowerCase();
     if (!name || !normalizedEmail || !password) {
       return res.status(400).json({
         message: "Name, email, and password are required",
       });
     }
+    if (name.length < 2 || name.length > 30) {
+      errorMessage.push("Name must be between 2 and 30 characters");
+    }
+    if (!EMAILPATTERN.test(normalizedEmail)) {
+      errorMessage.push("Invalid email address");
+    }
+    if (!PASSWORDPATTERN.test(password)) {
+      errorMessage.push(
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+      );
+    }
+    if (errorMessage.length > 0) {
+      return res.status(400).json({ message: errorMessage });
+    }
+    if (!Intl.supportedValuesOf("timeZone").includes(timezone)) {
+      return res.status(400).json({ message: "Invalid timezone" });
+    }
     const existingUser = await User.findOne({
-      $or: [{ normalizedEmail }, { name }],
+      $or: [{ email: normalizedEmail }, { name: name.toLowerCase() }],
     });
     if (existingUser) {
       return res.status(409).json({
@@ -45,7 +65,7 @@ export async function register(req, res) {
 export async function login(req, res) {
   try {
     const { email, password } = req.body;
-    const normalizedEmail = email.toLowerCase();
+    const normalizedEmail = email?.trim().toLowerCase();
     if (!normalizedEmail || !password) {
       return res.status(400).json({
         message: "Email and password are required",

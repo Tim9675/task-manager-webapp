@@ -22,7 +22,6 @@ export async function createTask(title, activeView) {
   };
 
   const response = await client.post("/tasks", newTask);
-  await new Promise((resolve) => setTimeout(resolve, 5000));
   return response.data.data;
 }
 
