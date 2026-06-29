@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Toaster } from "react-hot-toast";
 
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -14,6 +15,12 @@ import DisplayProvider from "./components/providers/DisplayProvider";
 function App() {
   return (
     <BrowserRouter>
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          duration: 3000,
+        }}
+      />
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />

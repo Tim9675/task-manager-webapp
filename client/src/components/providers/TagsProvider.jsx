@@ -3,6 +3,8 @@ import { useContext, useState, useMemo, useCallback, useEffect } from "react";
 import { TagsContext } from "../../contexts/TagsContext";
 import { TasksContext } from "../../contexts/TasksContext";
 import { getUserTags, createTag, updateTag, deleteTag } from "../../api/tagApi";
+import { normalizeTitle } from "./helpers/normalizeTitle.js";
+import { showApiError, showActionSuccess } from "./helpers/showApiResponse.js";
 
 function TagsProvider({ children }) {
   const [userTags, setUserTags] = useState([]);
@@ -15,11 +17,9 @@ function TagsProvider({ children }) {
     async function fetchTags() {
       try {
         const tags = await getUserTags();
-        console.log(tags);
         setUserTags(tags);
       } catch (error) {
-        console.log("Error fetching tags:");
-        console.log(error);
+        showApiError(error, "Error when fetching tags");
       } finally {
         setIsLoadingTags(false);
       }
@@ -37,21 +37,20 @@ function TagsProvider({ children }) {
 
   // CRUD functions
   async function onCreateTag(title, color) {
-    const normalizedTitle = title.trim().toLowerCase();
+    const normalizedTitle = normalizeTitle(title);
     const duplicate = userTags.some(
-      (tag) => tag.title.trim().toLowerCase() === normalizedTitle,
+      (tag) => normalizeTitle(tag.title) === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
 
     try {
       setIsCreatingTag(true);
       const res = await createTag(title, color);
-      console.log(res);
       setUserTags((prev) => [...prev, res]);
+      showActionSuccess("Tag", "created");
       return { success: true };
     } catch (error) {
-      console.log("Error in onCreateTag");
-      console.log(error);
+      showApiError(error, "Error when creating tag");
       return { success: false, error: "Server error in onCreateTag" };
     } finally {
       setIsCreatingTag(false);
@@ -59,25 +58,24 @@ function TagsProvider({ children }) {
   }
 
   async function onUpdateTag(updatedTag) {
-    const normalizedTitle = updatedTag.title.trim().toLowerCase();
+    const normalizedTitle = normalizeTitle(updatedTag.title);
     const duplicate = userTags.some(
       (tag) =>
         tag._id !== updatedTag._id &&
-        tag.title.trim().toLowerCase() === normalizedTitle,
+        normalizeTitle(tag.title) === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
 
     try {
       setIsUpdatingTag(true);
       const res = await updateTag(updatedTag);
-      console.log(res);
       setUserTags((prev) =>
         prev.map((tag) => (tag._id === res._id ? res : tag)),
       );
+      showActionSuccess("Tag", "updated");
       return { success: true };
     } catch (error) {
-      console.log("Error in onUpdateTag");
-      console.log(error);
+      showApiError(error, "Error when updating tag");
       return { success: false, error: "Server error in onUpdateTag" };
     } finally {
       setIsUpdatingTag(false);
@@ -89,9 +87,9 @@ function TagsProvider({ children }) {
       await deleteTag(tagId);
       setUserTags((prev) => prev.filter((tag) => tag._id !== tagId));
       removeTagFromTasks(tagId);
+      showActionSuccess("Tag", "deleted");
     } catch (error) {
-      console.log("Error in onDeleteTag");
-      console.log(error);
+      showApiError(error, "Error when deleting tag");
     }
   }
 

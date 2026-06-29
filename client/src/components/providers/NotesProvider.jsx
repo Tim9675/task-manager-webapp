@@ -7,6 +7,8 @@ import {
   updateNote,
   deleteNote,
 } from "../../api/noteApi";
+import { normalizeTitle } from "./helpers/normalizeTitle.js";
+import { showApiError, showActionSuccess } from "./helpers/showApiResponse.js";
 
 function NotesProvider({ children }) {
   const [userNotes, setUserNotes] = useState([]);
@@ -18,11 +20,9 @@ function NotesProvider({ children }) {
     async function fetchNotes() {
       try {
         const notes = await getUserNotes();
-        console.log(notes);
         setUserNotes(notes);
       } catch (error) {
-        console.log("Error fetching notes:");
-        console.log(error);
+        showApiError(error, "Error when fetching notes");
       } finally {
         setIsLoadingNotes(false);
       }
@@ -34,21 +34,20 @@ function NotesProvider({ children }) {
 
   // CRUD functions
   async function onCreateNote(title, content, color) {
-    const normalizedTitle = title.trim().toLowerCase();
+    const normalizedTitle = normalizeTitle(title);
     const duplicate = userNotes.some(
-      (note) => note.title.trim().toLowerCase() === normalizedTitle,
+      (note) => normalizeTitle(note.title) === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
 
     try {
       setIsCreatingNote(true);
       const res = await createNote(title, content, color);
-      console.log(res);
       setUserNotes((prev) => [...prev, res]);
+      showActionSuccess("Note", "created");
       return { success: true };
     } catch (error) {
-      console.log("Error in onCreateNote");
-      console.log(error);
+      showApiError(error, "Error when creating not");
       return { success: false, error: "Server error in onCreateNote" };
     } finally {
       setIsCreatingNote(false);
@@ -56,25 +55,24 @@ function NotesProvider({ children }) {
   }
 
   async function onUpdateNote(updatedNote) {
-    const normalizedTitle = updatedNote.title.trim().toLowerCase();
+    const normalizedTitle = normalizeTitle(updatedNote.title);
     const duplicate = userNotes.some(
       (note) =>
         note._id !== updatedNote._id &&
-        note.title.trim().toLowerCase() === normalizedTitle,
+        normalizeTitle(note.title) === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
 
     try {
       setIsUpdatingNote(true);
       const res = await updateNote(updatedNote);
-      console.log(res);
       setUserNotes((prev) =>
         prev.map((note) => (note._id === res._id ? res : note)),
       );
+      showActionSuccess("Note", "updated");
       return { success: true };
     } catch (error) {
-      console.log("Error in onUpdateNote");
-      console.log(error);
+      showApiError(error, "Error when updating note");
       return { success: false, error: "Server error in onUpdateNote" };
     } finally {
       setIsUpdatingNote(false);
@@ -85,9 +83,9 @@ function NotesProvider({ children }) {
     try {
       await deleteNote(noteId);
       setUserNotes((prev) => prev.filter((note) => note._id !== noteId));
+      showActionSuccess("Note", "deleted");
     } catch (error) {
-      console.log("Error in onDeleteNote");
-      console.log(error);
+      showApiError(error, "Error when deleting note");
     }
   }
 

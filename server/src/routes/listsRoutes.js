@@ -7,12 +7,21 @@ import {
   updateList,
   deleteList,
 } from "../controllers/listsController.js";
+import {
+  validateCreateList,
+  validateUpdateList,
+} from "../validation/listValidation.js";
 
 const router = express.Router();
 
-router.post("/", createList); // works
+router.post("/", validateCreateList, createList); // works
 router.get("/", getLists); // works
-router.patch("/:listId", validateObjectId("listId"), updateList); //works
+router.patch(
+  "/:listId",
+  validateObjectId("listId"),
+  validateUpdateList,
+  updateList,
+); //works
 router.delete("/:listId", validateObjectId("listId"), deleteList); // works
 
 export default router;

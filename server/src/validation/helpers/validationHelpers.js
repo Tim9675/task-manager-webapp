@@ -11,8 +11,8 @@ export function requireString(value, fieldName, max = 100) {
   if (!value.trim()) {
     return `${fieldName} must be a non-empty string`;
   }
-  if (value.length < MIN_LENGTH || lengthLimit.max < value.length) {
-    return `${fieldName} must be between ${MIN_LENGTH} and ${lengthLimit.max} characters long`;
+  if (value.length < MIN_LENGTH_REQUIRED || max < value.length) {
+    return `${fieldName} must be between ${MIN_LENGTH_REQUIRED} and ${max} characters long`;
   }
   return null;
 }
@@ -62,5 +62,18 @@ export function requireBoolean(value, fieldName) {
   if (typeof value !== "boolean") {
     return `${fieldName} must be a boolean`;
   }
+  return null;
+}
+
+export function isValidHexColor(value) {
+  if (typeof value !== "string") {
+    return "Color must be a string";
+  }
+  const hexColorPattern = /^#([0-9A-Fa-f]{6})$/;
+
+  if (!hexColorPattern.test(value)) {
+    return "Color must be a valid hex color value";
+  }
+
   return null;
 }

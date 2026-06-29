@@ -8,6 +8,8 @@ import {
   getUserLists,
   updateList,
 } from "../../api/listApi";
+import { normalizeTitle } from "./helpers/normalizeTitle.js";
+import { showActionSuccess, showApiError } from "./helpers/showApiResponse.js";
 
 function ListsProvider({ children }) {
   const [userLists, setUserLists] = useState([]);
@@ -22,8 +24,7 @@ function ListsProvider({ children }) {
         const lists = await getUserLists();
         setUserLists(lists);
       } catch (error) {
-        console.log("Error fetching lists");
-        console.log(error);
+        showApiError(error, "Error when fetching lists");
       } finally {
         setIsLoadingLists(false);
       }
@@ -64,21 +65,20 @@ function ListsProvider({ children }) {
   // CRUD functions
   async function onCreateList(title, color) {
     // Don't need to check for empty string title since button is disabled if listTitle state is empty
-    const normalizedTitle = title.trim().toLowerCase();
+    const normalizedTitle = normalizeTitle(title);
     const duplicate = userLists.some(
-      (list) => list.title.trim().toLowerCase() === normalizedTitle,
+      (list) => normalizeTitle(list.title) === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
 
     try {
       setIsCreatingList(true);
       const res = await createList(title, color);
-      console.log(res);
       setUserLists((prev) => [...prev, res]);
+      showActionSuccess("List", "created");
       return { success: true };
     } catch (error) {
-      console.log("Error in onCreateList");
-      console.log(error);
+      showApiError(error, "Error when creating list");
       return {
         success: false,
         error: "Server error in onCreateList",
@@ -90,25 +90,24 @@ function ListsProvider({ children }) {
 
   async function onUpdateList(updatedList) {
     // Same reasoning as onCreateList for empty title
-    const normalizedTitle = updatedList.title.trim().toLowerCase();
+    const normalizedTitle = normalizeTitle(updatedList.title);
     const duplicate = userLists.some(
       (list) =>
         list._id !== updatedList._id &&
-        list.title.trim().toLowerCase() === normalizedTitle,
+        normalizeTitle(list.title) === normalizedTitle,
     );
     if (duplicate) return { success: false, error: "duplicate" };
 
     try {
       setIsUpdatingList(true);
       const res = await updateList(updatedList);
-      console.log(res);
       setUserLists((prev) =>
         prev.map((list) => (list._id === res._id ? res : list)),
       );
+      showActionSuccess("List", "updated");
       return { success: true };
     } catch (error) {
-      console.log("Error in onUpdateList");
-      console.log(error);
+      showApiError(error, "Error when updating list");
       return {
         success: false,
         error: "Server error in onUpdateList",
@@ -123,9 +122,9 @@ function ListsProvider({ children }) {
       await deleteList(listId);
       setUserLists((prev) => prev.filter((list) => list._id !== listId));
       removeListFromTasks(listId);
+      showActionSuccess("List", "deleted");
     } catch (error) {
-      console.log("Error in onDeleteList");
-      console.log(error);
+      showApiError(error, "Error when deleting list");
     }
   }
 
