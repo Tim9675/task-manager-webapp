@@ -1,6 +1,5 @@
 import Task from "../models/Task.js";
-import List from "../models/List.js";
-import Tag from "../models/Tag.js";
+import { normalizeDueDate } from "./helpers/normalizeDueDate.js";
 
 export async function getTasks(req, res) {
   try {
@@ -21,64 +20,16 @@ export async function createTask(req, res) {
     const userId = req.user.userId;
     const { title, description, dueDate, listId, tagIds, subtasks } = req.body;
 
-    // Always send ISO 8601 with timezone
-    // (e.g. "2026-05-06T23:59:59.999+08:00" or "2026-05-06T15:59:59.999Z")
-    // ^^^ SAME WITH updateTask ^^^
-
-    // Prevents users from creating their tasks inside other users' lists; also catches ""
-    if (listId !== undefined && listId !== null && listId !== "") {
-      const listExists = await List.exists({
-        _id: listId,
-        userId,
-      });
-
-      if (!listExists) {
-        return res.status(404).json({
-          message: "List not found",
-        });
-      }
-    }
-
-    if (Array.isArray(tagIds) && tagIds.length > 0) {
-      const uniqueTagIds = [...new Set(tagIds)];
-
-      const existingTagsCount = await Tag.countDocuments({
-        userId,
-        _id: { $in: uniqueTagIds },
-      });
-
-      if (existingTagsCount !== uniqueTagIds.length) {
-        return res.status(404).json({
-          message: "One or more tags not found",
-        });
-      }
-    }
-
-    const parsedDate =
-      dueDate === undefined || dueDate === "" ? null : new Date(dueDate);
-
-    if (parsedDate && isNaN(parsedDate.getTime()))
-      return res.status(400).json({ message: "Invalid dueDate" });
-
-    const taskPayload = {
+    const task = await Task.create({
       userId,
       title,
       description,
-      dueDate: parsedDate,
+      dueDate: normalizeDueDate(dueDate),
+      listId: listId || null,
+      tagIds,
       subtasks,
-    };
+    });
 
-    if (listId !== undefined && listId !== "") {
-      taskPayload.listId = listId;
-    }
-
-    if (tagIds !== undefined) {
-      taskPayload.tagIds = tagIds;
-    }
-
-    const task = new Task(taskPayload);
-
-    await task.save();
     const resp = task.toObject();
     delete resp.__v;
     delete resp.userId;
@@ -97,51 +48,13 @@ export async function updateTask(req, res) {
     const { title, description, dueDate, listId, tagIds, subtasks, checked } =
       req.body;
 
-    // Prevents users from putting their tasks inside other users' lists; also catches ""
-    if (listId !== undefined && listId !== null && listId !== "") {
-      const listExists = await List.exists({
-        _id: listId,
-        userId,
-      });
-
-      if (!listExists) {
-        return res.status(404).json({
-          message: "List not found",
-        });
-      }
-    }
-
-    if (Array.isArray(tagIds) && tagIds.length > 0) {
-      const uniqueTagIds = [...new Set(tagIds)];
-
-      const existingTagsCount = await Tag.countDocuments({
-        userId,
-        _id: { $in: uniqueTagIds },
-      });
-
-      if (existingTagsCount !== uniqueTagIds.length) {
-        return res.status(404).json({
-          message: "One or more tags not found",
-        });
-      }
-    }
-
     const updatePayload = {};
 
     if (title !== undefined) updatePayload.title = title;
     if (description !== undefined) updatePayload.description = description;
-    if (dueDate !== undefined) {
-      const parsedDate =
-        dueDate === "" || dueDate === null ? null : new Date(dueDate);
-
-      if (parsedDate && isNaN(parsedDate.getTime())) {
-        return res.status(400).json({ message: "Invalid dueDate" });
-      }
-
-      updatePayload.dueDate = parsedDate;
-    }
-    if (listId !== undefined)
-      updatePayload.listId = listId === "" ? null : listId;
+    if (dueDate !== undefined)
+      updatePayload.dueDate = normalizeDueDate(dueDate);
+    if (listId !== undefined) updatePayload.listId = listId || null;
     if (tagIds !== undefined) updatePayload.tagIds = tagIds;
     if (subtasks !== undefined) updatePayload.subtasks = subtasks;
     if (checked !== undefined) updatePayload.checked = checked;

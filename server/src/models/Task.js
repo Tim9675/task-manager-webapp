@@ -4,7 +4,13 @@ const taskSchema = new mongoose.Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
 
-    title: { type: String, required: true, trim: true },
+    title: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 100,
+      trim: true,
+    },
     description: { type: String, default: "", trim: true },
 
     dueDate: { type: Date, default: null },
@@ -19,7 +25,13 @@ const taskSchema = new mongoose.Schema(
           type: Schema.Types.ObjectId,
           default: () => new mongoose.Types.ObjectId(),
         },
-        title: { type: String, required: true, trim: true },
+        title: {
+          type: String,
+          required: true,
+          minlength: 2,
+          maxlength: 100,
+          trim: true,
+        },
         checked: { type: Boolean, default: false },
       },
     ],

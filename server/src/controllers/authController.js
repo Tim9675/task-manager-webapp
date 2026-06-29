@@ -2,8 +2,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import User from "../models/User.js";
-import { sanitizeUser } from "../helpers/sanitizeUser.js";
-import { EMAILPATTERN, PASSWORDPATTERN } from "../constants/validation.js";
+import { sanitizeUser } from "./helpers/sanitizeUser.js";
+import { EMAIL_PATTERN, PASSWORD_PATTERN } from "./helpers/constants.js";
 
 export async function register(req, res) {
   let errorMessage = [];
@@ -18,10 +18,10 @@ export async function register(req, res) {
     if (name.length < 2 || name.length > 30) {
       errorMessage.push("Name must be between 2 and 30 characters");
     }
-    if (!EMAILPATTERN.test(normalizedEmail)) {
+    if (!EMAIL_PATTERN.test(normalizedEmail)) {
       errorMessage.push("Invalid email address");
     }
-    if (!PASSWORDPATTERN.test(password)) {
+    if (!PASSWORD_PATTERN.test(password)) {
       errorMessage.push(
         "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
       );

@@ -4,6 +4,11 @@ import {
   getTasksUpcoming,
 } from "../controllers/datesController.js";
 import { validateObjectId } from "../middleware/validateObjectId.js";
+import {
+  validateCreateTask,
+  validateTaskReferences,
+  validateUpdateTask,
+} from "../validation/taskValidation.js";
 
 import {
   getTasks,
@@ -20,8 +25,14 @@ router.get("/upcoming", getTasksUpcoming);
 
 // CRUD routes
 router.get("/", getTasks);
-router.post("/", createTask);
-router.patch("/:taskId", validateObjectId("taskId"), updateTask);
+router.post("/", validateCreateTask, validateTaskReferences, createTask);
+router.patch(
+  "/:taskId",
+  validateObjectId("taskId"),
+  validateUpdateTask,
+  validateTaskReferences,
+  updateTask,
+);
 router.delete("/:taskId", validateObjectId("taskId"), deleteTask);
 
 export default router;

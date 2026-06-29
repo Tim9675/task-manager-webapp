@@ -1,4 +1,4 @@
-export const EMAILPATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export const PASSWORDPATTERN = new RegExp(
+export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const PASSWORD_PATTERN = new RegExp(
   "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&,\\(\\)\\-_\\+\\=\\[\\]\\{\\}:;<>\\?|~])[A-Za-z\\d!@#$%^&,\\(\\)\\-_\\+\\=\\[\\]\\{\\}:;<>\\?|~]{8,}$",
 );

@@ -17,6 +17,7 @@ function TasksProvider({ children }) {
   const [isLoadingTasks, setIsLoadingTasks] = useState(true);
   const [isCreatingTask, setIsCreatingTask] = useState(false);
   const [isUpdatingTask, setIsUpdatingTask] = useState(false);
+  const [taskError, setTaskError] = useState("");
 
   useEffect(() => {
     async function fetchTasks() {
@@ -24,8 +25,8 @@ function TasksProvider({ children }) {
         const tasks = await getUserTasks();
         setUserTasks(tasks);
       } catch (error) {
-        console.log("Error fetching tasks");
-        console.log(error);
+        console.error("Error fetching tasks");
+        console.error(error);
       } finally {
         setIsLoadingTasks(false);
       }
@@ -65,8 +66,11 @@ function TasksProvider({ children }) {
       setisTaskDetailsOpen(true);
       return res;
     } catch (error) {
-      console.log("Error in onCreateTask");
-      console.log(error);
+      console.error(
+        "Error in onCreateTask",
+        error.response?.data?.message || error,
+      );
+      setTaskError(error.response?.data?.message || "Error when creating task");
     } finally {
       setIsCreatingTask(false);
     }
@@ -80,8 +84,8 @@ function TasksProvider({ children }) {
         prev.map((task) => (task._id === res._id ? res : task)),
       );
     } catch (error) {
-      console.log("Error in onToggleTask");
-      console.log(error);
+      console.error("Error in onToggleTask: ", error.response?.data?.message);
+      setTaskError(error.response?.data?.message || "Error when toggling task");
     }
   }
 
@@ -95,8 +99,8 @@ function TasksProvider({ children }) {
         }),
       );
     } catch (error) {
-      console.log("Error in onUpdateTask");
-      console.log(error);
+      console.error("Error in onUpdateTask: ", error.response?.data?.message);
+      setTaskError(error.response?.data?.message || "Error when updating task");
     } finally {
       setIsUpdatingTask(false);
     }
@@ -110,8 +114,8 @@ function TasksProvider({ children }) {
         setSelectedTaskId(null);
       }
     } catch (error) {
-      console.log("Error in onDeleteTask");
-      console.log(error);
+      console.error("Error in onDeleteTask", error.response?.data?.message);
+      setTaskError(error.response?.data?.message || "Error when deleting task");
     }
   }
 
@@ -167,6 +171,7 @@ function TasksProvider({ children }) {
         isLoadingTasks,
         isCreatingTask,
         isUpdatingTask,
+        taskError,
       }}
     >
       {children}
