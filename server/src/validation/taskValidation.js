@@ -113,7 +113,7 @@ export function validateUpdateTask(req, res, next) {
     }
   }
 
-  if (listId !== undefined) {
+  if (listId != null) {
     const listIdError = isValidObjectId(listId, "List ID");
     if (listIdError) {
       return res.status(400).json({ message: listIdError });

@@ -10,6 +10,7 @@ import authRoutes from "./routes/authRoutes.js";
 import { connectDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 import { authMiddleWare } from "./middleware/authMiddleware.js";
+import { errorMiddleware } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
 
@@ -24,8 +25,6 @@ app.use(
 );
 app.use(express.json()); // makes req.body available as JSON
 app.use(rateLimiter);
-// app.use(express.urlencoded({ extended: true })); // REMINDER: Eventually add
-// app.use(errorMiddleware); // REMINDER: Eventually add centralized error middleware
 
 //Public Routes
 app.use("/api/auth", authRoutes);
@@ -36,11 +35,13 @@ app.use(authMiddleWare);
 app.use("/api/tasks", tasksRoutes);
 app.use("/api/lists", listsRoutes);
 app.use("/api/tags", tagsRoutes);
-app.use("/api/notes", notesRoutes); // REMINDER: Replace PUT with PATCH,
+app.use("/api/notes", notesRoutes);
+
+app.use(errorMiddleware); // REMINDER: Eventually add centralized error middleware
 
 // Optional improvement for  update functions inside controllers
 
-// if (Object.keys(updatePayload).length === 0) {
+// if (!Object.keys(updatePayload).length) {
 //   return res.status(400).json({
 //     message: "No fields to update",
 //   });

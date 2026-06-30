@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
   getTasksToday,
   getTasksUpcoming,
@@ -9,13 +10,13 @@ import {
   validateTaskReferences,
   validateUpdateTask,
 } from "../validation/taskValidation.js";
-
 import {
   getTasks,
   createTask,
   updateTask,
   deleteTask,
 } from "../controllers/tasksController.js";
+import { asyncHandler } from "./helpers/asyncHandler.js";
 
 const router = express.Router();
 
@@ -24,15 +25,20 @@ router.get("/today", getTasksToday); // Learning Point: Static routes (/today) m
 router.get("/upcoming", getTasksUpcoming);
 
 // CRUD routes
-router.get("/", getTasks);
-router.post("/", validateCreateTask, validateTaskReferences, createTask);
+router.get("/", asyncHandler(getTasks));
+router.post(
+  "/",
+  validateCreateTask,
+  validateTaskReferences,
+  asyncHandler(createTask),
+);
 router.patch(
   "/:taskId",
   validateObjectId("taskId"),
   validateUpdateTask,
   validateTaskReferences,
-  updateTask,
+  asyncHandler(updateTask),
 );
-router.delete("/:taskId", validateObjectId("taskId"), deleteTask);
+router.delete("/:taskId", validateObjectId("taskId"), asyncHandler(deleteTask));
 
 export default router;
