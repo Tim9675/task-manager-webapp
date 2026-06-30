@@ -1,5 +1,7 @@
 import express from "express";
+
 import { validateObjectId } from "../middleware/validateObjectId.js";
+import { asyncHandler } from "./helpers/asyncHandler.js";
 
 import {
   getLists,
@@ -14,14 +16,14 @@ import {
 
 const router = express.Router();
 
-router.post("/", validateCreateList, createList); // works
-router.get("/", getLists); // works
+router.post("/", validateCreateList, asyncHandler(createList)); // works
+router.get("/", asyncHandler(getLists)); // works
 router.patch(
   "/:listId",
   validateObjectId("listId"),
   validateUpdateList,
-  updateList,
+  asyncHandler(updateList),
 ); //works
-router.delete("/:listId", validateObjectId("listId"), deleteList); // works
+router.delete("/:listId", validateObjectId("listId"), asyncHandler(deleteList)); // works
 
 export default router;

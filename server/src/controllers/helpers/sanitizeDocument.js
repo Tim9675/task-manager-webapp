@@ -1,4 +1,4 @@
-export function sanitizeResponse(obj) {
+export function sanitizeDocument(obj) {
   const resp = obj.toObject();
 
   delete resp.__v;

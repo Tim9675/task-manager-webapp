@@ -1,6 +1,6 @@
 import Task from "../models/Task.js";
 import { normalizeDueDate } from "./helpers/normalizeDueDate.js";
-import { sanitizeResponse } from "./helpers/sanitizeResponse.js";
+import { sanitizeDocument } from "./helpers/sanitizeDocument.js";
 
 export async function getTasks(req, res) {
   const userId = req.user.userId;
@@ -25,7 +25,7 @@ export async function createTask(req, res) {
     subtasks,
   });
 
-  const resp = sanitizeResponse(task);
+  const resp = sanitizeDocument(task);
   res.status(201).json({ message: "Task created successfully", data: resp });
 }
 

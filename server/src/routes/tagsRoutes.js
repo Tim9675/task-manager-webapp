@@ -11,17 +11,18 @@ import {
   validateCreateTag,
   validateUpdateTag,
 } from "../validation/tagValidation.js";
+import { asyncHandler } from "./helpers/asyncHandler.js";
 
 const router = express.Router();
 
-router.post("/", validateCreateTag, createTag);
-router.get("/", getTags);
+router.post("/", validateCreateTag, asyncHandler(createTag));
+router.get("/", asyncHandler(getTags));
 router.patch(
   "/:tagId",
   validateObjectId("tagId"),
   validateUpdateTag,
-  updateTag,
+  asyncHandler(updateTag),
 );
-router.delete("/:tagId", validateObjectId("tagId"), deleteTag);
+router.delete("/:tagId", validateObjectId("tagId"), asyncHandler(deleteTag));
 
 export default router;

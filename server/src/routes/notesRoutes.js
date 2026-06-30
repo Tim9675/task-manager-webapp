@@ -11,17 +11,18 @@ import {
   validateCreateNote,
   validateUpdateNote,
 } from "../validation/noteValidation.js";
+import { asyncHandler } from "./helpers/asyncHandler.js";
 
 const router = express.Router();
 
-router.get("/", getNotes);
-router.post("/", validateCreateNote, createNote);
+router.get("/", asyncHandler(getNotes));
+router.post("/", validateCreateNote, asyncHandler(createNote));
 router.patch(
   "/:noteId",
   validateObjectId("noteId"),
   validateUpdateNote,
-  updateNote,
+  asyncHandler(updateNote),
 );
-router.delete("/:noteId", validateObjectId("noteId"), deleteNote);
+router.delete("/:noteId", validateObjectId("noteId"), asyncHandler(deleteNote));
 
 export default router;
