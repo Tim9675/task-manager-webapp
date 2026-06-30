@@ -3,7 +3,13 @@ import mongoose, { Schema } from "mongoose";
 const noteSchema = new mongoose.Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-    title: { type: String, required: true, trim: true },
+    title: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 20,
+      trim: true,
+    },
     content: { type: String, default: "", trim: true },
     color: {
       type: String,
