@@ -1,9 +1,9 @@
 import { useContext } from "react";
 
-import { TasksContext } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/TasksContext";
 
 function ButtonBar({ onOpen }) {
-  const { isUpdatingTask } = useContext(TasksContext);
+  const { isUpdatingTask } = useTasks();
 
   return (
     <div className="mt-2 flex w-full items-center justify-between gap-5 md:h-10">

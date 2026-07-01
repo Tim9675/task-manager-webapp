@@ -1,7 +1,7 @@
 import { useState, useMemo, useContext } from "react";
 
 import { isToday, isUpcoming } from "../../utils/date.js";
-import { TasksContext } from "../../contexts/TasksContext.jsx";
+import { useTasks } from "../../contexts/TasksContext.jsx";
 import { ListsContext } from "../../contexts/ListsContext.jsx";
 import { TagsContext } from "../../contexts/TagsContext.jsx";
 import { DisplayContext } from "../../contexts/DisplayContext.jsx";
@@ -15,7 +15,7 @@ function DisplayProvider({ children }) {
   const [isHideCompleted, setIsHideCompleted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const { userTasks } = useContext(TasksContext);
+  const { userTasks } = useTasks();
   const { getListTitle } = useContext(ListsContext);
   const { getTagTitle } = useContext(TagsContext);
 

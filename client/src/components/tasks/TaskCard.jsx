@@ -1,7 +1,7 @@
 import Checkbox from "@mui/material/Checkbox";
 import { ChevronRight } from "lucide-react";
 import { useContext } from "react";
-import { TasksContext } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/TasksContext";
 
 function TaskCard({ task, onSelect, listDetails }) {
   const label = { slotProps: { input: { "aria-label": "Checkbox" } } };
@@ -17,7 +17,7 @@ function TaskCard({ task, onSelect, listDetails }) {
     },
   };
 
-  const { isSelectedTask, onToggleTask } = useContext(TasksContext);
+  const { isSelectedTask, onToggleTask } = useTasks();
   const isSelected = isSelectedTask(task._id);
 
   return (

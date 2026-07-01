@@ -1,14 +1,14 @@
 import { useContext, useState, useMemo, useCallback, useEffect } from "react";
 
 import { TagsContext } from "../../contexts/TagsContext";
-import { TasksContext } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/TasksContext";
 import { getUserTags, createTag, updateTag, deleteTag } from "../../api/tagApi";
 import { normalizeTitle } from "./helpers/normalizeTitle.js";
 import { showApiError, showActionSuccess } from "./helpers/showApiResponse.js";
 
 function TagsProvider({ children }) {
   const [userTags, setUserTags] = useState([]);
-  const { userTasks, removeTagFromTasks } = useContext(TasksContext);
+  const { userTasks, removeTagFromTasks } = useTasks();
   const [isLoadingTags, setIsLoadingTags] = useState(true);
   const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [isUpdatingTag, setIsUpdatingTag] = useState(false);

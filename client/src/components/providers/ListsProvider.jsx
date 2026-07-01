@@ -1,7 +1,7 @@
 import { useContext, useState, useMemo, useCallback, useEffect } from "react";
 
 import { ListsContext } from "../../contexts/ListsContext";
-import { TasksContext } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/TasksContext";
 import {
   createList,
   deleteList,
@@ -13,7 +13,7 @@ import { showActionSuccess, showApiError } from "./helpers/showApiResponse.js";
 
 function ListsProvider({ children }) {
   const [userLists, setUserLists] = useState([]);
-  const { userTasks, removeListFromTasks } = useContext(TasksContext);
+  const { userTasks, removeListFromTasks } = useTasks();
   const [isLoadingLists, setIsLoadingLists] = useState(true);
   const [isCreatingList, setIsCreatingList] = useState(false);
   const [isUpdatingList, setIsUpdatingList] = useState(false);

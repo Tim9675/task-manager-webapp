@@ -16,14 +16,14 @@ import ListModal from "./ListModal";
 import { ListsContext } from "../../contexts/ListsContext";
 import { TagsContext } from "../../contexts/TagsContext";
 import TagModal from "./TagModal";
-import { TasksContext } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/TasksContext";
 
 function Sidebar({ onClose }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddListOpen, setIsAddListOpen] = useState(false);
   const [isAddTagOpen, setIsAddTagOpen] = useState(false);
 
-  const { todayTaskCount, upcomingTaskCount } = useContext(TasksContext);
+  const { todayTaskCount, upcomingTaskCount } = useTasks();
   const { userListsWithCounts, onCreateList } = useContext(ListsContext);
   const { userTags, onCreateTag } = useContext(TagsContext);
 

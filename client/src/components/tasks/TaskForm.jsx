@@ -8,7 +8,7 @@ import SubtaskSection from "./SubtaskSection";
 import TagSection from "./TagSection";
 import { ListsContext } from "../../contexts/ListsContext";
 import { TagsContext } from "../../contexts/TagsContext";
-import { TasksContext } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/TasksContext";
 
 function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
   const { register, control, handleSubmit, reset, watch, setValue } = useForm({
@@ -22,7 +22,7 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
     },
   });
 
-  const { onUpdateTask } = useContext(TasksContext);
+  const { onUpdateTask } = useTasks();
   const { userLists } = useContext(ListsContext);
   const { userTags } = useContext(TagsContext);
 

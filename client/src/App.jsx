@@ -6,7 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import TasksProvider from "./components/providers/TasksProvider";
+import { TasksProvider } from "./contexts/TasksContext";
 import ListsProvider from "./components/providers/ListsProvider";
 import TagsProvider from "./components/providers/TagsProvider";
 import NotesProvider from "./components/providers/NotesProvider";

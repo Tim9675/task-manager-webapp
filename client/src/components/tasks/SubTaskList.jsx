@@ -3,11 +3,11 @@ import { useContext } from "react";
 import TaskCard from "./TaskCard";
 import AddTask from "./AddTask";
 import { ListsContext } from "../../contexts/ListsContext";
-import { TasksContext } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/TasksContext";
 
 function SubTaskList({ tasks, id, header }) {
   const { getListById } = useContext(ListsContext);
-  const { openTask } = useContext(TasksContext);
+  const { openTask } = useTasks();
 
   return (
     <div className="flex h-full grow flex-col rounded-md border border-[#ebebeb] py-5">

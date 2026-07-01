@@ -4,13 +4,13 @@ import { Menu } from "lucide-react";
 import Sidebar from "../components/sidebar/Sidebar";
 import TaskDetailsPanel from "../components/tasks/TaskDetailsPanel";
 import SidebarSkeleton from "../components/skeletons/SidebarSkeleton";
-import { TasksContext } from "../contexts/TasksContext";
+import { useTasks } from "../contexts/TasksContext";
 import { ListsContext } from "../contexts/ListsContext";
 import { TagsContext } from "../contexts/TagsContext";
 import { DisplayContext } from "../contexts/DisplayContext";
 
 function DashboardLayout({ children }) {
-  const { isTaskDetailsOpen, closeTask } = useContext(TasksContext);
+  const { isTaskDetailsOpen, closeTask } = useTasks();
   const { isLoadingLists } = useContext(ListsContext);
   const { isLoadingTags } = useContext(TagsContext);
   const { isSidebarOpen, setIsSidebarOpen } = useContext(DisplayContext);

@@ -3,12 +3,12 @@ import { useContext, useState } from "react";
 
 import TaskForm from "./TaskForm";
 import DeleteTaskModal from "./DeleteTaskModal";
-import { TasksContext } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/TasksContext";
 
 function TaskDetailsPanel({ onClose }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const { selectedTask, onDeleteTask } = useContext(TasksContext);
+  const { selectedTask, onDeleteTask } = useTasks();
 
   return (
     <aside className="my-5 me-5 flex h-[calc(100vh-2.5rem)] w-100 flex-col rounded-2xl bg-neutral-100 px-5 py-5">

@@ -1,10 +1,10 @@
 import { Plus, Loader } from "lucide-react";
 import { useContext, useState } from "react";
-import { TasksContext } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/TasksContext";
 
 function AddTask({ activeView }) {
   const [taskTitle, setTaskTitle] = useState("");
-  const { onCreateTask, isCreatingTask } = useContext(TasksContext);
+  const { onCreateTask, isCreatingTask } = useTasks();
   return (
     <div className="mx-5 flex h-13 items-center rounded-md border border-[#ebebeb] px-3 focus-within:border-neutral-300">
       <button
