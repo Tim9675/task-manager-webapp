@@ -1,16 +1,22 @@
 import { EllipsisVertical, Tag } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import TagModal from "./TagModal";
-import { TagsContext } from "../../contexts/TagsContext";
+import { useTags } from "../../contexts/TagsContext";
 import DeleteTagModal from "./DeleteTagModal";
 
-function TagSidebarItem({ nav, activeView, isSearching, onDisplayChange }) {
+function TagSidebarItem({
+  nav,
+  activeView,
+  setActiveView,
+  isSearching,
+  onDisplayChange,
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditTagOpen, setIsEditTagOpen] = useState(false);
   const [isDeleteTagOpen, setIsDeleteTagOpen] = useState(false);
 
-  const { onUpdateTag, onDeleteTag } = useContext(TagsContext);
+  const { onUpdateTag, onDeleteTag } = useTags();
 
   const isCurrentDisplay =
     activeView?.type === "tag" && activeView?.id === nav._id && !isSearching;

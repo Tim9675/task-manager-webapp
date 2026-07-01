@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -6,8 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import ButtonBar from "./ButtonBar";
 import SubtaskSection from "./SubtaskSection";
 import TagSection from "./TagSection";
-import { ListsContext } from "../../contexts/ListsContext";
-import { TagsContext } from "../../contexts/TagsContext";
+import { useLists } from "../../contexts/ListsContext";
+import { useTags } from "../../contexts/TagsContext";
 import { useTasks } from "../../contexts/TasksContext";
 
 function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
@@ -23,8 +23,8 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
   });
 
   const { onUpdateTask } = useTasks();
-  const { userLists } = useContext(ListsContext);
-  const { userTags } = useContext(TagsContext);
+  const { userLists } = useLists();
+  const { userTags } = useTags();
 
   useEffect(() => {
     if (!selectedTask) return;

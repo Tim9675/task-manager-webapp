@@ -1,6 +1,6 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-import { NotesContext } from "../../contexts/NotesContext";
+import { useNotes } from "../../contexts/NotesContext";
 
 function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
   const [noteTitle, setNoteTitle] = useState(note?.title ?? "");
@@ -9,8 +9,7 @@ function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
 
   const [isNoteDuplicate, setIsNoteDuplicate] = useState(false);
 
-  const { availableNoteColors, isCreatingNote, isUpdatingNote } =
-    useContext(NotesContext);
+  const { availableNoteColors, isCreatingNote, isUpdatingNote } = useNotes();
 
   async function submitNote() {
     let result;

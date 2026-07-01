@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { TagsContext } from "../../contexts/TagsContext";
+import { useState } from "react";
+import { useTags } from "../../contexts/TagsContext";
 
 function TagModal({ mode, tag = {}, onTagSubmit, onClose }) {
   const [tagTitle, setTagTitle] = useState(mode === "edit" ? tag.title : "");
@@ -8,8 +8,7 @@ function TagModal({ mode, tag = {}, onTagSubmit, onClose }) {
   );
   const [isTagDuplicate, setIsTagDuplicate] = useState(false);
 
-  const { availableTagColors, isCreatingTag, isUpdatingTag } =
-    useContext(TagsContext);
+  const { availableTagColors, isCreatingTag, isUpdatingTag } = useTags();
 
   async function submitTag() {
     let result;

@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { ListsContext } from "../../contexts/ListsContext";
+import { useLists } from "../../contexts/ListsContext";
 
 function DeleteListModal({ nav, onDelete, onClose }) {
-  const { getCachedTasksByList } = useContext(ListsContext);
+  const { getCachedTasksByList } = useLists();
 
   const tasksWithThisList = getCachedTasksByList(nav._id);
   const taskCount = tasksWithThisList.length;

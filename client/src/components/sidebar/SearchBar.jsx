@@ -1,11 +1,9 @@
 import { Search } from "lucide-react";
 
-import { useContext } from "react";
-import { DisplayContext } from "../../contexts/DisplayContext";
+import { useDisplay } from "../../contexts/DisplayContext";
 
 function SearchBar() {
-  const { searchQuery, setSearchQuery, setIsSearching } =
-    useContext(DisplayContext);
+  const { searchQuery, setSearchQuery, setIsSearching } = useDisplay();
 
   // REMINDER: Optional, but add an "x" button that resets the search query
   return (

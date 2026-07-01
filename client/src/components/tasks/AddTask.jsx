@@ -1,5 +1,5 @@
 import { Plus, Loader } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useTasks } from "../../contexts/TasksContext";
 
 function AddTask({ activeView }) {

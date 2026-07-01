@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { DisplayContext } from "../../contexts/DisplayContext";
+import { useDisplay } from "../../contexts/DisplayContext";
 
 function SettingsModal({ onClose }) {
-  const { isHideCompleted, setIsHideCompleted } = useContext(DisplayContext);
+  const { isHideCompleted, setIsHideCompleted } = useDisplay();
 
   return (
     <div

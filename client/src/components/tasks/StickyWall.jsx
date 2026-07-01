@@ -1,13 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 
-import { NotesContext } from "../../contexts/NotesContext";
+import { useNotes } from "../../contexts/NotesContext";
 import NoteCard from "./NoteCard";
 import AddNoteButton from "./AddNoteButton";
 import NoteInput from "./NoteInput";
 
 function StickyWall() {
-  const { userNotes, onCreateNote, onUpdateNote, onDeleteNote } =
-    useContext(NotesContext);
+  const { userNotes, onCreateNote, onUpdateNote, onDeleteNote } = useNotes();
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [editNoteId, setEditNoteId] = useState(null);
 

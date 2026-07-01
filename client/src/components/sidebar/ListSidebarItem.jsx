@@ -1,9 +1,9 @@
 import { EllipsisVertical } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import ListModal from "./ListModal";
 import DeleteListModal from "./DeleteListModal";
-import { ListsContext } from "../../contexts/ListsContext";
+import { useLists } from "../../contexts/ListsContext";
 
 function ListSidebarItem({
   nav,
@@ -16,7 +16,7 @@ function ListSidebarItem({
   const [isEditListOpen, setIsEditListOpen] = useState(false);
   const [isDeleteListOpen, setIsDeleteListOpen] = useState(false);
 
-  const { onUpdateList, onDeleteList } = useContext(ListsContext);
+  const { onUpdateList, onDeleteList } = useLists();
 
   const isCurrentDisplay =
     activeView.type === "list" && nav._id === activeView.id && !isSearching;

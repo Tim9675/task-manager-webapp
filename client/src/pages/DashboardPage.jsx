@@ -1,17 +1,17 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import TaskList from "../components/tasks/TaskList";
 import StickyWall from "../components/tasks/StickyWall";
 import DashboardLayout from "../layouts/DashboardLayout";
 import TaskListSkeleton from "../components/skeletons/TaskListSkeleton";
-import { DisplayContext } from "../contexts/DisplayContext";
+import { useDisplay } from "../contexts/DisplayContext";
 import { useTasks } from "../contexts/TasksContext";
 
 function DashboardPage() {
   // Load state
   const { isLoadingTasks } = useTasks();
 
-  const { activeView, header } = useContext(DisplayContext);
+  const { activeView, header } = useDisplay();
 
   return (
     <DashboardLayout>

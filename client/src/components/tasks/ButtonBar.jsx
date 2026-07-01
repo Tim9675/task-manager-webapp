@@ -1,5 +1,3 @@
-import { useContext } from "react";
-
 import { useTasks } from "../../contexts/TasksContext";
 
 function ButtonBar({ onOpen }) {

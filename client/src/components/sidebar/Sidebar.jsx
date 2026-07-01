@@ -5,7 +5,7 @@ import {
   StickyNote,
   Menu,
 } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import SidebarSection from "./SidebarSection";
 import SearchBar from "./SearchBar";
@@ -13,8 +13,8 @@ import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
 import SettingsModal from "./SettingsModal";
 import ListModal from "./ListModal";
-import { ListsContext } from "../../contexts/ListsContext";
-import { TagsContext } from "../../contexts/TagsContext";
+import { useLists } from "../../contexts/ListsContext";
+import { useTags } from "../../contexts/TagsContext";
 import TagModal from "./TagModal";
 import { useTasks } from "../../contexts/TasksContext";
 
@@ -24,8 +24,8 @@ function Sidebar({ onClose }) {
   const [isAddTagOpen, setIsAddTagOpen] = useState(false);
 
   const { todayTaskCount, upcomingTaskCount } = useTasks();
-  const { userListsWithCounts, onCreateList } = useContext(ListsContext);
-  const { userTags, onCreateTag } = useContext(TagsContext);
+  const { userListsWithCounts, onCreateList } = useLists();
+  const { userTags, onCreateTag } = useTags();
 
   // Should be the only one hardcoded
   const tasksSection = [

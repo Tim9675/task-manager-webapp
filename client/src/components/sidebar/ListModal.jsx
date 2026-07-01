@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { ListsContext } from "../../contexts/ListsContext";
+import { useState } from "react";
+import { useLists } from "../../contexts/ListsContext";
 
 function ListModal({ mode, list = {}, onListSubmit, onClose }) {
   const [listTitle, setListTitle] = useState(mode === "edit" ? list.title : "");
@@ -8,8 +8,7 @@ function ListModal({ mode, list = {}, onListSubmit, onClose }) {
   );
   const [isListDuplicate, setIsListDuplicate] = useState(false);
 
-  const { availableListColors, isCreatingList, isUpdatingList } =
-    useContext(ListsContext);
+  const { availableListColors, isCreatingList, isUpdatingList } = useLists();
   async function submitList() {
     let result;
     try {

@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import TaskForm from "./TaskForm";
 import DeleteTaskModal from "./DeleteTaskModal";

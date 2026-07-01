@@ -1,6 +1,5 @@
 import Checkbox from "@mui/material/Checkbox";
 import { ChevronRight } from "lucide-react";
-import { useContext } from "react";
 import { useTasks } from "../../contexts/TasksContext";
 
 function TaskCard({ task, onSelect, listDetails }) {

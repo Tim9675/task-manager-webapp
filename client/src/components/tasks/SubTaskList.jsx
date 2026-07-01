@@ -1,12 +1,10 @@
-import { useContext } from "react";
-
 import TaskCard from "./TaskCard";
 import AddTask from "./AddTask";
-import { ListsContext } from "../../contexts/ListsContext";
+import { useLists } from "../../contexts/ListsContext";
 import { useTasks } from "../../contexts/TasksContext";
 
 function SubTaskList({ tasks, id, header }) {
-  const { getListById } = useContext(ListsContext);
+  const { getListById } = useLists();
   const { openTask } = useTasks();
 
   return (

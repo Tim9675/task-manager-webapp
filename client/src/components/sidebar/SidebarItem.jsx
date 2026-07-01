@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { DisplayContext } from "../../contexts/DisplayContext";
+import { useDisplay } from "../../contexts/DisplayContext";
 
 import TaskSidebarItem from "./TaskSidebarItem";
 import ListSidebarItem from "./ListSidebarItem";
@@ -7,7 +6,7 @@ import TagSidebarItem from "./TagSidebarItem";
 
 function SidebarItem({ nav, type }) {
   const { activeView, setActiveView, isSearching, setIsSearching } =
-    useContext(DisplayContext);
+    useDisplay();
 
   function renderItem() {
     switch (type) {

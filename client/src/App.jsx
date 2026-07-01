@@ -7,10 +7,10 @@ import SignupPage from "./pages/SignupPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { TasksProvider } from "./contexts/TasksContext";
-import ListsProvider from "./components/providers/ListsProvider";
-import TagsProvider from "./components/providers/TagsProvider";
-import NotesProvider from "./components/providers/NotesProvider";
-import DisplayProvider from "./components/providers/DisplayProvider";
+import { ListsProvider } from "./contexts/ListsContext";
+import { TagsProvider } from "./contexts/TagsContext";
+import { NotesProvider } from "./contexts/NotesContext";
+import { DisplayProvider } from "./contexts/DisplayContext";
 
 function App() {
   return (

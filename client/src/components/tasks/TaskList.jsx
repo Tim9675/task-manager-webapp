@@ -1,18 +1,12 @@
-import { useContext } from "react";
-
 import TaskCard from "./TaskCard";
 import AddTask from "./AddTask";
-import { ListsContext } from "../../contexts/ListsContext";
+import { useLists } from "../../contexts/ListsContext";
 import { useTasks } from "../../contexts/TasksContext";
 import Upcoming from "./Upcoming";
-import { DisplayContext } from "../../contexts/DisplayContext";
+import { useDisplay } from "../../contexts/DisplayContext";
 
 function TaskList({ header }) {
-  const {
-    activeView,
-    isSearching,
-    visibleTasks: tasks,
-  } = useContext(DisplayContext);
+  const { activeView, isSearching, visibleTasks: tasks } = useDisplay();
 
   let remainingTasksCounter = 0;
 
@@ -20,7 +14,7 @@ function TaskList({ header }) {
     if (!task.checked) remainingTasksCounter++;
   }
 
-  const { getListById } = useContext(ListsContext);
+  const { getListById } = useLists();
   const { openTask } = useTasks();
 
   return (
