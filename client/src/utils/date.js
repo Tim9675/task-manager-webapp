@@ -62,6 +62,8 @@ export function getDueDateOnCreate(activeView) {
 
   let dueDate = dueToday;
 
+  if (activeView !== "today" && activeView.type !== "upcoming") return null;
+
   switch (activeView.id) {
     case "tomorrow":
       dueDate = dueTom;
