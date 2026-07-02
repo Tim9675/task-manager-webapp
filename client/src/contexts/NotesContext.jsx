@@ -16,6 +16,7 @@ export function NotesProvider({ children }) {
   const [isLoadingNotes, setIsLoadingNotes] = useState(true);
   const [isCreatingNote, setIsCreatingNote] = useState(false);
   const [isUpdatingNote, setIsUpdatingNote] = useState(false);
+  const [isDeletingNote, setIsDeletingNote] = useState(false);
 
   useEffect(() => {
     async function fetchNotes() {
@@ -82,11 +83,14 @@ export function NotesProvider({ children }) {
 
   async function onDeleteNote(noteId) {
     try {
+      setIsDeletingNote(true);
       await deleteNote(noteId);
       setUserNotes((prev) => prev.filter((note) => note._id !== noteId));
       showActionSuccess("Note", "deleted");
     } catch (error) {
       showApiError(error, "Error when deleting note");
+    } finally {
+      setIsDeletingNote(false);
     }
   }
 
@@ -101,6 +105,7 @@ export function NotesProvider({ children }) {
         isLoadingNotes,
         isCreatingNote,
         isUpdatingNote,
+        isDeletingNote,
       }}
     >
       {children}

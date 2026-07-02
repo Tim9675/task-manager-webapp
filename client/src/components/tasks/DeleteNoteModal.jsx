@@ -1,4 +1,8 @@
+import { useNotes } from "../../contexts/NotesContext";
+
 function DeleteNoteModal({ noteTitle, onDelete, onClose }) {
+  const { isDeletingNote } = useNotes();
+
   return (
     <div
       onClick={onClose}
@@ -29,18 +33,20 @@ function DeleteNoteModal({ noteTitle, onDelete, onClose }) {
         <div className="mt-4 flex justify-evenly">
           <button
             type="button"
+            disabled={isDeletingNote}
             onClick={onClose}
-            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95"
+            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:hover:brightness-100"
           >
             Cancel
           </button>
           <button
             type="button"
-            onClick={() => {
-              onDelete();
+            disabled={isDeletingNote}
+            onClick={async () => {
+              await onDelete();
               onClose();
             }}
-            className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95"
+            className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
           >
             Delete
           </button>
