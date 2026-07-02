@@ -44,7 +44,7 @@ export function NotesProvider({ children }) {
     try {
       setIsCreatingNote(true);
       const res = await createNote(title, content, color);
-      setUserNotes((prev) => [...prev, res]);
+      setUserNotes((prev) => [res, ...prev]);
       showActionSuccess("Note", "created");
       return { success: true };
     } catch (error) {

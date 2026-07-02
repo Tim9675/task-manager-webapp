@@ -83,9 +83,13 @@ export function DisplayProvider({ children }) {
   );
 }
 
-// REMINDER: Add criteria "createdAt" when backend is integrated
 function compareTasks(a, b) {
-  if (a.checked === b.checked) return 0;
+  if (a.checked === b.checked) {
+    const aParsedDate = Date.parse(a.dueDate);
+    const bParsedDate = Date.parse(b.dueDate);
+
+    return aParsedDate - bParsedDate;
+  }
   return a.checked ? 1 : -1;
 }
 

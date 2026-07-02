@@ -17,6 +17,15 @@ function StickyWall() {
       </header>
       {/* Idk why main is tabable. Is <main> automatically tabable or is it because of grid? */}
       <div className="mx-5 grid grid-cols-1 gap-5 overflow-y-auto rounded border border-[#ebebeb] px-6 py-5 md:grid-cols-2 xl:grid-cols-3">
+        {isAddingNote ? (
+          <NoteInput
+            mode="create"
+            onClose={() => setIsAddingNote(false)}
+            onNoteSubmit={onCreateNote}
+          />
+        ) : (
+          <AddNoteButton onAdd={() => setIsAddingNote(true)} />
+        )}
         {userNotes.map((note) => {
           if (note._id === editNoteId)
             return (
@@ -37,16 +46,6 @@ function StickyWall() {
             />
           );
         })}
-
-        {isAddingNote ? (
-          <NoteInput
-            mode="create"
-            onClose={() => setIsAddingNote(false)}
-            onNoteSubmit={onCreateNote}
-          />
-        ) : (
-          <AddNoteButton onAdd={() => setIsAddingNote(true)} />
-        )}
       </div>
     </div>
   );
