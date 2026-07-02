@@ -31,8 +31,8 @@ function TaskDetailsPanel({ onClose }) {
 
       {isDeleteModalOpen && (
         <DeleteTaskModal
-          onDelete={() => {
-            if (selectedTask) onDeleteTask(selectedTask._id);
+          onDelete={async () => {
+            if (selectedTask) await onDeleteTask(selectedTask._id);
             onClose();
           }}
           onClose={() => setIsDeleteModalOpen(false)}

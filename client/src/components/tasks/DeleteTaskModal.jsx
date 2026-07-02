@@ -1,4 +1,8 @@
+import { useTasks } from "../../contexts/TasksContext";
+
 function DeleteTaskModal({ onDelete, onClose }) {
+  const { isDeletingTask } = useTasks();
+
   return (
     <div
       onClick={onClose}
@@ -27,18 +31,20 @@ function DeleteTaskModal({ onDelete, onClose }) {
         <div className="mt-4 flex justify-evenly">
           <button
             type="button"
+            disabled={isDeletingTask}
             onClick={onClose}
-            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95"
+            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:hover:brightness-100"
           >
             Cancel
           </button>
           <button
             type="button"
-            onClick={() => {
-              onDelete();
+            disabled={isDeletingTask}
+            onClick={async () => {
+              await onDelete();
               onClose();
             }}
-            className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95"
+            className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
           >
             Delete
           </button>

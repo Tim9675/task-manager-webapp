@@ -19,6 +19,7 @@ export function TasksProvider({ children }) {
   const [isLoadingTasks, setIsLoadingTasks] = useState(true);
   const [isCreatingTask, setIsCreatingTask] = useState(false);
   const [isUpdatingTask, setIsUpdatingTask] = useState(false);
+  const [isDeletingTask, setIsDeletingTask] = useState(false);
 
   useEffect(() => {
     async function fetchTasks() {
@@ -104,6 +105,7 @@ export function TasksProvider({ children }) {
 
   async function onDeleteTask(taskId) {
     try {
+      setIsDeletingTask(true);
       await deleteTask(taskId);
       setUserTasks((prev) => prev.filter((task) => task._id !== taskId));
       if (selectedTaskId === taskId) {
@@ -112,6 +114,8 @@ export function TasksProvider({ children }) {
       showActionSuccess("Task", "deleted");
     } catch (error) {
       showApiError(error, "Error when deleting task");
+    } finally {
+      setIsDeletingTask(false);
     }
   }
 
@@ -167,6 +171,7 @@ export function TasksProvider({ children }) {
         isLoadingTasks,
         isCreatingTask,
         isUpdatingTask,
+        isDeletingTask,
       }}
     >
       {children}

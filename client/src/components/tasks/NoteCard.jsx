@@ -43,7 +43,7 @@ function NoteCard({ note, onEdit, onDelete }) {
         <DeleteNoteModal
           noteTitle={noteTitle}
           onClose={() => setIsDeleteNoteOpen(false)}
-          onDelete={onDelete}
+          onDelete={async () => await onDelete()}
         />
       )}
     </>

@@ -79,8 +79,8 @@ function TagSidebarItem({
       {isDeleteTagOpen && (
         <DeleteTagModal
           nav={nav}
-          onDelete={() => {
-            onDeleteTag(nav._id);
+          onDelete={async () => {
+            await onDeleteTag(nav._id);
             const isActiveTag =
               activeView.type === "tag" && activeView.id === nav._id;
 

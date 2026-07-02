@@ -42,7 +42,7 @@ function StickyWall() {
               key={note._id}
               note={note}
               onEdit={() => setEditNoteId(note._id)}
-              onDelete={() => onDeleteNote(note._id)}
+              onDelete={async () => await onDeleteNote(note._id)}
             />
           );
         })}

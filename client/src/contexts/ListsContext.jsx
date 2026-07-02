@@ -25,6 +25,7 @@ export function ListsProvider({ children }) {
   const [isLoadingLists, setIsLoadingLists] = useState(true);
   const [isCreatingList, setIsCreatingList] = useState(false);
   const [isUpdatingList, setIsUpdatingList] = useState(false);
+  const [isDeletingList, setIsDeletingList] = useState(false);
 
   useEffect(() => {
     async function fetchLists() {
@@ -127,12 +128,15 @@ export function ListsProvider({ children }) {
 
   async function onDeleteList(listId) {
     try {
+      setIsDeletingList(true);
       await deleteList(listId);
       setUserLists((prev) => prev.filter((list) => list._id !== listId));
       removeListFromTasks(listId);
       showActionSuccess("List", "deleted");
     } catch (error) {
       showApiError(error, "Error when deleting list");
+    } finally {
+      setIsDeletingList(false);
     }
   }
 
@@ -165,6 +169,7 @@ export function ListsProvider({ children }) {
         isLoadingLists,
         isCreatingList,
         isUpdatingList,
+        isDeletingList,
       }}
     >
       {children}

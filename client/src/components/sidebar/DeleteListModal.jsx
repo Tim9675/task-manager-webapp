@@ -1,7 +1,7 @@
 import { useLists } from "../../contexts/ListsContext";
 
 function DeleteListModal({ nav, onDelete, onClose }) {
-  const { getCachedTasksByList } = useLists();
+  const { getCachedTasksByList, isDeletingList } = useLists();
 
   const tasksWithThisList = getCachedTasksByList(nav._id);
   const taskCount = tasksWithThisList.length;
@@ -44,18 +44,20 @@ function DeleteListModal({ nav, onDelete, onClose }) {
         <div className="mt-4 flex justify-evenly">
           <button
             type="button"
+            disabled={isDeletingList}
             onClick={onClose}
-            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95"
+            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:hover:brightness-100"
           >
             Cancel
           </button>
           <button
             type="button"
+            disabled={isDeletingList}
             onClick={async () => {
               await onDelete();
               onClose();
             }}
-            className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95"
+            className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
           >
             Delete
           </button>

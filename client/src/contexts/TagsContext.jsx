@@ -20,6 +20,7 @@ export function TagsProvider({ children }) {
   const [isLoadingTags, setIsLoadingTags] = useState(true);
   const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [isUpdatingTag, setIsUpdatingTag] = useState(false);
+  const [isDeletingTag, setisDeletingTag] = useState(false);
 
   useEffect(() => {
     async function fetchTags() {
@@ -92,12 +93,15 @@ export function TagsProvider({ children }) {
 
   async function onDeleteTag(tagId) {
     try {
+      setisDeletingTag(true);
       await deleteTag(tagId);
       setUserTags((prev) => prev.filter((tag) => tag._id !== tagId));
       removeTagFromTasks(tagId);
       showActionSuccess("Tag", "deleted");
     } catch (error) {
       showApiError(error, "Error when deleting tag");
+    } finally {
+      setisDeletingTag(false);
     }
   }
 
@@ -124,6 +128,7 @@ export function TagsProvider({ children }) {
         isLoadingTags,
         isCreatingTag,
         isUpdatingTag,
+        isDeletingTag,
       }}
     >
       {children}

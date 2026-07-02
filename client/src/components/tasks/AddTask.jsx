@@ -9,7 +9,7 @@ function AddTask({ activeView }) {
     <div className="mx-5 flex h-13 items-center rounded-md border border-[#ebebeb] px-3 focus-within:border-neutral-300">
       <button
         onClick={async () => {
-          // REMINDER: Clearing input immediately, only reset task title after getting valid response
+          // Only reset task title after getting valid response
           const res = await onCreateTask(taskTitle, activeView);
           if (res) setTaskTitle("");
         }}
