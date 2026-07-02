@@ -4,6 +4,7 @@ import {
   CalendarDays,
   StickyNote,
   Menu,
+  Notebook,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -13,17 +14,17 @@ import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
 import SettingsModal from "./SettingsModal";
 import ListModal from "./ListModal";
+import { useTasks } from "../../contexts/TasksContext";
 import { useLists } from "../../contexts/ListsContext";
 import { useTags } from "../../contexts/TagsContext";
 import TagModal from "./TagModal";
-import { useTasks } from "../../contexts/TasksContext";
 
 function Sidebar({ onClose }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddListOpen, setIsAddListOpen] = useState(false);
   const [isAddTagOpen, setIsAddTagOpen] = useState(false);
 
-  const { todayTaskCount, upcomingTaskCount } = useTasks();
+  const { todayTaskCount, upcomingTaskCount, userTasksCount } = useTasks();
   const { userListsWithCounts, onCreateList } = useLists();
   const { userTags, onCreateTag } = useTags();
 
@@ -36,8 +37,9 @@ function Sidebar({ onClose }) {
       icon: ChevronsRight,
     },
     { _id: 1, title: "Today", count: todayTaskCount, icon: ListCheck },
-    { _id: 2, title: "Calendar", icon: CalendarDays },
-    { _id: 3, title: "Sticky Wall", icon: StickyNote },
+    { _id: 2, title: "All Tasks", count: userTasksCount, icon: Notebook },
+    { _id: 3, title: "Calendar", icon: CalendarDays },
+    { _id: 4, title: "Sticky Wall", icon: StickyNote },
   ];
 
   return (

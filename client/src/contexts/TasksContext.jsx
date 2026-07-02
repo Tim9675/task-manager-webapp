@@ -55,6 +55,11 @@ export function TasksProvider({ children }) {
     [userTasks],
   );
 
+  const userTasksCount = useMemo(
+    () => userTasks.filter((task) => !task.checked).length,
+    [userTasks],
+  );
+
   // CRUD functions
   async function onCreateTask(title, activeView) {
     if (!title.trim()) return;
@@ -159,6 +164,7 @@ export function TasksProvider({ children }) {
         selectedTask,
         todayTaskCount,
         upcomingTaskCount,
+        userTasksCount,
         openTask,
         closeTask,
         isSelectedTask,
