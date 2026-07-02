@@ -93,7 +93,7 @@ function Sidebar({ onClose }) {
       )}
 
       {/* Footer */}
-      <footer className="md:h-18">
+      <footer className="md:h-20">
         <SettingsButton onOpen={() => setIsSettingsOpen(true)} />
         {isSettingsOpen && (
           <SettingsModal onClose={() => setIsSettingsOpen(false)} />
