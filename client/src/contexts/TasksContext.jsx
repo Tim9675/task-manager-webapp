@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+} from "react";
 
 import { isToday, isUpcoming } from "../utils/date";
 import {
@@ -9,6 +16,7 @@ import {
   updateTask,
 } from "../api/taskApi.js";
 import { showActionSuccess, showApiError } from "./helpers/showApiResponse.js";
+import { PANEL_ANIMATION_MS } from "../helpers/styles.js";
 
 const TasksContext = createContext();
 
@@ -34,6 +42,8 @@ export function TasksProvider({ children }) {
     }
 
     fetchTasks();
+
+    return () => clearTimeout(closeTimeout.current);
   }, []);
 
   // Task to display in TaskDetailsPanel
@@ -59,6 +69,8 @@ export function TasksProvider({ children }) {
     () => userTasks.filter((task) => !task.checked).length,
     [userTasks],
   );
+
+  const closeTimeout = useRef();
 
   // CRUD functions
   async function onCreateTask(title, activeView) {
@@ -126,13 +138,17 @@ export function TasksProvider({ children }) {
 
   // Helper functions
   function openTask(taskId) {
+    clearTimeout(closeTimeout.current);
     setSelectedTaskId(taskId);
     setisTaskDetailsOpen(true);
   }
 
   function closeTask() {
-    setSelectedTaskId(null);
     setisTaskDetailsOpen(false);
+    closeTimeout.current = setTimeout(
+      () => setSelectedTaskId(null),
+      PANEL_ANIMATION_MS,
+    );
   }
 
   function isSelectedTask(taskId) {
