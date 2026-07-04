@@ -55,7 +55,7 @@ function TaskList({ header }) {
               ))
             ) : (
               <p className="my-2.5 w-full text-center">
-                No items match your search.
+                🎉 You're all caught up!
               </p>
             )}
           </div>

@@ -6,6 +6,8 @@ function DeleteListModal({ nav, onDelete, onClose }) {
   const tasksWithThisList = getCachedTasksByList(nav._id);
   const taskCount = tasksWithThisList.length;
 
+  const isPlural = taskCount > 1;
+
   return (
     <div
       onClick={onClose}
@@ -28,15 +30,15 @@ function DeleteListModal({ nav, onDelete, onClose }) {
           </button>
         </div>
 
-        <p className="my-5 text-center">Delete "{nav.title}" list?</p>
+        <p className="my-5 text-center">Delete the list "{nav.title}"?</p>
 
         {taskCount > 0 && (
           <div className="text-xs text-red-600">
             <p>
-              {taskCount} task{taskCount > 1 && "s"} currently belong
-              {taskCount === 1 && "s"} to this list.
+              {taskCount} task{isPlural && "s"} belong
+              {!isPlural && "s"} to this list.
             </p>
-            <p>They will become unlisted.</p>
+            <p>{isPlural ? "They" : "It"} will become unlisted.</p>
           </div>
         )}
 

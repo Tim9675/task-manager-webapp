@@ -27,9 +27,7 @@ function SubTaskList({ tasks, id, header }) {
             />
           ))
         ) : (
-          <p className="my-2.5 w-full text-center">
-            No items match your search.
-          </p>
+          <p className="my-2.5 w-full text-center">🎉 You're all caught up!</p>
         )}
       </div>
     </div>

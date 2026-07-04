@@ -5,6 +5,7 @@ function DeleteTagModal({ nav, onDelete, onClose }) {
 
   const tasksWithThisTag = getCachedTasksByTag(nav._id);
   const taskCount = tasksWithThisTag.length;
+  const isPlural = taskCount > 1;
 
   return (
     <div
@@ -27,14 +28,17 @@ function DeleteTagModal({ nav, onDelete, onClose }) {
           </button>
         </div>
 
-        <p className="my-5 text-center">Delete "{nav.title}" tag?</p>
+        <p className="my-5 text-center">Delete the tag "{nav.title}"?</p>
 
         {taskCount > 0 && (
           <div className="text-xs text-red-600">
             <p>
-              {taskCount} task{taskCount > 1 && "s"} currently use this tag.
+              {taskCount} task{isPlural && "s"} use{!isPlural && "s"} this tag.
             </p>
-            <p>The tag will be removed from those tasks.</p>
+            <p>
+              The tag will be removed from {!isPlural ? "this" : "these"} task
+              {isPlural && "s"}.
+            </p>
           </div>
         )}
 
