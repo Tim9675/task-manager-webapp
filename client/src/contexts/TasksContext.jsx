@@ -5,7 +5,7 @@ import { showApiError } from "./helpers/showApiResponse.js";
 
 import useTaskActions from "./hooks/useTaskActions.js";
 import useTaskSelection from "./hooks/useTaskSelection.js";
-import useTaskStatistics from "./hooks/useTaskStatistics.js";
+import useTaskDerivedData from "./hooks/useTaskDerivedData.js";
 
 const TasksContext = createContext();
 
@@ -30,7 +30,7 @@ export function TasksProvider({ children }) {
     fetchTasks();
   }, []);
 
-  const crud = useTaskActions({
+  const action = useTaskActions({
     setUserTasks,
     selectedTaskId,
     setSelectedTaskId,
@@ -44,7 +44,7 @@ export function TasksProvider({ children }) {
     setIsTaskDetailsOpen,
   });
 
-  const stats = useTaskStatistics({ userTasks });
+  const derived = useTaskDerivedData({ userTasks });
 
   return (
     <TasksContext.Provider
@@ -52,9 +52,9 @@ export function TasksProvider({ children }) {
         userTasks,
         isTaskDetailsOpen,
         isLoadingTasks,
-        ...crud,
+        ...action,
         ...selection,
-        ...stats,
+        ...derived,
       }}
     >
       {children}

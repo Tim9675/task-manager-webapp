@@ -20,7 +20,6 @@ export function DisplayProvider({ children }) {
   const { getListTitle } = useLists();
   const { getTagTitle } = useTags();
 
-  // REMINDER: To be removed when backend connected
   const visibleTasks = useMemo(() => {
     const filtered = userTasks.filter((task) => {
       if (isHideCompleted && task.checked) return false;
