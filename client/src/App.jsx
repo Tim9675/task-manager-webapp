@@ -4,14 +4,10 @@ import { Toaster } from "react-hot-toast";
 
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import DashboardPage from "./pages/DashboardPage";
 import PublicRoute from "./routes/PublicRoute";
+import AppProviders from "./providers/AppProviders";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import { TasksProvider } from "./contexts/TasksContext";
-import { ListsProvider } from "./contexts/ListsContext";
-import { TagsProvider } from "./contexts/TagsContext";
-import { NotesProvider } from "./contexts/NotesContext";
-import { DisplayProvider } from "./contexts/DisplayContext";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
   return (
@@ -51,17 +47,9 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <TasksProvider>
-                <ListsProvider>
-                  <TagsProvider>
-                    <NotesProvider>
-                      <DisplayProvider>
-                        <DashboardPage />
-                      </DisplayProvider>
-                    </NotesProvider>
-                  </TagsProvider>
-                </ListsProvider>
-              </TasksProvider>
+              <AppProviders>
+                <DashboardPage />
+              </AppProviders>
             </ProtectedRoute>
           }
         />
