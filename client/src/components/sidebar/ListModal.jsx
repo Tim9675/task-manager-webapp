@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import { useLists } from "../../contexts/ListsContext";
+import Modal from "../modals/Modal";
 
 function ListModal({ mode, list = {}, onListSubmit, onClose }) {
   const [listTitle, setListTitle] = useState(mode === "edit" ? list.title : "");
@@ -9,6 +11,17 @@ function ListModal({ mode, list = {}, onListSubmit, onClose }) {
   const [isListDuplicate, setIsListDuplicate] = useState(false);
 
   const { availableListColors, isCreatingList, isUpdatingList } = useLists();
+
+  const isLoading = isLoading;
+
+  const buttonContent = isCreatingList
+    ? "Creating..."
+    : isUpdatingList
+      ? "Saving..."
+      : mode === "edit"
+        ? "Save"
+        : "Create";
+
   async function submitList() {
     let result;
     try {
@@ -40,91 +53,58 @@ function ListModal({ mode, list = {}, onListSubmit, onClose }) {
   }
 
   return (
-    <div
-      onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/20"
+    <Modal
+      isOpen={true}
+      header={mode === "create" ? "Add new list" : "Edit list"}
+      onAction={async () => {
+        await submitList();
+      }}
+      onClose={onClose}
+      isLoading={isLoading}
+      isEmpty={!listTitle.trim()}
+      action={buttonContent}
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="w-72 rounded-xl bg-white p-4 shadow-lg"
-      >
-        {/* Header */}
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-neutral-800">
-            {mode === "create" ? "Add New List" : "Edit List"}
-          </h2>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="cursor-pointer text-sm text-neutral-500 hover:text-neutral-700"
-          >
-            ✕
-          </button>
+      {/* Toggle hide completed tasks */}
+      <div className="flex h-20 w-full flex-col justify-evenly">
+        <div className="flex h-10 w-full items-center rounded border-2 border-[#ebebeb]">
+          <div
+            className="mx-2 size-4 rounded"
+            style={{ backgroundColor: listColor }}
+          ></div>
+          <input
+            type="text"
+            value={listTitle}
+            autoFocus
+            onChange={(e) => {
+              setListTitle(e.target.value);
+              setIsListDuplicate(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                submitList();
+              }
+            }}
+            className="h-full w-55 rounded-md px-2.5"
+          />
         </div>
-
-        {/* Toggle hide completed tasks */}
-        <div className="flex h-20 w-full flex-col justify-evenly">
-          <div className="flex h-10 w-full items-center rounded border-2 border-[#ebebeb]">
-            <div
-              className="mx-2 size-4 rounded"
-              style={{ backgroundColor: listColor }}
-            ></div>
-            <input
-              type="text"
-              value={listTitle}
-              autoFocus
-              onChange={(e) => {
-                setListTitle(e.target.value);
-                setIsListDuplicate(false);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  submitList();
-                }
-              }}
-              className="h-full w-55 rounded-md px-2.5"
-            />
-          </div>
-          <div className="mt-2.5 flex h-5 w-full items-center justify-evenly">
-            {availableListColors.map((color) => (
-              <button
-                key={color}
-                type="button"
-                onClick={() => setListColor(color)}
-                className={`size-4 cursor-pointer rounded ${listColor === color && "outline outline-offset-6 outline-[#ebebeb]"}`}
-                style={{ backgroundColor: color }}
-              ></button>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-2.5 h-5 w-full text-center text-red-600">
-          {isListDuplicate && "This list already exists."}
-        </div>
-
-        {/* Footer */}
-        <div className="mt-4 flex justify-evenly">
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isCreatingList || isUpdatingList}
-            className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:hover:brightness-100"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            disabled={!listTitle.trim() || isCreatingList || isUpdatingList}
-            onClick={submitList}
-            className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
-          >
-            {mode === "create" ? "Create" : "Save"}
-          </button>
+        <div className="mt-2.5 flex h-5 w-full items-center justify-evenly">
+          {availableListColors.map((color) => (
+            <button
+              key={color}
+              type="button"
+              onClick={() => setListColor(color)}
+              className={`size-4 cursor-pointer rounded ${listColor === color && "outline outline-offset-6 outline-[#ebebeb]"}`}
+              style={{ backgroundColor: color }}
+            ></button>
+          ))}
         </div>
       </div>
-    </div>
+
+      <div className="mt-2.5 h-5 w-full text-center text-red-600">
+        {isListDuplicate && "This list already exists."}
+      </div>
+    </Modal>
   );
 }
 

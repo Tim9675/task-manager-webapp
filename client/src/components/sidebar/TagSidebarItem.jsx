@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import TagModal from "./TagModal";
 import { useTags } from "../../contexts/TagsContext";
-import DeleteTagModal from "./DeleteTagModal";
+import Modal from "../modals/Modal";
 
 function TagSidebarItem({
   nav,
@@ -16,10 +16,16 @@ function TagSidebarItem({
   const [isEditTagOpen, setIsEditTagOpen] = useState(false);
   const [isDeleteTagOpen, setIsDeleteTagOpen] = useState(false);
 
-  const { onUpdateTag, onDeleteTag } = useTags();
+  const { onUpdateTag, onDeleteTag, getCachedTasksByTag, isDeletingTag } =
+    useTags();
 
   const isCurrentDisplay =
     activeView?.type === "tag" && activeView?.id === nav._id && !isSearching;
+
+  const tasksWithThisTag = getCachedTasksByTag(nav._id);
+  const taskCount = tasksWithThisTag.length;
+  const isPlural = taskCount > 1;
+
   return (
     <>
       {/*
@@ -76,21 +82,36 @@ function TagSidebarItem({
           onClose={() => setIsEditTagOpen(false)}
         />
       )}
-      {isDeleteTagOpen && (
-        <DeleteTagModal
-          nav={nav}
-          onDelete={async () => {
-            await onDeleteTag(nav._id);
-            const isActiveTag =
-              activeView.type === "tag" && activeView.id === nav._id;
+      <Modal
+        isOpen={isDeleteTagOpen}
+        header="Warning!"
+        onAction={async () => {
+          await onDeleteTag(nav._id);
+          const isActiveTag =
+            activeView.type === "tag" && activeView.id === nav._id;
 
-            if (isActiveTag) {
-              setActiveView({ type: "today" });
-            }
-          }}
-          onClose={() => setIsDeleteTagOpen(false)}
-        />
-      )}
+          if (isActiveTag) setActiveView({ type: "today" });
+
+          setIsDeleteTagOpen(false);
+        }}
+        onClose={() => setIsDeleteTagOpen(false)}
+        isLoading={isDeletingTag}
+        action={isDeletingTag ? "Deleting..." : "Delete"}
+      >
+        <p className="my-5 text-center">Delete the tag "{nav.title}"?</p>
+
+        {taskCount > 0 && (
+          <div className="text-xs text-red-600">
+            <p>
+              {taskCount} task{isPlural && "s"} use{!isPlural && "s"} this tag.
+            </p>
+            <p>
+              The tag will be removed from {!isPlural ? "this" : "these"} task
+              {isPlural && "s"}.
+            </p>
+          </div>
+        )}
+      </Modal>
     </>
   );
 }

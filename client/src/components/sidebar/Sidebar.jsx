@@ -8,17 +8,20 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import SidebarSection from "./SidebarSection";
+import SidebarSkeleton from "../skeletons/SidebarSkeleton";
+
 import SearchBar from "./SearchBar";
+import SidebarSection from "./SidebarSection";
 import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
-import SettingsModal from "./SettingsModal";
+
+import Modal from "../modals/Modal";
 import ListModal from "./ListModal";
-import SidebarSkeleton from "../skeletons/SidebarSkeleton";
+import TagModal from "./TagModal";
+
 import { useTasks } from "../../contexts/TasksContext";
 import { useLists } from "../../contexts/ListsContext";
 import { useTags } from "../../contexts/TagsContext";
-import TagModal from "./TagModal";
 import { useDisplay } from "../../contexts/DisplayContext";
 
 function Sidebar() {
@@ -29,7 +32,12 @@ function Sidebar() {
   const { todayTaskCount, upcomingTaskCount, userTasksCount } = useTasks();
   const { userListsWithCounts, onCreateList, isLoadingLists } = useLists();
   const { userTags, onCreateTag, isLoadingTags } = useTags();
-  const { isSidebarOpen, setIsSidebarOpen } = useDisplay();
+  const {
+    isSidebarOpen,
+    setIsSidebarOpen,
+    isHideCompleted,
+    setIsHideCompleted,
+  } = useDisplay();
 
   // Should be the only one hardcoded
   const tasksSection = [
@@ -106,12 +114,44 @@ function Sidebar() {
             />
           )}
 
+          <Modal
+            isOpen={isSettingsOpen}
+            header="Settings"
+            onAction={async () => {
+              // placeholder for future updateSettings function
+              setIsSettingsOpen(false);
+            }}
+            onClose={() => setIsSettingsOpen(false)}
+            isLoading={false}
+            action={"Save"}
+          >
+            {/* Toggle hide completed tasks */}
+            <div className="flex max-h-60 flex-col gap-1 overflow-y-auto">
+              <button
+                type="button"
+                onClick={() => setIsHideCompleted(!isHideCompleted)}
+                className="flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors hover:bg-neutral-50"
+              >
+                {/* Left Side */}
+                <p className="ms-3">Hide completed tasks</p>
+
+                {/* Right Side */}
+                <div
+                  className={`flex size-4 items-center justify-center rounded border text-xs ${
+                    isHideCompleted
+                      ? "border-neutral-700 bg-neutral-700 text-white"
+                      : "border-neutral-300"
+                  }`}
+                >
+                  {isHideCompleted && "✓"}
+                </div>
+              </button>
+            </div>
+          </Modal>
+
           {/* Footer */}
           <footer className="md:h-20">
             <SettingsButton onOpen={() => setIsSettingsOpen(true)} />
-            {isSettingsOpen && (
-              <SettingsModal onClose={() => setIsSettingsOpen(false)} />
-            )}
             <SignOutButton />
           </footer>
         </aside>

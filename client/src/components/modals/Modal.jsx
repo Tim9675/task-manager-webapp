@@ -1,13 +1,18 @@
-import { useTags } from "../../contexts/TagsContext";
+import { createPortal } from "react-dom";
 
-function DeleteTagModal({ nav, onDelete, onClose }) {
-  const { getCachedTasksByTag, isDeletingTag } = useTags();
+function Modal({
+  isOpen,
+  header,
+  onAction,
+  onClose,
+  isLoading,
+  isEmpty = false,
+  action,
+  children,
+}) {
+  if (!isOpen) return null;
 
-  const tasksWithThisTag = getCachedTasksByTag(nav._id);
-  const taskCount = tasksWithThisTag.length;
-  const isPlural = taskCount > 1;
-
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/20"
@@ -18,7 +23,8 @@ function DeleteTagModal({ nav, onDelete, onClose }) {
       >
         {/* Header */}
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-neutral-800">Warning!</h2>
+          <h2 className="text-lg font-semibold text-neutral-800">{header}</h2>
+
           <button
             type="button"
             onClick={onClose}
@@ -28,25 +34,13 @@ function DeleteTagModal({ nav, onDelete, onClose }) {
           </button>
         </div>
 
-        <p className="my-5 text-center">Delete the tag "{nav.title}"?</p>
-
-        {taskCount > 0 && (
-          <div className="text-xs text-red-600">
-            <p>
-              {taskCount} task{isPlural && "s"} use{!isPlural && "s"} this tag.
-            </p>
-            <p>
-              The tag will be removed from {!isPlural ? "this" : "these"} task
-              {isPlural && "s"}.
-            </p>
-          </div>
-        )}
+        {children}
 
         {/* Footer */}
         <div className="mt-4 flex justify-evenly">
           <button
             type="button"
-            disabled={isDeletingTag}
+            disabled={isLoading}
             onClick={onClose}
             className="cursor-pointer rounded-md bg-[#f5f5f5] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:hover:brightness-100"
           >
@@ -54,19 +48,20 @@ function DeleteTagModal({ nav, onDelete, onClose }) {
           </button>
           <button
             type="button"
-            disabled={isDeletingTag}
+            disabled={isLoading || isEmpty}
             onClick={async () => {
-              await onDelete();
+              await onAction();
               onClose();
             }}
             className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
           >
-            Delete
+            {action}
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
-export default DeleteTagModal;
+export default Modal;

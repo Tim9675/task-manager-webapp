@@ -2,7 +2,7 @@ import { EllipsisVertical } from "lucide-react";
 import { useState } from "react";
 
 import ListModal from "./ListModal";
-import DeleteListModal from "./DeleteListModal";
+import Modal from "../modals/Modal";
 import { useLists } from "../../contexts/ListsContext";
 
 function ListSidebarItem({
@@ -16,10 +16,17 @@ function ListSidebarItem({
   const [isEditListOpen, setIsEditListOpen] = useState(false);
   const [isDeleteListOpen, setIsDeleteListOpen] = useState(false);
 
-  const { onUpdateList, onDeleteList } = useLists();
+  const { onUpdateList, onDeleteList, getCachedTasksByList, isDeletingList } =
+    useLists();
 
   const isCurrentDisplay =
     activeView.type === "list" && nav._id === activeView.id && !isSearching;
+
+  const tasksWithThisList = getCachedTasksByList(nav._id);
+  const taskCount = tasksWithThisList.length;
+
+  const isPlural = taskCount > 1;
+
   return (
     <>
       {/*
@@ -92,21 +99,36 @@ function ListSidebarItem({
           onClose={() => setIsEditListOpen(false)}
         />
       )}
-      {isDeleteListOpen && (
-        <DeleteListModal
-          nav={nav}
-          onDelete={async () => {
-            await onDeleteList(nav._id);
-            const isActiveList =
-              activeView.type === "list" && activeView.id === nav._id;
+      <Modal
+        isOpen={isDeleteListOpen}
+        header="Warning!"
+        onAction={async () => {
+          await onDeleteList(nav._id);
+          const isActiveList =
+            activeView.type === "list" && activeView.id === nav.id;
 
-            if (isActiveList) {
-              setActiveView({ type: "today" });
-            }
-          }}
-          onClose={() => setIsDeleteListOpen(false)}
-        />
-      )}
+          if (isActiveList) {
+            setActiveVie({ type: "today" });
+          }
+
+          setIsDeleteListOpen(false);
+        }}
+        onClose={() => setIsDeleteListOpen(false)}
+        isLoading={isDeletingList}
+        action={isDeletingList ? "Deleting..." : "Delete"}
+      >
+        <p className="my-5 text-center">Delete the list "{nav.title}"?</p>
+
+        {taskCount > 0 && (
+          <div className="text-xs text-red-600">
+            <p>
+              {taskCount} task{isPlural && "s"} belong
+              {!isPlural && "s"} to this list.
+            </p>
+            <p>{isPlural ? "They" : "It"} will become unlisted.</p>
+          </div>
+        )}
+      </Modal>
     </>
   );
 }

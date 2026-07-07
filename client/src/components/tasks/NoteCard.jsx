@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
-import DeleteNoteModal from "./DeleteNoteModal";
 
-function NoteCard({ note, onEdit, onDelete }) {
+import { Pencil, Trash2 } from "lucide-react";
+import Modal from "../modals/Modal";
+
+function NoteCard({ note, onEdit, onDelete, isDeletingNote }) {
   const noteTitle = note?.title ?? "Missing note title";
   const [isDeleteNoteOpen, setIsDeleteNoteOpen] = useState(false);
 
@@ -39,13 +40,21 @@ function NoteCard({ note, onEdit, onDelete }) {
           <pre className="text-wrap text-[#444444]">{note.content}</pre>
         </div>
       </div>
-      {isDeleteNoteOpen && (
-        <DeleteNoteModal
-          noteTitle={noteTitle}
-          onClose={() => setIsDeleteNoteOpen(false)}
-          onDelete={async () => await onDelete()}
-        />
-      )}
+      <Modal
+        isOpen={isDeleteNoteOpen}
+        header="Warning!"
+        onAction={async () => {
+          await onDelete();
+          setIsDeleteNoteOpen(false);
+        }}
+        onClose={() => setIsDeleteNoteOpen(false)}
+        isLoading={isDeletingNote}
+        action={isDeletingNote ? "Deleting..." : "Delete"}
+      >
+        <p className="my-5 text-center">
+          Delete the note titled '{noteTitle}'?
+        </p>
+      </Modal>
     </>
   );
 }

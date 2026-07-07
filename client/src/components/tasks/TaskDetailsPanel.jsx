@@ -2,15 +2,20 @@ import { X } from "lucide-react";
 import { useState } from "react";
 
 import TaskForm from "./TaskForm";
-import DeleteTaskModal from "./DeleteTaskModal";
+import Modal from "../modals/Modal.jsx";
 import { useTasks } from "../../contexts/TasksContext";
 import { PANEL_ANIMATION_MS } from "../../helpers/styles.js";
 
 function TaskDetailsPanel() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const { selectedTask, onDeleteTask, isTaskDetailsOpen, closeTask } =
-    useTasks();
+  const {
+    selectedTask,
+    onDeleteTask,
+    isDeletingTask,
+    isTaskDetailsOpen,
+    closeTask,
+  } = useTasks();
 
   return (
     <div
@@ -38,15 +43,19 @@ function TaskDetailsPanel() {
           </div>
         )}
 
-        {isDeleteModalOpen && (
-          <DeleteTaskModal
-            onDelete={async () => {
-              closeTask();
-              if (selectedTask) await onDeleteTask(selectedTask._id);
-            }}
-            onClose={() => setIsDeleteModalOpen(false)}
-          />
-        )}
+        <Modal
+          isOpen={isDeleteModalOpen}
+          header="Warning!"
+          onAction={async () => {
+            closeTask();
+            if (selectedTask) await onDeleteTask(selectedTask._id);
+          }}
+          onClose={() => setIsDeleteModalOpen(false)}
+          isLoading={isDeletingTask}
+          action={isDeletingTask ? "Deleting..." : "Delete"}
+        >
+          <p className="my-5 text-center">Delete this task?</p>
+        </Modal>
       </aside>
     </div>
   );

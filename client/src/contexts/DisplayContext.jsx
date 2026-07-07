@@ -51,6 +51,8 @@ export function DisplayProvider({ children }) {
     switch (activeView.type) {
       case "upcoming":
         return "Upcoming";
+      case "alltasks":
+        return "All Tasks";
       case "list":
         return getListTitle(activeView.id) ?? "List";
       case "tag":

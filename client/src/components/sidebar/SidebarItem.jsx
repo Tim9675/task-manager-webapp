@@ -3,10 +3,19 @@ import { useDisplay } from "../../contexts/DisplayContext";
 import TaskSidebarItem from "./TaskSidebarItem";
 import ListSidebarItem from "./ListSidebarItem";
 import TagSidebarItem from "./TagSidebarItem";
+import { useTasks } from "../../contexts/TasksContext";
 
 function SidebarItem({ nav, type }) {
   const { activeView, setActiveView, isSearching, setIsSearching } =
     useDisplay();
+
+  const { closeTask } = useTasks();
+
+  const viewTitle = nav.title.toLowerCase();
+  const shouldCloseTask =
+    viewTitle !== "today" &&
+    viewTitle !== "upcoming" &&
+    viewTitle !== "all tasks";
 
   function renderItem() {
     switch (type) {
@@ -18,8 +27,10 @@ function SidebarItem({ nav, type }) {
             isSearching={isSearching}
             onDisplayChange={() => {
               setIsSearching(false);
+              if (shouldCloseTask) closeTask();
+
               setActiveView({
-                type: nav.title.toLowerCase().replaceAll(" ", ""),
+                type: viewTitle.replaceAll(" ", ""),
               });
             }}
           />
