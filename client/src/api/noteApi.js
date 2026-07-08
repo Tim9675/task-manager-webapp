@@ -9,9 +9,9 @@ export async function createNote(title, content, color) {
   if (!title.trim()) return;
 
   const newNote = {
-    title: title,
-    content: content,
-    color: color,
+    title,
+    content,
+    color,
   };
 
   const response = await client.post("/notes", newNote);

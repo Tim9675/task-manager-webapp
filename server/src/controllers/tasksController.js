@@ -44,13 +44,11 @@ export async function updateTask(req, res) {
   if (subtasks !== undefined) updatePayload.subtasks = subtasks;
   if (checked !== undefined) updatePayload.checked = checked;
 
-  //  VVV Uncomment when TaskForm dirtyfields are implemented VVV
-
-  // if (!Object.keys(updatePayload).length) {
-  //   return res.status(400).json({
-  //     message: "No fields to update",
-  //   });
-  // }
+  if (!Object.keys(updatePayload).length) {
+    return res.status(400).json({
+      message: "No fields to update",
+    });
+  }
 
   const updatedTask = await Task.findOneAndUpdate(
     { _id: req.params.taskId, userId },

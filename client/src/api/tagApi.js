@@ -9,8 +9,8 @@ export async function createTag(title, color) {
   if (!title.trim()) return;
 
   const newTag = {
-    title: title,
-    color: color,
+    title,
+    color,
   };
 
   const response = await client.post("/tags", newTag);

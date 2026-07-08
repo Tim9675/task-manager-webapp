@@ -11,7 +11,15 @@ import { useTags } from "../../contexts/TagsContext";
 import { useTasks } from "../../contexts/TasksContext";
 
 function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
-  const { register, control, handleSubmit, reset, watch, setValue } = useForm({
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { dirtyFields },
+  } = useForm({
     defaultValues: {
       title: "",
       description: "",
@@ -29,21 +37,34 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
   useEffect(() => {
     if (!selectedTask) return;
 
+    function normalizeDate(date) {
+      if (!date) return null;
+
+      const normalizedDate = new Date(date);
+      normalizedDate.setHours(23, 59, 59, 999);
+      return normalizedDate;
+    }
+
+    register("tagIds");
+
     reset({
       title: selectedTask.title || "",
       description: selectedTask.description || "",
       listId: selectedTask.listId || null,
-      dueDate: selectedTask.dueDate || null,
+      dueDate: normalizeDate(selectedTask.dueDate),
       tagIds: selectedTask.tagIds || [],
       subtasks: selectedTask.subtasks || [],
     });
-  }, [selectedTask, reset]);
+  }, [selectedTask, reset, register]);
 
   function onSubmit(data) {
-    onUpdateTask({
-      ...selectedTask,
-      ...data,
-    });
+    const changedValues = {};
+
+    for (const key of Object.keys(dirtyFields)) {
+      changedValues[key] = data[key];
+    }
+
+    onUpdateTask(selectedTask._id, changedValues);
   }
 
   return (

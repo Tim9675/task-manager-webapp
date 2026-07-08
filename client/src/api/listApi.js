@@ -9,8 +9,8 @@ export async function createList(title, color) {
   if (!title.trim()) return;
 
   const newList = {
-    title: title,
-    color: color,
+    title,
+    color,
   };
 
   const response = await client.post("/lists", newList);

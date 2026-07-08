@@ -12,7 +12,7 @@ export async function createTask(title, activeView) {
   const date = getDueDateOnCreate(activeView);
 
   const newTask = {
-    title: title,
+    title,
     description: "",
     dueDate: date,
     listId: activeView.type === "list" ? activeView.id : null,
@@ -26,12 +26,12 @@ export async function createTask(title, activeView) {
 }
 
 export async function toggleTask(taskId, checked) {
-  const response = await client.patch(`/tasks/${taskId}`, { checked: checked });
+  const response = await client.patch(`/tasks/${taskId}`, { checked });
   return response.data.data;
 }
 
-export async function updateTask(updatedTask) {
-  const response = await client.patch(`/tasks/${updatedTask._id}`, updatedTask);
+export async function updateTask(taskId, patchBody) {
+  const response = await client.patch(`/tasks/${taskId}`, patchBody);
   return response.data.data;
 }
 

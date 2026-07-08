@@ -12,14 +12,11 @@ function TagSection({ availableTags, watch, setValue }) {
   );
 
   function toggleTag(tagId) {
-    if (selectedTagIds.includes(tagId)) {
-      setValue(
-        "tagIds",
-        selectedTagIds.filter((id) => id !== tagId),
-      );
-    } else {
-      setValue("tagIds", [...selectedTagIds, tagId]);
-    }
+    const next = selectedTagIds.includes(tagId)
+      ? selectedTagIds.filter((id) => id !== tagId)
+      : [...selectedTagIds, tagId];
+
+    setValue("tagIds", next, { shouldDirty: true, shouldTouch: true });
   }
 
   return (

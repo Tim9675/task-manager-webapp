@@ -48,10 +48,12 @@ function useTaskActions({
     }
   }
 
-  async function onUpdateTask(updatedTask) {
+  async function onUpdateTask(taskId, patchBody) {
+    if (!Object.keys(patchBody).length) return;
+
     try {
       setIsUpdatingTask(true);
-      const res = await updateTask(updatedTask);
+      const res = await updateTask(taskId, patchBody);
       setUserTasks((prev) =>
         prev.map((task) => {
           return task._id === res._id ? res : task;
