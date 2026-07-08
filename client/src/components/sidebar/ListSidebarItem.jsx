@@ -64,8 +64,7 @@ function ListSidebarItem({
             }}
             onBlur={() => setIsMenuOpen(false)}
             tabIndex={0}
-            // REMINDER: Not focusable on shift+tab
-            className="invisible relative mx-0.5 flex h-full w-4 cursor-pointer justify-center rounded-2xl group-hover:visible group-focus:visible hover:bg-[#aaaaaa] focus:visible"
+            className="invisible relative mx-1.5 flex h-full w-4 cursor-pointer justify-center rounded-2xl group-hover:visible group-focus:visible hover:bg-[#aaaaaa] focus:visible"
           >
             <EllipsisVertical size={20} color="#7c7c7c" />
             {isMenuOpen && (
@@ -91,24 +90,24 @@ function ListSidebarItem({
           </div>
         </div>
       </button>
-      {isEditListOpen && (
-        <ListModal
-          mode="edit"
-          list={nav}
-          onListSubmit={onUpdateList}
-          onClose={() => setIsEditListOpen(false)}
-        />
-      )}
+
+      <ListModal
+        isOpen={isEditListOpen}
+        mode="edit"
+        list={nav}
+        onListSubmit={onUpdateList}
+        onClose={() => setIsEditListOpen(false)}
+      />
       <Modal
         isOpen={isDeleteListOpen}
         header="Warning!"
         onAction={async () => {
           await onDeleteList(nav._id);
           const isActiveList =
-            activeView.type === "list" && activeView.id === nav.id;
+            activeView.type === "list" && activeView.id === nav._id;
 
           if (isActiveList) {
-            setActiveVie({ type: "today" });
+            setActiveView({ type: "today" });
           }
 
           setIsDeleteListOpen(false);

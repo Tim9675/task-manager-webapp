@@ -98,21 +98,19 @@ function Sidebar() {
           </div>
 
           {/* Modals */}
-          {isAddListOpen && (
-            <ListModal
-              mode="create"
-              onListSubmit={onCreateList}
-              onClose={() => setIsAddListOpen(false)}
-            />
-          )}
+          <ListModal
+            isOpen={isAddListOpen}
+            mode="create"
+            onListSubmit={onCreateList}
+            onClose={() => setIsAddListOpen(false)}
+          />
 
-          {isAddTagOpen && (
-            <TagModal
-              mode="create"
-              onTagSubmit={onCreateTag}
-              onClose={() => setIsAddTagOpen(false)}
-            />
-          )}
+          <TagModal
+            isOpen={isAddTagOpen}
+            mode="create"
+            onTagSubmit={onCreateTag}
+            onClose={() => setIsAddTagOpen(false)}
+          />
 
           <Modal
             isOpen={isSettingsOpen}

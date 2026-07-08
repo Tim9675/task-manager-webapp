@@ -3,7 +3,9 @@ import { useState } from "react";
 import { useLists } from "../../contexts/ListsContext";
 import Modal from "../modals/Modal";
 
-function ListModal({ mode, list = {}, onListSubmit, onClose }) {
+function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
+  if (!isOpen) return null;
+
   const [listTitle, setListTitle] = useState(mode === "edit" ? list.title : "");
   const [listColor, setListColor] = useState(
     mode === "edit" ? list.color : "#ff6b6b",
@@ -12,7 +14,7 @@ function ListModal({ mode, list = {}, onListSubmit, onClose }) {
 
   const { availableListColors, isCreatingList, isUpdatingList } = useLists();
 
-  const isLoading = isLoading;
+  const isLoading = isCreatingList || isUpdatingList;
 
   const buttonContent = isCreatingList
     ? "Creating..."

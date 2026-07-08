@@ -3,7 +3,9 @@ import { useState } from "react";
 import { useTags } from "../../contexts/TagsContext";
 import Modal from "../modals/Modal";
 
-function TagModal({ mode, tag = {}, onTagSubmit, onClose }) {
+function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
+  if (!isOpen) return null;
+
   const [tagTitle, setTagTitle] = useState(mode === "edit" ? tag.title : "");
   const [tagColor, setTagColor] = useState(
     mode === "edit" ? tag.color : "#d1eaed",

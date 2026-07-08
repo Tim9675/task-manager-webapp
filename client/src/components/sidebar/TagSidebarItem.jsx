@@ -2,8 +2,8 @@ import { EllipsisVertical, Tag } from "lucide-react";
 import { useState } from "react";
 
 import TagModal from "./TagModal";
-import { useTags } from "../../contexts/TagsContext";
 import Modal from "../modals/Modal";
+import { useTags } from "../../contexts/TagsContext";
 
 function TagSidebarItem({
   nav,
@@ -74,14 +74,13 @@ function TagSidebarItem({
         </div>
       </button>
 
-      {isEditTagOpen && (
-        <TagModal
-          mode="edit"
-          tag={nav}
-          onTagSubmit={onUpdateTag}
-          onClose={() => setIsEditTagOpen(false)}
-        />
-      )}
+      <TagModal
+        isOpen={isEditTagOpen}
+        mode="edit"
+        tag={nav}
+        onTagSubmit={onUpdateTag}
+        onClose={() => setIsEditTagOpen(false)}
+      />
       <Modal
         isOpen={isDeleteTagOpen}
         header="Warning!"
