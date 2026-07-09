@@ -51,7 +51,6 @@ function Modal({
             disabled={isLoading || isEmpty}
             onClick={async () => {
               await onAction();
-              onClose();
             }}
             className="cursor-pointer rounded-md bg-[#ffd43b] px-4 py-2 text-sm font-medium hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
           >

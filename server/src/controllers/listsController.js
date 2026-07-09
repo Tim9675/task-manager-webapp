@@ -34,13 +34,11 @@ export async function updateList(req, res) {
   if (title !== undefined) updatePayload.title = title;
   if (color !== undefined) updatePayload.color = color;
 
-  //  VVV Uncomment when TaskForm dirtyfields are implemented VVV
-
-  // if (!Object.keys(updatePayload).length) {
-  //   return res.status(400).json({
-  //     message: "No fields to update",
-  //   });
-  // }
+  if (!Object.keys(updatePayload).length) {
+    return res.status(400).json({
+      message: "No fields to update",
+    });
+  }
 
   const updatedList = await List.findOneAndUpdate(
     { _id: req.params.listId, userId },

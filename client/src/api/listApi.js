@@ -17,8 +17,8 @@ export async function createList(title, color) {
   return response.data.data;
 }
 
-export async function updateList(updatedList) {
-  const response = await client.patch(`/lists/${updatedList._id}`, updatedList);
+export async function updateList(listId, patchBody) {
+  const response = await client.patch(`/lists/${listId}`, patchBody);
   return response.data.data;
 }
 

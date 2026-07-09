@@ -2,7 +2,11 @@ import { useState } from "react";
 
 import { createList, deleteList, updateList } from "../../api/listApi.js";
 import { normalizeTitle } from "../helpers/normalizeTitle.js";
-import { showActionSuccess, showApiError } from "../helpers/showApiResponse.js";
+import {
+  showActionSuccess,
+  showApiError,
+  showWarning,
+} from "../helpers/showApiResponse.js";
 
 function useListCrud({ userLists, setUserLists, removeListFromTasks }) {
   const [isCreatingList, setIsCreatingList] = useState(false);
@@ -35,19 +39,26 @@ function useListCrud({ userLists, setUserLists, removeListFromTasks }) {
     }
   }
 
-  async function onUpdateList(updatedList) {
+  async function onUpdateList(listId, patchBody) {
     // Same reasoning as onCreateList for empty title
-    const normalizedTitle = normalizeTitle(updatedList.title);
-    const duplicate = userLists.some(
-      (list) =>
-        list._id !== updatedList._id &&
-        normalizeTitle(list.title) === normalizedTitle,
-    );
-    if (duplicate) return { success: false, error: "duplicate" };
+    if (!Object.keys(patchBody).length) {
+      showWarning("No fields to update!");
+      return { success: false };
+    }
+
+    if (patchBody.title !== undefined) {
+      const normalizedTitle = normalizeTitle(patchBody.title);
+      const duplicate = userLists.some(
+        (list) =>
+          list._id !== patchBody._id &&
+          normalizeTitle(list.title) === normalizedTitle,
+      );
+      if (duplicate) return { success: false, error: "duplicate" };
+    }
 
     try {
       setIsUpdatingList(true);
-      const res = await updateList(updatedList);
+      const res = await updateList(listId, patchBody);
       setUserLists((prev) =>
         prev.map((list) => (list._id === res._id ? res : list)),
       );

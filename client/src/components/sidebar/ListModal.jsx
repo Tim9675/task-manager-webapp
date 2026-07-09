@@ -6,10 +6,10 @@ import Modal from "../modals/Modal";
 function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
   if (!isOpen) return null;
 
-  const [listTitle, setListTitle] = useState(mode === "edit" ? list.title : "");
-  const [listColor, setListColor] = useState(
-    mode === "edit" ? list.color : "#ff6b6b",
-  );
+  const isEdit = mode === "edit";
+
+  const [listTitle, setListTitle] = useState(isEdit ? list.title : "");
+  const [listColor, setListColor] = useState(isEdit ? list.color : "#ff6b6b");
   const [isListDuplicate, setIsListDuplicate] = useState(false);
 
   const { availableListColors, isCreatingList, isUpdatingList } = useLists();
@@ -20,27 +20,24 @@ function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
     ? "Creating..."
     : isUpdatingList
       ? "Saving..."
-      : mode === "edit"
+      : isEdit
         ? "Save"
         : "Create";
 
   async function submitList() {
     let result;
     try {
-      switch (mode) {
-        case "create":
-          result = await onListSubmit(listTitle, listColor);
-          break;
-        case "edit":
-          result = await onListSubmit({
-            _id: list._id,
-            title: listTitle,
-            color: listColor,
-          });
-          break;
-        default:
-          result = { success: false, error: "Error in ListModal.jsx" };
+      if (isEdit) {
+        const patchBody = {};
+
+        if (listTitle !== list.title) patchBody.title = listTitle;
+        if (listColor !== list.color) patchBody.color = listColor;
+
+        result = await onListSubmit(list._id, patchBody);
+      } else {
+        result = await onListSubmit(listTitle, listColor);
       }
+
       if (!result.success) {
         if (result.error === "duplicate") {
           setIsListDuplicate(true);
@@ -57,7 +54,7 @@ function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
   return (
     <Modal
       isOpen={true}
-      header={mode === "create" ? "Add new list" : "Edit list"}
+      header={isEdit ? "Edit list" : "Add new list"}
       onAction={async () => {
         await submitList();
       }}
@@ -81,10 +78,10 @@ function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
               setListTitle(e.target.value);
               setIsListDuplicate(false);
             }}
-            onKeyDown={(e) => {
+            onKeyDown={async (e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                submitList();
+                await submitList();
               }
             }}
             className="h-full w-55 rounded-md px-2.5"

@@ -7,3 +7,7 @@ export function showApiError(error, fallback) {
 export function showActionSuccess(object, action) {
   toast.success(`${object} successfully ${action}`);
 }
+
+export function showWarning(error) {
+  toast(error, { icon: "⚠️" });
+}
