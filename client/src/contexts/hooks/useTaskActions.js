@@ -6,7 +6,11 @@ import {
   updateTask,
   deleteTask,
 } from "../../api/taskApi.js";
-import { showActionSuccess, showApiError } from "../helpers/showApiResponse.js";
+import {
+  showActionSuccess,
+  showApiError,
+  showWarning,
+} from "../helpers/showApiResponse.js";
 
 function useTaskActions({
   setUserTasks,
@@ -49,7 +53,10 @@ function useTaskActions({
   }
 
   async function onUpdateTask(taskId, patchBody) {
-    if (!Object.keys(patchBody).length) return;
+    if (!Object.keys(patchBody).length) {
+      showWarning("No fields to update!");
+      return;
+    }
 
     try {
       setIsUpdatingTask(true);
