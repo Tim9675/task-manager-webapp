@@ -46,13 +46,12 @@ function SubtaskCard({ subtask, control, index, remove }) {
             />
           )}
         />
-        {/* Add delete functionality later */}
         <button
           type="button"
-          className="flex size-10 cursor-pointer items-center justify-center"
+          className="flex size-10 cursor-pointer items-center justify-center text-[#7c7c7c] hover:text-red-600"
           onClick={() => remove(index)}
         >
-          <Trash2 color="#7c7c7c" size={18} strokeWidth={3} />
+          <Trash2 size={18} strokeWidth={3} />
         </button>
       </div>
     </div>

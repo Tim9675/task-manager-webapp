@@ -30,7 +30,12 @@ function StickyWall() {
             onNoteSubmit={onCreateNote}
           />
         ) : (
-          <AddNoteButton onAdd={() => setIsAddingNote(true)} />
+          <AddNoteButton
+            onAdd={() => {
+              setIsAddingNote(true);
+              setEditNoteId(null);
+            }}
+          />
         )}
         {userNotes.map((note) => {
           if (note._id === editNoteId)
@@ -47,7 +52,10 @@ function StickyWall() {
             <NoteCard
               key={note._id}
               note={note}
-              onEdit={() => setEditNoteId(note._id)}
+              onEdit={() => {
+                setEditNoteId(note._id);
+                setIsAddingNote(false);
+              }}
               onDelete={async () => await onDeleteNote(note._id)}
               isDeletingNote={isDeletingNote}
             />
