@@ -17,8 +17,8 @@ export async function createTag(title, color) {
   return response.data.data;
 }
 
-export async function updateTag(updatedTag) {
-  const response = await client.patch(`/tags/${updatedTag._id}`, updatedTag);
+export async function updateTag(tagId, patchBody) {
+  const response = await client.patch(`/tags/${tagId}`, patchBody);
   return response.data.data;
 }
 

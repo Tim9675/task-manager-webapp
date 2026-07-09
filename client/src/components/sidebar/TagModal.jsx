@@ -6,10 +6,10 @@ import Modal from "../modals/Modal";
 function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
   if (!isOpen) return null;
 
-  const [tagTitle, setTagTitle] = useState(mode === "edit" ? tag.title : "");
-  const [tagColor, setTagColor] = useState(
-    mode === "edit" ? tag.color : "#d1eaed",
-  );
+  const isEdit = mode === "edit";
+
+  const [tagTitle, setTagTitle] = useState(isEdit ? tag.title : "");
+  const [tagColor, setTagColor] = useState(isEdit ? tag.color : "#d1eaed");
   const [isTagDuplicate, setIsTagDuplicate] = useState(false);
 
   const { availableTagColors, isCreatingTag, isUpdatingTag } = useTags();
@@ -20,27 +20,24 @@ function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
     ? "Creating..."
     : isUpdatingTag
       ? "Saving..."
-      : mode === "edit"
+      : isEdit
         ? "Save"
         : "Create";
 
   async function submitTag() {
     let result;
     try {
-      switch (mode) {
-        case "create":
-          result = await onTagSubmit(tagTitle, tagColor);
-          break;
-        case "edit":
-          result = await onTagSubmit({
-            _id: tag._id,
-            title: tagTitle,
-            color: tagColor,
-          });
-          break;
-        default:
-          result = { success: false, error: "Error in TagModal.jsx" };
+      if (isEdit) {
+        const patchBody = {};
+
+        if (tagTitle !== tag.title) patchBody.title = tagTitle;
+        if (tagColor !== tag.color) patchBody.color = tagColor;
+
+        result = await onTagSubmit(tag._id, patchBody);
+      } else {
+        result = await onTagSubmit(tagTitle, tagColor);
       }
+
       if (!result.success) {
         if (result.error === "duplicate") {
           setIsTagDuplicate(true);
@@ -57,7 +54,7 @@ function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
   return (
     <Modal
       isOpen={true}
-      header={mode === "create" ? "Add new tag" : "Edit tag"}
+      header={isEdit ? "Edit tag" : "Add new tag"}
       onAction={async () => {
         await submitTag();
       }}
@@ -81,10 +78,10 @@ function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
               setTagTitle(e.target.value);
               setIsTagDuplicate(false);
             }}
-            onKeyDown={(e) => {
+            onKeyDown={async (e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                submitTag();
+                await submitTag();
               }
             }}
             className="h-full w-55 rounded-md px-2.5"

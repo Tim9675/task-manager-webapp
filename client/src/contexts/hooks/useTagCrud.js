@@ -2,12 +2,16 @@ import { useState } from "react";
 
 import { createTag, updateTag, deleteTag } from "../../api/tagApi";
 import { normalizeTitle } from "../helpers/normalizeTitle";
-import { showApiError, showActionSuccess } from "../helpers/showApiResponse";
+import {
+  showApiError,
+  showActionSuccess,
+  showWarning,
+} from "../helpers/showApiResponse";
 
 function useTagCrud({ userTags, setUserTags, removeTagFromTasks }) {
   const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [isUpdatingTag, setIsUpdatingTag] = useState(false);
-  const [isDeletingTag, setisDeletingTag] = useState(false);
+  const [isDeletingTag, setIsDeletingTag] = useState(false);
 
   // CRUD functions
   async function onCreateTag(title, color) {
@@ -31,18 +35,25 @@ function useTagCrud({ userTags, setUserTags, removeTagFromTasks }) {
     }
   }
 
-  async function onUpdateTag(updatedTag) {
-    const normalizedTitle = normalizeTitle(updatedTag.title);
-    const duplicate = userTags.some(
-      (tag) =>
-        tag._id !== updatedTag._id &&
-        normalizeTitle(tag.title) === normalizedTitle,
-    );
-    if (duplicate) return { success: false, error: "duplicate" };
+  async function onUpdateTag(tagId, patchBody) {
+    if (!Object.keys(patchBody).length) {
+      showWarning("No fields to update!");
+      return { success: false };
+    }
+
+    if (patchBody.title !== undefined) {
+      const normalizedTitle = normalizeTitle(patchBody.title);
+      const duplicate = userTags.some(
+        (tag) =>
+          tag._id !== patchBody._id &&
+          normalizeTitle(tag.title) === normalizedTitle,
+      );
+      if (duplicate) return { success: false, error: "duplicate" };
+    }
 
     try {
       setIsUpdatingTag(true);
-      const res = await updateTag(updatedTag);
+      const res = await updateTag(tagId, patchBody);
       setUserTags((prev) =>
         prev.map((tag) => (tag._id === res._id ? res : tag)),
       );
@@ -58,7 +69,7 @@ function useTagCrud({ userTags, setUserTags, removeTagFromTasks }) {
 
   async function onDeleteTag(tagId) {
     try {
-      setisDeletingTag(true);
+      setIsDeletingTag(true);
       await deleteTag(tagId);
       setUserTags((prev) => prev.filter((tag) => tag._id !== tagId));
       removeTagFromTasks(tagId);
@@ -66,7 +77,7 @@ function useTagCrud({ userTags, setUserTags, removeTagFromTasks }) {
     } catch (error) {
       showApiError(error, "Error when deleting tag");
     } finally {
-      setisDeletingTag(false);
+      setIsDeletingTag(false);
     }
   }
 
