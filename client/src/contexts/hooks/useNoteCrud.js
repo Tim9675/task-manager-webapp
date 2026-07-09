@@ -3,6 +3,8 @@ import { useState } from "react";
 import { createNote, updateNote, deleteNote } from "../../api/noteApi";
 import { normalizeTitle } from "../helpers/normalizeTitle";
 import { showApiError, showActionSuccess } from "../helpers/showApiResponse";
+import { isEmptyUpdateBody } from "../helpers/isEmptyUpdateBody";
+import { isDuplicateTitle } from "../helpers/isDuplicateTitle";
 
 function useNoteCrud({ userNotes, setUserNotes }) {
   const [isCreatingNote, setIsCreatingNote] = useState(false);
@@ -11,10 +13,7 @@ function useNoteCrud({ userNotes, setUserNotes }) {
 
   // CRUD functions
   async function onCreateNote(title, content, color) {
-    const normalizedTitle = normalizeTitle(title);
-    const duplicate = userNotes.some(
-      (note) => normalizeTitle(note.title) === normalizedTitle,
-    );
+    const duplicate = isDuplicateTitle(userNotes, title);
     if (duplicate) return { success: false, error: "duplicate" };
 
     try {
@@ -24,25 +23,24 @@ function useNoteCrud({ userNotes, setUserNotes }) {
       showActionSuccess("Note", "created");
       return { success: true };
     } catch (error) {
-      showApiError(error, "Error when creating not");
+      showApiError(error, "Error when creating note");
       return { success: false, error: "Server error in onCreateNote" };
     } finally {
       setIsCreatingNote(false);
     }
   }
 
-  async function onUpdateNote(updatedNote) {
-    const normalizedTitle = normalizeTitle(updatedNote.title);
-    const duplicate = userNotes.some(
-      (note) =>
-        note._id !== updatedNote._id &&
-        normalizeTitle(note.title) === normalizedTitle,
-    );
-    if (duplicate) return { success: false, error: "duplicate" };
+  async function onUpdateNote(noteId, patchBody) {
+    if (isEmptyUpdateBody(patchBody)) return { success: false };
+
+    if (patchBody.title !== undefined) {
+      const duplicate = isDuplicateTitle(userNotes, patchBody.title, noteId);
+      if (duplicate) return { success: false, error: "duplicate" };
+    }
 
     try {
       setIsUpdatingNote(true);
-      const res = await updateNote(updatedNote);
+      const res = await updateNote(noteId, patchBody);
       setUserNotes((prev) =>
         prev.map((note) => (note._id === res._id ? res : note)),
       );

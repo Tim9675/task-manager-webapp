@@ -2,11 +2,9 @@ import { useState } from "react";
 
 import { createTag, updateTag, deleteTag } from "../../api/tagApi";
 import { normalizeTitle } from "../helpers/normalizeTitle";
-import {
-  showApiError,
-  showActionSuccess,
-  showWarning,
-} from "../helpers/showApiResponse";
+import { showApiError, showActionSuccess } from "../helpers/showApiResponse";
+import { isEmptyUpdateBody } from "../helpers/isEmptyUpdateBody";
+import { isDuplicateTitle } from "../helpers/isDuplicateTitle";
 
 function useTagCrud({ userTags, setUserTags, removeTagFromTasks }) {
   const [isCreatingTag, setIsCreatingTag] = useState(false);
@@ -15,10 +13,7 @@ function useTagCrud({ userTags, setUserTags, removeTagFromTasks }) {
 
   // CRUD functions
   async function onCreateTag(title, color) {
-    const normalizedTitle = normalizeTitle(title);
-    const duplicate = userTags.some(
-      (tag) => normalizeTitle(tag.title) === normalizedTitle,
-    );
+    const duplicate = isDuplicateTitle(userTags, title);
     if (duplicate) return { success: false, error: "duplicate" };
 
     try {
@@ -36,18 +31,10 @@ function useTagCrud({ userTags, setUserTags, removeTagFromTasks }) {
   }
 
   async function onUpdateTag(tagId, patchBody) {
-    if (!Object.keys(patchBody).length) {
-      showWarning("No fields to update!");
-      return { success: false };
-    }
+    if (isEmptyUpdateBody(patchBody)) return { success: false };
 
     if (patchBody.title !== undefined) {
-      const normalizedTitle = normalizeTitle(patchBody.title);
-      const duplicate = userTags.some(
-        (tag) =>
-          tag._id !== patchBody._id &&
-          normalizeTitle(tag.title) === normalizedTitle,
-      );
+      const duplicate = isDuplicateTitle(userTags, patchBody.title, tagId);
       if (duplicate) return { success: false, error: "duplicate" };
     }
 

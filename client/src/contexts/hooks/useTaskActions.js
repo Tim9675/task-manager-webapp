@@ -6,11 +6,8 @@ import {
   updateTask,
   deleteTask,
 } from "../../api/taskApi.js";
-import {
-  showActionSuccess,
-  showApiError,
-  showWarning,
-} from "../helpers/showApiResponse.js";
+import { showActionSuccess, showApiError } from "../helpers/showApiResponse.js";
+import { isEmptyUpdateBody } from "../helpers/isEmptyUpdateBody.js";
 
 function useTaskActions({
   setUserTasks,
@@ -53,10 +50,7 @@ function useTaskActions({
   }
 
   async function onUpdateTask(taskId, patchBody) {
-    if (!Object.keys(patchBody).length) {
-      showWarning("No fields to update!");
-      return;
-    }
+    if (isEmptyUpdateBody(patchBody)) return;
 
     try {
       setIsUpdatingTask(true);

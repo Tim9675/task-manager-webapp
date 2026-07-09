@@ -2,11 +2,9 @@ import { useState } from "react";
 
 import { createList, deleteList, updateList } from "../../api/listApi.js";
 import { normalizeTitle } from "../helpers/normalizeTitle.js";
-import {
-  showActionSuccess,
-  showApiError,
-  showWarning,
-} from "../helpers/showApiResponse.js";
+import { showActionSuccess, showApiError } from "../helpers/showApiResponse.js";
+import { isEmptyUpdateBody } from "../helpers/isEmptyUpdateBody.js";
+import { isDuplicateTitle } from "../helpers/isDuplicateTitle.js";
 
 function useListCrud({ userLists, setUserLists, removeListFromTasks }) {
   const [isCreatingList, setIsCreatingList] = useState(false);
@@ -16,10 +14,7 @@ function useListCrud({ userLists, setUserLists, removeListFromTasks }) {
   // CRUD functions
   async function onCreateList(title, color) {
     // Don't need to check for empty string title since button is disabled if listTitle state is empty
-    const normalizedTitle = normalizeTitle(title);
-    const duplicate = userLists.some(
-      (list) => normalizeTitle(list.title) === normalizedTitle,
-    );
+    const duplicate = isDuplicateTitle(userLists, title);
     if (duplicate) return { success: false, error: "duplicate" };
 
     try {
@@ -41,18 +36,10 @@ function useListCrud({ userLists, setUserLists, removeListFromTasks }) {
 
   async function onUpdateList(listId, patchBody) {
     // Same reasoning as onCreateList for empty title
-    if (!Object.keys(patchBody).length) {
-      showWarning("No fields to update!");
-      return { success: false };
-    }
+    if (isEmptyUpdateBody(patchBody)) return { success: false };
 
     if (patchBody.title !== undefined) {
-      const normalizedTitle = normalizeTitle(patchBody.title);
-      const duplicate = userLists.some(
-        (list) =>
-          list._id !== patchBody._id &&
-          normalizeTitle(list.title) === normalizedTitle,
-      );
+      const duplicate = isDuplicateTitle(userLists, patchBody.title, listId);
       if (duplicate) return { success: false, error: "duplicate" };
     }
 

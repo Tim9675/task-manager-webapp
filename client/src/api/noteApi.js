@@ -18,8 +18,8 @@ export async function createNote(title, content, color) {
   return response.data.data;
 }
 
-export async function updateNote(updatedNote) {
-  const response = await client.patch(`/notes/${updatedNote._id}`, updatedNote);
+export async function updateNote(noteId, patchBody) {
+  const response = await client.patch(`/notes/${noteId}`, patchBody);
   return response.data.data;
 }
 

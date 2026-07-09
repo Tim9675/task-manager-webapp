@@ -11,24 +11,32 @@ function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
 
   const { availableNoteColors, isCreatingNote, isUpdatingNote } = useNotes();
 
+  const isEdit = mode === "edit";
+  const isLoading = isCreatingNote || isUpdatingNote;
+
+  const buttonContent = isCreatingNote
+    ? "Creating..."
+    : isUpdatingNote
+      ? "Saving..."
+      : isEdit
+        ? "Save"
+        : "Create";
+
   async function submitNote() {
     let result;
     try {
-      switch (mode) {
-        case "create":
-          result = await onNoteSubmit(noteTitle, noteContent, noteColor);
-          break;
-        case "edit":
-          result = await onNoteSubmit({
-            _id: note._id,
-            title: noteTitle,
-            content: noteContent,
-            color: noteColor,
-          });
-          break;
-        default:
-          result = { success: false, error: "Error in NoteInput.jsx" };
+      if (isEdit) {
+        const patchBody = {};
+
+        if (noteTitle !== note.title) patchBody.title = noteTitle;
+        if (noteContent !== note.content) patchBody.content = noteContent;
+        if (noteColor !== note.color) patchBody.color = noteColor;
+
+        result = await onNoteSubmit(note._id, patchBody);
+      } else {
+        result = await onNoteSubmit(noteTitle, noteContent, noteColor);
       }
+
       if (!result.success) {
         if (result.error === "duplicate") {
           setIsNoteDuplicate(true);
@@ -64,9 +72,7 @@ function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
             className="h-37.5 rounded-md border border-[#7c7c7c] px-1 text-wrap text-[#444444]"
             value={noteContent}
             onChange={(e) => setNoteContent(e.target.value)}
-          >
-            {noteContent}
-          </textarea>
+          />
           <div className="flex h-10 items-center justify-evenly rounded bg-[#f5f5f5]">
             {availableNoteColors.map((color) => (
               <button
@@ -97,7 +103,7 @@ function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
               className="h-full flex-1 cursor-pointer rounded-md bg-[#ffd43b] hover:brightness-95 disabled:cursor-not-allowed disabled:bg-[#bbbbbb] disabled:hover:brightness-100"
               onClick={submitNote}
             >
-              {mode === "create" ? "Add" : "Save"}
+              {buttonContent}
             </button>
           </div>
         </div>
