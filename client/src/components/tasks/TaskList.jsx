@@ -15,7 +15,7 @@ function TaskList({ header }) {
   }
 
   const { getListById } = useLists();
-  const { openTask } = useTasks();
+  const { isSelectedTask, openTask, closeTask } = useTasks();
 
   return (
     <div className="flex h-full grow flex-col py-5">
@@ -44,7 +44,13 @@ function TaskList({ header }) {
                 <TaskCard
                   key={task._id}
                   task={task}
-                  onSelect={() => openTask(task._id)}
+                  onSelect={() => {
+                    if (isSelectedTask(task._id)) {
+                      closeTask();
+                    } else {
+                      openTask(task._id);
+                    }
+                  }}
                   // Tag condition in case a tag has same id as list
                   listDetails={
                     activeView.type !== "tag" &&

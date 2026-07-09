@@ -19,7 +19,7 @@ function TaskDetailsPanel() {
 
   return (
     <div
-      className={`transition-all ease-in-out ${isTaskDetailsOpen ? "w-105" : "w-0"}`}
+      className={`overflow-hidden transition-all ease-in-out ${isTaskDetailsOpen ? "w-105" : "w-0"}`}
       style={{ transitionDuration: `${PANEL_ANIMATION_MS}ms` }}
     >
       <aside

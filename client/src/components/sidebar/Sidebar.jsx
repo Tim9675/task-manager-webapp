@@ -58,7 +58,7 @@ function Sidebar() {
       <SidebarSkeleton />
     ) : (
       <div
-        className={`relative transition-all duration-500 ease-in ${isSidebarOpen ? "w-77" : "w-25.5"}`}
+        className={`relative overflow-hidden transition-all duration-500 ease-in ${isSidebarOpen ? "w-77" : "w-22.5"}`}
       >
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -67,7 +67,9 @@ function Sidebar() {
           <Menu color="#7c7c7c" size={21} strokeWidth={3} />
         </button>
         <aside
-          className={`my-5 ms-5 flex h-[calc(100vh-2.5rem)] w-72 flex-col rounded-2xl bg-neutral-100 px-4 py-5 transition duration-500 ease-in ${!isSidebarOpen && "translate-x-[-110%]"}`}
+          className={`my-5 ms-5 flex h-[calc(100vh-2.5rem)] w-72 flex-col rounded-2xl bg-neutral-100 px-4 py-5 transition duration-500 ease-in ${!isSidebarOpen && "pointer-events-none translate-x-[-110%]"}`}
+          inert={!isSidebarOpen}
+          aria-hidden={!isSidebarOpen}
         >
           {/* Header */}
           <header className="flex items-center justify-between">
