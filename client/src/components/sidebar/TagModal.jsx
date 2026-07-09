@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { useTags } from "../../contexts/TagsContext";
 import Modal from "../modals/Modal";
+import { onSubmitResult } from "../helpers/onSubmitResult";
 
 function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
   if (!isOpen) return null;
@@ -25,18 +26,13 @@ function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
         : "Create";
 
   async function submitTag() {
-    let result;
     try {
-      if (isEdit) {
-        const patchBody = {};
+      const curr = {
+        title: tagTitle,
+        color: tagColor,
+      };
 
-        if (tagTitle !== tag.title) patchBody.title = tagTitle;
-        if (tagColor !== tag.color) patchBody.color = tagColor;
-
-        result = await onTagSubmit(tag._id, patchBody);
-      } else {
-        result = await onTagSubmit(tagTitle, tagColor);
-      }
+      const result = await onSubmitResult(isEdit, tag, curr, onTagSubmit);
 
       if (!result.success) {
         if (result.error === "duplicate") {

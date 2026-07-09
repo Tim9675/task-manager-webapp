@@ -13,7 +13,6 @@ function useListCrud({ userLists, setUserLists, removeListFromTasks }) {
 
   // CRUD functions
   async function onCreateList(title, color) {
-    // Don't need to check for empty string title since button is disabled if listTitle state is empty
     const duplicate = isDuplicateTitle(userLists, title);
     if (duplicate) return { success: false, error: "duplicate" };
 
@@ -35,7 +34,6 @@ function useListCrud({ userLists, setUserLists, removeListFromTasks }) {
   }
 
   async function onUpdateList(listId, patchBody) {
-    // Same reasoning as onCreateList for empty title
     if (isEmptyUpdateBody(patchBody)) return { success: false };
 
     if (patchBody.title !== undefined) {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useNotes } from "../../contexts/NotesContext";
+import { onSubmitResult } from "../helpers/onSubmitResult";
 
 function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
   const [noteTitle, setNoteTitle] = useState(note?.title ?? "");
@@ -23,19 +24,14 @@ function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
         : "Create";
 
   async function submitNote() {
-    let result;
     try {
-      if (isEdit) {
-        const patchBody = {};
+      const curr = {
+        title: noteTitle,
+        content: noteContent,
+        color: noteColor,
+      };
 
-        if (noteTitle !== note.title) patchBody.title = noteTitle;
-        if (noteContent !== note.content) patchBody.content = noteContent;
-        if (noteColor !== note.color) patchBody.color = noteColor;
-
-        result = await onNoteSubmit(note._id, patchBody);
-      } else {
-        result = await onNoteSubmit(noteTitle, noteContent, noteColor);
-      }
+      const result = await onSubmitResult(isEdit, note, curr, onNoteSubmit);
 
       if (!result.success) {
         if (result.error === "duplicate") {

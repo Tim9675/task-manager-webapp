@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { useLists } from "../../contexts/ListsContext";
 import Modal from "../modals/Modal";
+import { onSubmitResult } from "../helpers/onSubmitResult";
 
 function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
   if (!isOpen) return null;
@@ -25,18 +26,13 @@ function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
         : "Create";
 
   async function submitList() {
-    let result;
     try {
-      if (isEdit) {
-        const patchBody = {};
+      const curr = {
+        title: listTitle,
+        color: listColor,
+      };
 
-        if (listTitle !== list.title) patchBody.title = listTitle;
-        if (listColor !== list.color) patchBody.color = listColor;
-
-        result = await onListSubmit(list._id, patchBody);
-      } else {
-        result = await onListSubmit(listTitle, listColor);
-      }
+      const result = await onSubmitResult(isEdit, list, curr, onListSubmit);
 
       if (!result.success) {
         if (result.error === "duplicate") {
