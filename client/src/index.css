@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: Neuwelt-Medium;
-  src: url("/fonts/Neuwelt-Medium.otf");
+  src: url("../src/assets//fonts/Neuwelt-Medium.otf");
 }
 
 :root {
