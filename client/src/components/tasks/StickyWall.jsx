@@ -19,7 +19,7 @@ function StickyWall() {
   return (
     <div className="flex h-full flex-col py-5">
       <header className="mb-5 flex w-full px-5">
-        <h3 className="ms-2.5 text-[2.5rem] font-bold">Sticky Wall</h3>
+        <h1 className="ms-2.5 text-[2.5rem] font-bold">Sticky Wall</h1>
       </header>
       {/* Idk why main is tabable. Is <main> automatically tabable or is it because of grid? */}
       {/* I think it's overflowing content */}
