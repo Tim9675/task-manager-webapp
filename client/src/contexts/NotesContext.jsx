@@ -24,7 +24,12 @@ export function NotesProvider({ children }) {
     fetchNotes();
   }, []);
 
-  const availableNoteColors = ["#d1eaed", "#ffdada", "#fdf2b3", "#ffd4a9"];
+  const availableNoteColors = [
+    { value: "#d1eaed", label: "Light blue" },
+    { value: "#ffdada", label: "Light pink" },
+    { value: "#fdf2b3", label: "Light yellow" },
+    { value: "#ffd4a9", label: "Light orange" },
+  ];
 
   const crud = useNoteCrud({ userNotes, setUserNotes });
 

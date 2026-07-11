@@ -37,6 +37,7 @@ function StickyWall() {
             }}
           />
         )}
+
         {userNotes.map((note) => {
           if (note._id === editNoteId)
             return (
