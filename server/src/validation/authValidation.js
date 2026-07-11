@@ -3,38 +3,31 @@ import { requireString } from "./helpers/validationHelpers.js";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_PATTERN =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&,\\(\\)\\-_\\+\\=\\[\\]\\{\\}:;<>\\?|~])[A-Za-z\\d!@#$%^&,\\(\\)\\-_\\+\\=\\[\\]\\{\\}:;<>\\?|~]{8,}$/;
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*,()\\/\-_+=[\]{}:;<>?\|~])[A-Za-z\d!@#$%^&*,()\\/\-_+=[\]{}:;<>?\|~]{8,}$/;
 
 export function validateRegister(req, res, next) {
   const { name, email, password, timezone } = req.body;
 
-  let errorMessage = [];
+  let errorMessage = "";
   const nameError = requireString(name, "Name", 30);
   if (nameError) {
-    errorMessage.push(nameError);
+    errorMessage += nameError + "\n";
   }
 
   const emailError = requireString(email, "Email", 254); // 254 is the max email length as per current standards
   if (emailError) {
-    errorMessage.push(emailError);
+    errorMessage += emailError + "\n";
   } else {
     const normalizedEmail = normalizeString(email);
 
     if (!EMAIL_PATTERN.test(normalizedEmail)) {
-      errorMessage.push("Invalid email address");
+      errorMessage += "Invalid email address\n";
     }
   }
 
-  const passwordError = requireString(password, "Password");
-  if (passwordError) {
-    errorMessage.push(passwordError);
-  } else {
-    // Real validator; just used requireString to check if password is a non-empty string
-    if (!PASSWORD_PATTERN.test(password)) {
-      errorMessage.push(
-        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
-      );
-    }
+  if (!PASSWORD_PATTERN.test(password)) {
+    errorMessage +=
+      "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, a special character\n";
   }
 
   if (errorMessage.length > 0) {

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { EyeClosed } from "lucide-react";
-import { Eye } from "lucide-react";
+import { Eye, EyeClosed } from "lucide-react";
 
 import { login } from "../api/authApi.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
@@ -46,11 +45,10 @@ function LoginPage() {
   return (
     <div className="h-screen w-screen bg-[#fafafa] p-[1.5%]">
       <div className="flex h-full w-full justify-between">
-        {/* Image */}
         <aside className="overflow-clip rounded-2xl md:h-full md:w-[49%]">
           <img src={loginImage} alt="" />
         </aside>
-        {/* Login */}
+
         <main className="flex h-full w-full flex-col items-center justify-center rounded-2xl border border-[#ebebeb] bg-transparent md:h-full md:w-[49%]">
           <div className="h-1/2 w-2/3">
             <form onSubmit={handleSubmit} className="flex w-full flex-col">
@@ -67,6 +65,7 @@ function LoginPage() {
                 value={email}
                 autoFocus
                 autoComplete="email"
+                required
                 className="mx-2 my-1.5 h-10 rounded-md border p-1"
                 onChange={(e) => setEmail(e.target.value)}
                 aria-invalid={!!error}
@@ -82,6 +81,7 @@ function LoginPage() {
                   type={isPasswordVisible ? "text" : "password"}
                   value={password}
                   autoComplete="current-password"
+                  required
                   className="h-full w-full rounded-md border p-1"
                   onChange={(e) => setPassword(e.target.value)}
                   aria-invalid={!!error}
@@ -103,12 +103,12 @@ function LoginPage() {
 
               <p
                 id="login-error"
-                className="mx-2 my-2.5 h-2.5 text-sm text-red-500"
-                style={{ visibility: error ? "visible" : "hidden" }}
+                className={`mx-2 my-2.5 h-2.5 text-sm text-red-500 ${error ? "visible" : "invisible"}`}
                 role="alert"
               >
                 {error}
               </p>
+
               <button
                 type="submit"
                 disabled={loading}
@@ -117,12 +117,14 @@ function LoginPage() {
                 Sign in
               </button>
             </form>
+
             <div className="flex h-15 w-full flex-col items-center justify-between">
               <div className="flex w-full items-center justify-between">
                 <hr className="inline-block h-2 w-55 border-[#dddddd]" />
                 <span className="text-[#212529]">or</span>
                 <hr className="inline-block h-2 w-55 border-[#dddddd]" />
               </div>
+
               <p className="text-[#444444]">
                 Don't have an account?{" "}
                 <Link
