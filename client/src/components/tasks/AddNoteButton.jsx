@@ -6,6 +6,7 @@ function AddNoteButton({ onAdd }) {
       type="button"
       className="flex aspect-square w-full cursor-pointer items-center justify-center rounded-lg bg-[#ebebeb] p-5 hover:brightness-95"
       onClick={onAdd}
+      aria-label="Add note"
     >
       <Plus size={75} color="#212529" />
     </button>

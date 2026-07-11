@@ -22,6 +22,7 @@ function StickyWall() {
         <h3 className="ms-2.5 text-[2.5rem] font-bold">Sticky Wall</h3>
       </header>
       {/* Idk why main is tabable. Is <main> automatically tabable or is it because of grid? */}
+      {/* I think it's overflowing content */}
       <div className="mx-5 grid grid-cols-1 gap-5 overflow-y-auto rounded border border-[#ebebeb] px-6 py-5 md:grid-cols-2 xl:grid-cols-3">
         {isAddingNote ? (
           <NoteInput
