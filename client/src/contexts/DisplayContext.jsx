@@ -7,6 +7,33 @@ import { useTags } from "./TagsContext";
 
 const DisplayContext = createContext();
 
+function compareTasks(a, b) {
+  if (a.checked === b.checked) {
+    const aParsedDate = Date.parse(a.dueDate);
+    const bParsedDate = Date.parse(b.dueDate);
+
+    return aParsedDate - bParsedDate;
+  }
+  return a.checked ? 1 : -1;
+}
+
+function taskMatchesView(task, activeView, isHideCompleted) {
+  if (isHideCompleted && task.checked) return false;
+
+  switch (activeView.type) {
+    case "today":
+      return isToday(task.dueDate);
+    case "upcoming":
+      return isUpcoming(task.dueDate);
+    case "list":
+      return task.listId === activeView.id;
+    case "tag":
+      return task.tagIds.includes(activeView.id);
+    default:
+      return true;
+  }
+}
+
 export function DisplayProvider({ children }) {
   const [activeView, setActiveView] = useState({
     type: "today",
@@ -21,21 +48,9 @@ export function DisplayProvider({ children }) {
   const { getTagTitle } = useTags();
 
   const visibleTasks = useMemo(() => {
-    const filtered = userTasks.filter((task) => {
-      if (isHideCompleted && task.checked) return false;
-      switch (activeView.type) {
-        case "today":
-          return isToday(task.dueDate);
-        case "upcoming":
-          return isUpcoming(task.dueDate);
-        case "list":
-          return task.listId === activeView.id;
-        case "tag":
-          return task.tagIds.includes(activeView.id);
-        default:
-          return true;
-      }
-    });
+    const filtered = userTasks.filter((task) =>
+      taskMatchesView(task, activeView, isHideCompleted),
+    );
 
     const searched = isSearching
       ? filtered.filter((task) =>
@@ -60,7 +75,7 @@ export function DisplayProvider({ children }) {
       default:
         return "Today";
     }
-  }, [searchQuery, isSearching, activeView, getListTitle, getTagTitle]);
+  }, [isSearching, activeView, getListTitle, getTagTitle]);
 
   return (
     <DisplayContext.Provider
@@ -82,16 +97,6 @@ export function DisplayProvider({ children }) {
       {children}
     </DisplayContext.Provider>
   );
-}
-
-function compareTasks(a, b) {
-  if (a.checked === b.checked) {
-    const aParsedDate = Date.parse(a.dueDate);
-    const bParsedDate = Date.parse(b.dueDate);
-
-    return aParsedDate - bParsedDate;
-  }
-  return a.checked ? 1 : -1;
 }
 
 export function useDisplay() {

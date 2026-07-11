@@ -10,8 +10,8 @@ const ListsContext = createContext();
 
 export function ListsProvider({ children }) {
   const [userLists, setUserLists] = useState([]);
-  const { userTasks, removeListFromTasks } = useTasks();
   const [isLoadingLists, setIsLoadingLists] = useState(true);
+  const { userTasks, removeListFromTasks } = useTasks();
 
   useEffect(() => {
     async function fetchLists() {
@@ -46,10 +46,10 @@ export function ListsProvider({ children }) {
     <ListsContext.Provider
       value={{
         userLists,
+        isLoadingLists,
         availableListColors,
         ...crud,
         ...derived,
-        isLoadingLists,
       }}
     >
       {children}

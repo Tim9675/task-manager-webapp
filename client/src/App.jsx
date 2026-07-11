@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "react-loading-skeleton/dist/skeleton.css";
 import { Toaster } from "react-hot-toast";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";

@@ -10,8 +10,8 @@ const TagsContext = createContext();
 
 export function TagsProvider({ children }) {
   const [userTags, setUserTags] = useState([]);
-  const { userTasks, removeTagFromTasks } = useTasks();
   const [isLoadingTags, setIsLoadingTags] = useState(true);
+  const { userTasks, removeTagFromTasks } = useTasks();
 
   useEffect(() => {
     async function fetchTags() {
@@ -38,10 +38,10 @@ export function TagsProvider({ children }) {
     <TagsContext.Provider
       value={{
         userTags,
+        isLoadingTags,
         availableTagColors,
         ...crud,
         ...derived,
-        isLoadingTags,
       }}
     >
       {children}

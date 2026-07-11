@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 
 import { getUserNotes } from "../api/noteApi";
-
 import { showApiError } from "./helpers/showApiResponse";
 import useNoteCrud from "./hooks/useNoteCrud";
 
@@ -33,9 +32,9 @@ export function NotesProvider({ children }) {
     <NotesContext.Provider
       value={{
         userNotes,
+        isLoadingNotes,
         availableNoteColors,
         ...crud,
-        isLoadingNotes,
       }}
     >
       {children}
