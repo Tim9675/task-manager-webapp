@@ -4,37 +4,41 @@ const DEFAULT_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export function isToday(date) {
   if (!date) return false;
+
   const normalizedDate = typeof date === "string" ? date : date.toISOString();
-  const dueDate = DateTime.fromISO(normalizedDate);
+  const dueDate = DateTime.fromISO(normalizedDate, { zone: DEFAULT_TIMEZONE });
 
   const now = DateTime.now().setZone(DEFAULT_TIMEZONE);
-
   const start = now.startOf("day");
-  const end = start.plus({ days: 1 }); // exclusive end
+  const end = start.plus({ days: 1 });
 
   return start <= dueDate && dueDate < end;
 }
 
 export function isUpcoming(date) {
   if (!date) return false;
-  const normalizedDate = typeof date === "string" ? date : date.toISOString();
-  const dueDate = DateTime.fromISO(normalizedDate);
-  const now = DateTime.now().setZone(DEFAULT_TIMEZONE);
-  // Currently filters whole week; intended filter: today, tomorrow, remaining days of the week
-  const todayStart = now.startOf("day");
-  const nextWeekStart = now.startOf("week").plus({ weeks: 1 });
 
-  return todayStart <= dueDate && dueDate < nextWeekStart;
+  const normalizedDate = typeof date === "string" ? date : date.toISOString();
+  const dueDate = DateTime.fromISO(normalizedDate, { zone: DEFAULT_TIMEZONE });
+
+  const now = DateTime.now().setZone(DEFAULT_TIMEZONE);
+  const todayStart = now.startOf("day");
+  const upcomingEnd =
+    now.weekday === 7 ? now.plus({ days: 1 }).endOf("day") : now.endOf("week");
+
+  return todayStart <= dueDate && dueDate <= upcomingEnd;
 }
 
-export function getTaskDateBuckets(zone) {
+export function getTaskDateBuckets(zone = DEFAULT_TIMEZONE) {
   const now = DateTime.now().setZone(zone);
 
   const todayStart = now.startOf("day");
   const tomorrowStart = todayStart.plus({ days: 1 });
-  const dayAfterTomorrow = tomorrowStart.plus({ days: 1 });
-  const weekStart = now.startOf("week"); // Monday (Luxon ISO default)
-  const nextWeekStart = weekStart.plus({ weeks: 1 });
+  const dayAfterTomorrowStart = tomorrowStart.plus({ days: 1 });
+  const nextWeekStart = now.startOf("week").plus({ weeks: 1 });
+  const weekEnd = now.endOf("week");
+
+  const isWeekend = now.weekday === 6 || now.weekday === 7;
 
   return {
     today: {
@@ -43,10 +47,12 @@ export function getTaskDateBuckets(zone) {
     },
     tomorrow: {
       start: tomorrowStart.toUTC().toJSDate(),
-      end: dayAfterTomorrow.toUTC().toJSDate(),
+      end: dayAfterTomorrowStart.toUTC().toJSDate(),
     },
     thisWeek: {
-      start: dayAfterTomorrow.toUTC().toJSDate(),
+      start: isWeekend
+        ? weekEnd.toUTC().toJSDate()
+        : dayAfterTomorrowStart.toUTC().toJSDate(),
       end: nextWeekStart.toUTC().toJSDate(),
     },
   };
@@ -54,10 +60,9 @@ export function getTaskDateBuckets(zone) {
 
 export function getDueDateOnCreate(activeView) {
   const now = DateTime.now().setZone(DEFAULT_TIMEZONE);
-  DEFAULT_TIMEZONE;
   const dueToday = now.endOf("day");
   const dueTom = dueToday.plus({ days: 1 });
-  const dayAfterTomorrow = dueTom.plus({ days: 1 });
+  const dueDayAfterTomorrow = dueTom.plus({ days: 1 });
   const latestDueThisWeek = now.endOf("week");
 
   let dueDate = dueToday;
@@ -70,11 +75,12 @@ export function getDueDateOnCreate(activeView) {
       dueDate = dueTom;
       break;
     case "thisWeek":
-      if (dayAfterTomorrow <= latestDueThisWeek) {
-        dueDate = dayAfterTomorrow;
+      if (dueDayAfterTomorrow <= latestDueThisWeek) {
+        dueDate = dueDayAfterTomorrow;
       } else if (dueTom <= latestDueThisWeek) {
         dueDate = dueTom;
       }
+      break;
   }
 
   return dueDate.toISO();

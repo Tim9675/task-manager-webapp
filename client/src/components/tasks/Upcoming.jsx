@@ -3,7 +3,7 @@ import { getTaskDateBuckets } from "../../utils/date";
 import { useMemo } from "react";
 
 function Upcoming({ tasks }) {
-  const zone = "Asia/Manila";
+  const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { today, tomorrow, thisWeek } = getTaskDateBuckets(zone);
 
   const grouped = useMemo(() => {
@@ -15,7 +15,9 @@ function Upcoming({ tasks }) {
     for (const task of tasks) {
       // REMINDER: Possible type mismatch when backend is connected [String from backend, compared to Date in frontend]
       const due = new Date(task.dueDate);
-
+      console.log("Start", thisWeek.start);
+      console.log("Due", due);
+      console.log("End", thisWeek.end);
       if (due >= today.start && due < today.end) {
         temp.today.push(task);
       } else if (due >= tomorrow.start && due < tomorrow.end) {
