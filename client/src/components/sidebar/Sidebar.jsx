@@ -1,36 +1,25 @@
-import {
-  ChevronsRight,
-  ListCheck,
-  CalendarDays,
-  StickyNote,
-  Menu,
-  Notebook,
-} from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState, useRef } from "react";
 
-import SidebarSkeleton from "../skeletons/SidebarSkeleton";
-
-import SearchBar from "./SearchBar";
-import SidebarSection from "./SidebarSection";
-import SettingsButton from "./SettingsButton";
-import SignOutButton from "./SignOutButton";
-
-import Modal from "../modals/Modal";
-import ListModal from "./ListModal";
-import TagModal from "./TagModal";
-
-import { useTasks } from "../../contexts/TasksContext";
 import { useLists } from "../../contexts/ListsContext";
 import { useTags } from "../../contexts/TagsContext";
 import { useDisplay } from "../../contexts/DisplayContext";
+import SidebarSkeleton from "../skeletons/SidebarSkeleton";
+import SearchBar from "./SearchBar";
+
+import SidebarBody from "./SidebarBody";
+import SidebarModals from "./SidebarModals";
+
+import SettingsButton from "./SettingsButton";
+import SignOutButton from "./SignOutButton";
 
 function Sidebar() {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddListOpen, setIsAddListOpen] = useState(false);
   const [isAddTagOpen, setIsAddTagOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
   const returnFocusRef = useRef(null);
 
-  const { todayTaskCount, upcomingTaskCount, userTasksCount } = useTasks();
   const { userListsWithCounts, onCreateList, isLoadingLists } = useLists();
   const { userTags, onCreateTag, isLoadingTags } = useTags();
   const {
@@ -40,144 +29,78 @@ function Sidebar() {
     setIsHideCompleted,
   } = useDisplay();
 
-  // Should be the only one hardcoded
-  const tasksSection = [
-    {
-      _id: 0,
-      title: "Upcoming",
-      count: upcomingTaskCount,
-      icon: ChevronsRight,
-    },
-    { _id: 1, title: "Today", count: todayTaskCount, icon: ListCheck },
-    { _id: 2, title: "All Tasks", count: userTasksCount, icon: Notebook },
-    { _id: 3, title: "Calendar", icon: CalendarDays },
-    { _id: 4, title: "Sticky Wall", icon: StickyNote },
-  ];
-
-  function render() {
-    return isLoadingLists || isLoadingTags ? (
-      <SidebarSkeleton />
-    ) : (
-      <div
-        className={`relative overflow-hidden transition-all duration-500 ease-in ${isSidebarOpen ? "w-77" : "w-22.5"}`}
+  return isLoadingLists || isLoadingTags ? (
+    <SidebarSkeleton />
+  ) : (
+    <div
+      className={`relative overflow-hidden transition-all duration-500 ease-in ${isSidebarOpen ? "w-77" : "w-22.5"}`}
+    >
+      <button
+        type="button"
+        onClick={() => setIsSidebarOpen((prev) => !prev)}
+        className={`absolute top-9 right-5.75 z-50 flex size-7.5 cursor-pointer items-center justify-center rounded hover:bg-[#dddddd]`}
+        aria-label="Toggle sidebar"
+        aria-expanded={isSidebarOpen}
+        aria-controls="sidebar"
       >
-        <button
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className={`absolute top-9 right-5.75 z-50 flex size-7.5 cursor-pointer items-center justify-center rounded hover:bg-[#dddddd]`}
-        >
-          <Menu color="#7c7c7c" size={21} strokeWidth={3} />
-        </button>
-        <aside
-          className={`my-5 ms-5 flex h-[calc(100vh-2.5rem)] w-72 flex-col rounded-2xl bg-neutral-100 px-4 py-5 transition duration-500 ease-in ${!isSidebarOpen && "pointer-events-none translate-x-[-110%]"}`}
-          inert={!isSidebarOpen}
-          aria-hidden={!isSidebarOpen}
-        >
-          {/* Header */}
-          <header className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-neutral-900">Menu</h2>
-          </header>
+        <Menu color="#7c7c7c" size={21} strokeWidth={3} />
+      </button>
 
-          <SearchBar />
+      <aside
+        id="sidebar"
+        className={`my-5 ms-5 flex h-[calc(100vh-2.5rem)] w-72 flex-col rounded-2xl bg-neutral-100 px-4 py-5 transition duration-500 ease-in ${!isSidebarOpen && "pointer-events-none translate-x-[-110%]"}`}
+        inert={!isSidebarOpen}
+        aria-hidden={!isSidebarOpen}
+      >
+        {/* Header */}
+        <header className="flex items-center justify-between">
+          <h2 className="text-xl font-bold text-neutral-900">Menu</h2>
+        </header>
 
-          {/* Scrollable Content */}
-          <div className="flex-1 overflow-y-auto">
-            <SidebarSection
-              title="Tasks"
-              type={"tasks"}
-              navList={tasksSection}
-            />
-            <SidebarSection
-              title="Lists"
-              type={"lists"}
-              navList={userListsWithCounts}
-              onOpen={() => {
-                setIsAddListOpen(true);
-                returnFocusRef.current = document.activeElement;
-              }}
-            />
-            <SidebarSection
-              title="Tags"
-              type={"tags"}
-              navList={userTags}
-              onOpen={() => {
-                setIsAddTagOpen(true);
-                returnFocusRef.current = document.activeElement;
-              }}
-            />
-          </div>
+        <SearchBar />
 
-          {/* Modals */}
-          {isAddListOpen && (
-            <ListModal
-              mode="create"
-              onListSubmit={onCreateList}
-              onClose={() => setIsAddListOpen(false)}
-              returnFocusRef={returnFocusRef}
-            />
-          )}
+        {/* Scrollable Content */}
+        <SidebarBody
+          userListsWithCounts={userListsWithCounts}
+          userTags={userTags}
+          onAddListOpen={() => {
+            setIsAddListOpen(true);
+            returnFocusRef.current = document.activeElement;
+          }}
+          onAddTagOpen={() => {
+            setIsAddTagOpen(true);
+            returnFocusRef.current = document.activeElement;
+          }}
+        />
 
-          {isAddTagOpen && (
-            <TagModal
-              mode="create"
-              onTagSubmit={onCreateTag}
-              onClose={() => setIsAddTagOpen(false)}
-              returnFocusRef={returnFocusRef}
-            />
-          )}
+        {/* Modals */}
+        <SidebarModals
+          isAddListOpen={isAddListOpen}
+          onCreateList={onCreateList}
+          onAddListClose={() => setIsAddListOpen(false)}
+          isAddTagOpen={isAddTagOpen}
+          onCreateTag={onCreateTag}
+          onAddTagClose={() => setIsAddTagOpen(false)}
+          isSettingsOpen={isSettingsOpen}
+          onSettingsClose={() => setIsSettingsOpen(false)}
+          isHideCompleted={isHideCompleted}
+          setIsHideCompleted={setIsHideCompleted}
+          returnFocusRef={returnFocusRef}
+        />
 
-          {isSettingsOpen && (
-            <Modal
-              header="Settings"
-              onAction={async () => {
-                // placeholder for future updateSettings function
-                setIsSettingsOpen(false);
-              }}
-              onClose={() => setIsSettingsOpen(false)}
-              isLoading={false}
-              action={"Save"}
-              returnFocusRef={returnFocusRef}
-            >
-              {/* Toggle hide completed tasks */}
-              <div className="flex max-h-60 flex-col gap-1 overflow-y-auto">
-                <button
-                  type="button"
-                  onClick={() => setIsHideCompleted(!isHideCompleted)}
-                  className="flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors hover:bg-neutral-50"
-                >
-                  {/* Left Side */}
-                  <p className="ms-3">Hide completed tasks</p>
-
-                  {/* Right Side */}
-                  <div
-                    className={`flex size-4 items-center justify-center rounded border text-xs ${
-                      isHideCompleted
-                        ? "border-neutral-700 bg-neutral-700 text-white"
-                        : "border-neutral-300"
-                    }`}
-                  >
-                    {isHideCompleted && "✓"}
-                  </div>
-                </button>
-              </div>
-            </Modal>
-          )}
-
-          {/* Footer */}
-          <footer className="md:h-20">
-            <SettingsButton
-              onOpen={() => {
-                setIsSettingsOpen(true);
-                returnFocusRef.current = document.activeElement;
-              }}
-            />
-            <SignOutButton />
-          </footer>
-        </aside>
-      </div>
-    );
-  }
-
-  return render();
+        {/* Footer */}
+        <footer className="md:h-20">
+          <SettingsButton
+            onOpen={() => {
+              setIsSettingsOpen(true);
+              returnFocusRef.current = document.activeElement;
+            }}
+          />
+          <SignOutButton />
+        </footer>
+      </aside>
+    </div>
+  );
 }
 
 export default Sidebar;
