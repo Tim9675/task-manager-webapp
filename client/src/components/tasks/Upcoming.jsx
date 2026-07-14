@@ -7,10 +7,10 @@ import SubTaskList from "./SubTaskList";
 function Upcoming() {
   const { visibleTasks: tasks } = useDisplay();
 
-  let remainingTasksCounter = 0;
-  for (let task of tasks) {
-    if (!task.checked) remainingTasksCounter++;
-  }
+  const remainingTasksCounter = useMemo(
+    () => tasks.filter((task) => !task.checked).length,
+    [tasks],
+  );
 
   const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
