@@ -1,20 +1,26 @@
-import { Plus, Loader } from "lucide-react";
 import { useState } from "react";
+import { Plus, Loader } from "lucide-react";
+
 import { useTasks } from "../../contexts/TasksContext";
 
 function AddTask({ activeView }) {
   const [taskTitle, setTaskTitle] = useState("");
   const { onCreateTask, isCreatingTask } = useTasks();
+
+  async function createTask() {
+    const res = await onCreateTask(taskTitle, activeView);
+
+    if (res) setTaskTitle(""); // Only reset task title after getting valid response
+  }
+
   return (
     <div className="mx-5 flex h-13 items-center rounded-md border border-[#ebebeb] px-3 focus-within:border-neutral-300">
       <button
-        onClick={async () => {
-          // Only reset task title after getting valid response
-          const res = await onCreateTask(taskTitle, activeView);
-          if (res) setTaskTitle("");
-        }}
-        disabled={isCreatingTask}
-        className="flex size-9 items-center justify-center enabled:cursor-pointer disabled:cursor-not-allowed"
+        type="button"
+        onClick={createTask}
+        disabled={isCreatingTask || !taskTitle.trim()}
+        className="flex size-9 items-center justify-center rounded-md hover:bg-gray-100 hover:brightness-95 enabled:cursor-pointer disabled:cursor-not-allowed"
+        aria-label={isCreatingTask ? "Creating task" : "Add new task"}
       >
         {isCreatingTask ? (
           <div className="motion-safe:animate-spin">
@@ -24,17 +30,22 @@ function AddTask({ activeView }) {
           <Plus color="#7c7c7c" size={18} strokeWidth={4} />
         )}
       </button>
+
+      <label htmlFor={`new-task-${activeView.id}`} className="sr-only">
+        Task title
+      </label>
       <input
+        id={`new-task-${activeView.id}`}
         type="text"
         value={taskTitle}
         onChange={(e) => setTaskTitle(e.target.value)}
-        onKeyDown={async (e) => {
-          if (e.key === "Enter") {
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && taskTitle.trim()) {
             e.preventDefault();
-            const res = await onCreateTask(taskTitle, activeView);
-            if (res) setTaskTitle("");
+            createTask();
           }
         }}
+        disabled={isCreatingTask}
         className="ms-1 size-full flex-1 bg-transparent text-sm outline-none"
         placeholder="Add New Task"
       />

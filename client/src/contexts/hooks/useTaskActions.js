@@ -6,7 +6,11 @@ import {
   updateTask,
   deleteTask,
 } from "../../api/taskApi.js";
-import { showActionSuccess, showApiError } from "../helpers/showApiResponse.js";
+import {
+  showActionSuccess,
+  showApiError,
+  showWarning,
+} from "../helpers/showApiResponse.js";
 import { isEmptyUpdateBody } from "../helpers/isEmptyUpdateBody.js";
 
 function useTaskActions({
@@ -20,7 +24,11 @@ function useTaskActions({
   const [isDeletingTask, setIsDeletingTask] = useState(false);
 
   async function onCreateTask(title, activeView) {
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      showWarning("Task title required");
+      return;
+    }
+
     try {
       setIsCreatingTask(true);
       const res = await createTask(title, activeView);

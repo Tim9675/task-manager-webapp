@@ -64,8 +64,6 @@ export function DisplayProvider({ children }) {
   const header = useMemo(() => {
     if (isSearching) return "Search results";
     switch (activeView.type) {
-      case "upcoming":
-        return "Upcoming";
       case "alltasks":
         return "All Tasks";
       case "list":
