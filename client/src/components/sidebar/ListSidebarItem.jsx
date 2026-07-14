@@ -91,43 +91,49 @@ function ListSidebarItem({
         </div>
       </button>
 
-      <ListModal
-        isOpen={isEditListOpen}
-        mode="edit"
-        list={nav}
-        onListSubmit={onUpdateList}
-        onClose={() => setIsEditListOpen(false)}
-      />
-      <Modal
-        isOpen={isDeleteListOpen}
-        header="Warning!"
-        onAction={async () => {
-          await onDeleteList(nav._id);
-          const isActiveList =
-            activeView.type === "list" && activeView.id === nav._id;
+      {isEditListOpen && (
+        <ListModal
+          mode="edit"
+          list={nav}
+          onListSubmit={onUpdateList}
+          onClose={() => setIsEditListOpen(false)}
+        />
+      )}
+      {/* Remember to add previousFocus after restructuring */}
+      {isDeleteListOpen && (
+        <Modal
+          header="Warning!"
+          onAction={async () => {
+            await onDeleteList(nav._id);
+            const isActiveList =
+              activeView.type === "list" && activeView.id === nav._id;
 
-          if (isActiveList) {
-            setActiveView({ type: "today" });
-          }
+            if (isActiveList) {
+              setActiveView({ type: "today" });
+            }
 
-          setIsDeleteListOpen(false);
-        }}
-        onClose={() => setIsDeleteListOpen(false)}
-        isLoading={isDeletingList}
-        action={isDeletingList ? "Deleting..." : "Delete"}
-      >
-        <p className="my-5 text-center">Delete the list "{nav.title}"?</p>
+            setIsDeleteListOpen(false);
+          }}
+          onClose={() => setIsDeleteListOpen(false)}
+          isLoading={isDeletingList}
+          action={isDeletingList ? "Deleting..." : "Delete"}
+          descriptionId={"delete-list-description"}
+        >
+          <p id="delete-list-description" className="my-5 text-center">
+            Delete the list "{nav.title}"?
+          </p>
 
-        {taskCount > 0 && (
-          <div className="text-xs text-red-600">
-            <p>
-              {taskCount} task{isPlural && "s"} belong
-              {!isPlural && "s"} to this list.
-            </p>
-            <p>{isPlural ? "They" : "It"} will become unlisted.</p>
-          </div>
-        )}
-      </Modal>
+          {taskCount > 0 && (
+            <div role="alert" className="text-xs text-red-600">
+              <p>
+                {taskCount} task{isPlural && "s"} belong
+                {!isPlural && "s"} to this list.
+              </p>
+              <p>{isPlural ? "They" : "It"} will become unlisted.</p>
+            </div>
+          )}
+        </Modal>
+      )}
     </>
   );
 }

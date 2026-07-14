@@ -74,43 +74,50 @@ function TagSidebarItem({
         </div>
       </button>
 
-      <TagModal
-        isOpen={isEditTagOpen}
-        mode="edit"
-        tag={nav}
-        onTagSubmit={onUpdateTag}
-        onClose={() => setIsEditTagOpen(false)}
-      />
-      <Modal
-        isOpen={isDeleteTagOpen}
-        header="Warning!"
-        onAction={async () => {
-          await onDeleteTag(nav._id);
-          const isActiveTag =
-            activeView.type === "tag" && activeView.id === nav._id;
+      {isEditTagOpen && (
+        <TagModal
+          mode="edit"
+          tag={nav}
+          onTagSubmit={onUpdateTag}
+          onClose={() => setIsEditTagOpen(false)}
+        />
+      )}
+      {/* Remember to add previousFocus after restructuring */}
+      {isDeleteTagOpen && (
+        <Modal
+          header="Warning!"
+          onAction={async () => {
+            await onDeleteTag(nav._id);
+            const isActiveTag =
+              activeView.type === "tag" && activeView.id === nav._id;
 
-          if (isActiveTag) setActiveView({ type: "today" });
+            if (isActiveTag) setActiveView({ type: "today" });
 
-          setIsDeleteTagOpen(false);
-        }}
-        onClose={() => setIsDeleteTagOpen(false)}
-        isLoading={isDeletingTag}
-        action={isDeletingTag ? "Deleting..." : "Delete"}
-      >
-        <p className="my-5 text-center">Delete the tag "{nav.title}"?</p>
+            setIsDeleteTagOpen(false);
+          }}
+          onClose={() => setIsDeleteTagOpen(false)}
+          isLoading={isDeletingTag}
+          action={isDeletingTag ? "Deleting..." : "Delete"}
+          descriptionId={"delete-tag-description"}
+        >
+          <p id="delete-tag-description" className="my-5 text-center">
+            Delete the tag "{nav.title}"?
+          </p>
 
-        {taskCount > 0 && (
-          <div className="text-xs text-red-600">
-            <p>
-              {taskCount} task{isPlural && "s"} use{!isPlural && "s"} this tag.
-            </p>
-            <p>
-              The tag will be removed from {!isPlural ? "this" : "these"} task
-              {isPlural && "s"}.
-            </p>
-          </div>
-        )}
-      </Modal>
+          {taskCount > 0 && (
+            <div role="alert" className="text-xs text-red-600">
+              <p>
+                {taskCount} task{isPlural && "s"} use{!isPlural && "s"} this
+                tag.
+              </p>
+              <p>
+                The tag will be removed from {!isPlural ? "this" : "these"} task
+                {isPlural && "s"}.
+              </p>
+            </div>
+          )}
+        </Modal>
+      )}
     </>
   );
 }

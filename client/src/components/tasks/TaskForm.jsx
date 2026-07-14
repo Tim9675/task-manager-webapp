@@ -10,7 +10,7 @@ import { useLists } from "../../contexts/ListsContext";
 import { useTags } from "../../contexts/TagsContext";
 import { useTasks } from "../../contexts/TasksContext";
 
-function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
+function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
   const {
     register,
     control,
@@ -141,11 +141,21 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen }) {
         </div>
       </div>
       {/* Tags */}
-      <TagSection availableTags={userTags} watch={watch} setValue={setValue} />
+      <TagSection
+        availableTags={userTags}
+        watch={watch}
+        setValue={setValue}
+        returnFocusRef={returnFocusRef}
+      />
       {/* Subtasks */}
       <SubtaskSection control={control} watch={watch} setValue={setValue} />
 
-      <ButtonBar onOpen={() => setIsDeleteModalOpen(true)} />
+      <ButtonBar
+        onOpen={() => {
+          setIsDeleteModalOpen(true);
+          returnFocusRef.current = document.activeElement;
+        }}
+      />
     </form>
   );
 }

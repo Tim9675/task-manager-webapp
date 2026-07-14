@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
 import Modal from "../modals/Modal";
 
 function NoteCard({ note, onEdit, onDelete, isDeletingNote }) {
   const [isDeleteNoteOpen, setIsDeleteNoteOpen] = useState(false);
+  const returnFocusRef = useRef(null);
   const noteTitle = note?.title ?? "Missing note title";
 
   const iconSize = 20;
@@ -21,10 +22,10 @@ function NoteCard({ note, onEdit, onDelete, isDeletingNote }) {
               {note.title}
             </h2>
 
-            <div className="invisible flex w-20 justify-evenly group-focus-within:visible group-hover:visible group-focus-visible:visible">
+            <div className="flex w-20 justify-evenly">
               <button
                 type="button"
-                className="flex aspect-square size-7.5 cursor-pointer items-center justify-center rounded text-[#7c7c7c] hover:text-blue-600"
+                className="flex aspect-square size-7.5 cursor-pointer items-center justify-center rounded text-[#7c7c7c] hover:text-blue-600 focus:text-blue-600"
                 onClick={onEdit}
                 aria-label={`Edit note "${note.title}"`}
               >
@@ -32,8 +33,11 @@ function NoteCard({ note, onEdit, onDelete, isDeletingNote }) {
               </button>
               <button
                 type="button"
-                className="flex aspect-square size-7.5 cursor-pointer items-center justify-center rounded text-[#7c7c7c] hover:text-red-600"
-                onClick={() => setIsDeleteNoteOpen(true)}
+                className="flex aspect-square size-7.5 cursor-pointer items-center justify-center rounded text-[#7c7c7c] hover:text-red-600 focus:text-red-600"
+                onClick={() => {
+                  setIsDeleteNoteOpen(true);
+                  returnFocusRef.current = document.activeElement;
+                }}
                 aria-label={`Delete note "${note.title}"`}
               >
                 <Trash2 size={iconSize} />
@@ -44,21 +48,24 @@ function NoteCard({ note, onEdit, onDelete, isDeletingNote }) {
           <pre className="text-wrap text-[#444444]">{note.content}</pre>
         </div>
       </article>
-      <Modal
-        isOpen={isDeleteNoteOpen}
-        header="Warning!"
-        onAction={async () => {
-          await onDelete();
-          setIsDeleteNoteOpen(false);
-        }}
-        onClose={() => setIsDeleteNoteOpen(false)}
-        isLoading={isDeletingNote}
-        action={isDeletingNote ? "Deleting..." : "Delete"}
-      >
-        <p className="my-5 text-center">
-          Delete the note titled '{noteTitle}'?
-        </p>
-      </Modal>
+      {isDeleteNoteOpen && (
+        <Modal
+          header="Warning!"
+          onAction={async () => {
+            await onDelete();
+            setIsDeleteNoteOpen(false);
+          }}
+          onClose={() => setIsDeleteNoteOpen(false)}
+          isLoading={isDeletingNote}
+          action={isDeletingNote ? "Deleting..." : "Delete"}
+          returnFocusRef={returnFocusRef}
+          descriptionId={"delete-note-description"}
+        >
+          <p id="delete-note-description" className="my-5 text-center">
+            Delete the note titled '{noteTitle}'?
+          </p>
+        </Modal>
+      )}
     </>
   );
 }

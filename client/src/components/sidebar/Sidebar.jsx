@@ -6,7 +6,7 @@ import {
   Menu,
   Notebook,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import SidebarSkeleton from "../skeletons/SidebarSkeleton";
 
@@ -28,6 +28,7 @@ function Sidebar() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAddListOpen, setIsAddListOpen] = useState(false);
   const [isAddTagOpen, setIsAddTagOpen] = useState(false);
+  const returnFocusRef = useRef(null);
 
   const { todayTaskCount, upcomingTaskCount, userTasksCount } = useTasks();
   const { userListsWithCounts, onCreateList, isLoadingLists } = useLists();
@@ -89,69 +90,86 @@ function Sidebar() {
               title="Lists"
               type={"lists"}
               navList={userListsWithCounts}
-              setIsAddListOpen={setIsAddListOpen}
+              onOpen={() => {
+                setIsAddListOpen(true);
+                returnFocusRef.current = document.activeElement;
+              }}
             />
             <SidebarSection
               title="Tags"
               type={"tags"}
               navList={userTags}
-              setIsAddTagOpen={setIsAddTagOpen}
+              onOpen={() => {
+                setIsAddTagOpen(true);
+                returnFocusRef.current = document.activeElement;
+              }}
             />
           </div>
 
           {/* Modals */}
-          <ListModal
-            isOpen={isAddListOpen}
-            mode="create"
-            onListSubmit={onCreateList}
-            onClose={() => setIsAddListOpen(false)}
-          />
+          {isAddListOpen && (
+            <ListModal
+              mode="create"
+              onListSubmit={onCreateList}
+              onClose={() => setIsAddListOpen(false)}
+              returnFocusRef={returnFocusRef}
+            />
+          )}
 
-          <TagModal
-            isOpen={isAddTagOpen}
-            mode="create"
-            onTagSubmit={onCreateTag}
-            onClose={() => setIsAddTagOpen(false)}
-          />
+          {isAddTagOpen && (
+            <TagModal
+              mode="create"
+              onTagSubmit={onCreateTag}
+              onClose={() => setIsAddTagOpen(false)}
+              returnFocusRef={returnFocusRef}
+            />
+          )}
 
-          <Modal
-            isOpen={isSettingsOpen}
-            header="Settings"
-            onAction={async () => {
-              // placeholder for future updateSettings function
-              setIsSettingsOpen(false);
-            }}
-            onClose={() => setIsSettingsOpen(false)}
-            isLoading={false}
-            action={"Save"}
-          >
-            {/* Toggle hide completed tasks */}
-            <div className="flex max-h-60 flex-col gap-1 overflow-y-auto">
-              <button
-                type="button"
-                onClick={() => setIsHideCompleted(!isHideCompleted)}
-                className="flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors hover:bg-neutral-50"
-              >
-                {/* Left Side */}
-                <p className="ms-3">Hide completed tasks</p>
-
-                {/* Right Side */}
-                <div
-                  className={`flex size-4 items-center justify-center rounded border text-xs ${
-                    isHideCompleted
-                      ? "border-neutral-700 bg-neutral-700 text-white"
-                      : "border-neutral-300"
-                  }`}
+          {isSettingsOpen && (
+            <Modal
+              header="Settings"
+              onAction={async () => {
+                // placeholder for future updateSettings function
+                setIsSettingsOpen(false);
+              }}
+              onClose={() => setIsSettingsOpen(false)}
+              isLoading={false}
+              action={"Save"}
+              returnFocusRef={returnFocusRef}
+            >
+              {/* Toggle hide completed tasks */}
+              <div className="flex max-h-60 flex-col gap-1 overflow-y-auto">
+                <button
+                  type="button"
+                  onClick={() => setIsHideCompleted(!isHideCompleted)}
+                  className="flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors hover:bg-neutral-50"
                 >
-                  {isHideCompleted && "✓"}
-                </div>
-              </button>
-            </div>
-          </Modal>
+                  {/* Left Side */}
+                  <p className="ms-3">Hide completed tasks</p>
+
+                  {/* Right Side */}
+                  <div
+                    className={`flex size-4 items-center justify-center rounded border text-xs ${
+                      isHideCompleted
+                        ? "border-neutral-700 bg-neutral-700 text-white"
+                        : "border-neutral-300"
+                    }`}
+                  >
+                    {isHideCompleted && "✓"}
+                  </div>
+                </button>
+              </div>
+            </Modal>
+          )}
 
           {/* Footer */}
           <footer className="md:h-20">
-            <SettingsButton onOpen={() => setIsSettingsOpen(true)} />
+            <SettingsButton
+              onOpen={() => {
+                setIsSettingsOpen(true);
+                returnFocusRef.current = document.activeElement;
+              }}
+            />
             <SignOutButton />
           </footer>
         </aside>

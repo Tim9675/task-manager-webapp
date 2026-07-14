@@ -4,9 +4,7 @@ import { useTags } from "../../contexts/TagsContext";
 import Modal from "../modals/Modal";
 import { onSubmitResult } from "../helpers/onSubmitResult";
 
-function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
-  if (!isOpen) return null;
-
+function TagModal({ mode, tag = {}, onTagSubmit, onClose, returnFocusRef }) {
   const isEdit = mode === "edit";
 
   const [tagTitle, setTagTitle] = useState(isEdit ? tag.title : "");
@@ -49,7 +47,6 @@ function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
 
   return (
     <Modal
-      isOpen={true}
       header={isEdit ? "Edit tag" : "Add new tag"}
       onAction={async () => {
         await submitTag();
@@ -58,6 +55,7 @@ function TagModal({ isOpen, mode, tag = {}, onTagSubmit, onClose }) {
       isLoading={isLoading}
       isEmpty={!tagTitle.trim()}
       action={buttonContent}
+      returnFocusRef={returnFocusRef}
     >
       {/* Toggle hide completed tasks */}
       <div className="flex h-20 w-full flex-col justify-evenly">

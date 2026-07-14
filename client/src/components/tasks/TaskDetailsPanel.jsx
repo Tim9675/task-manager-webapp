@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import TaskForm from "./TaskForm";
 import Modal from "../modals/Modal.jsx";
@@ -8,6 +8,7 @@ import { PANEL_ANIMATION_MS } from "../../helpers/styles.js";
 
 function TaskDetailsPanel() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const returnFocusRef = useRef(null);
 
   const {
     selectedTask,
@@ -36,6 +37,7 @@ function TaskDetailsPanel() {
           <TaskForm
             selectedTask={selectedTask}
             setIsDeleteModalOpen={setIsDeleteModalOpen}
+            returnFocusRef={returnFocusRef}
           />
         ) : (
           <div className="flex flex-1 items-center justify-center text-sm text-neutral-500">
@@ -43,20 +45,25 @@ function TaskDetailsPanel() {
           </div>
         )}
 
-        <Modal
-          isOpen={isDeleteModalOpen}
-          header="Warning!"
-          onAction={async () => {
-            closeTask();
-            if (selectedTask) await onDeleteTask(selectedTask._id);
-            setIsDeleteModalOpen(false);
-          }}
-          onClose={() => setIsDeleteModalOpen(false)}
-          isLoading={isDeletingTask}
-          action={isDeletingTask ? "Deleting..." : "Delete"}
-        >
-          <p className="my-5 text-center">Delete this task?</p>
-        </Modal>
+        {isDeleteModalOpen && (
+          <Modal
+            header="Warning!"
+            onAction={async () => {
+              closeTask();
+              if (selectedTask) await onDeleteTask(selectedTask._id);
+              setIsDeleteModalOpen(false);
+            }}
+            onClose={() => setIsDeleteModalOpen(false)}
+            isLoading={isDeletingTask}
+            action={isDeletingTask ? "Deleting..." : "Delete"}
+            returnFocusRef={returnFocusRef}
+            descriptionId={"delete-task-description"}
+          >
+            <p id="delete-task-description" className="my-5 text-center">
+              Delete this task?
+            </p>
+          </Modal>
+        )}
       </aside>
     </div>
   );

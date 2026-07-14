@@ -4,9 +4,7 @@ import { useLists } from "../../contexts/ListsContext";
 import Modal from "../modals/Modal";
 import { onSubmitResult } from "../helpers/onSubmitResult";
 
-function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
-  if (!isOpen) return null;
-
+function ListModal({ mode, list = {}, onListSubmit, onClose, returnFocusRef }) {
   const isEdit = mode === "edit";
 
   const [listTitle, setListTitle] = useState(isEdit ? list.title : "");
@@ -49,7 +47,6 @@ function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
 
   return (
     <Modal
-      isOpen={true}
       header={isEdit ? "Edit list" : "Add new list"}
       onAction={async () => {
         await submitList();
@@ -58,6 +55,7 @@ function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
       isLoading={isLoading}
       isEmpty={!listTitle.trim()}
       action={buttonContent}
+      returnFocusRef={returnFocusRef}
     >
       {/* Toggle hide completed tasks */}
       <div className="flex h-20 w-full flex-col justify-evenly">
@@ -83,6 +81,7 @@ function ListModal({ isOpen, mode, list = {}, onListSubmit, onClose }) {
             className="h-full w-55 rounded-md px-2.5"
           />
         </div>
+        {/* REMINDER: Do radio group accessibility for ListModal and TagModal as well */}
         <div className="mt-2.5 flex h-5 w-full items-center justify-evenly">
           {availableListColors.map((color) => (
             <button
