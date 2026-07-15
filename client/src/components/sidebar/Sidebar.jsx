@@ -17,6 +17,7 @@ function Sidebar() {
   const [isAddListOpen, setIsAddListOpen] = useState(false);
   const [isAddTagOpen, setIsAddTagOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSignOutOpen, setIsSignOutOpen] = useState(false);
 
   const returnFocusRef = useRef(null);
 
@@ -85,18 +86,25 @@ function Sidebar() {
           onSettingsClose={() => setIsSettingsOpen(false)}
           isHideCompleted={isHideCompleted}
           setIsHideCompleted={setIsHideCompleted}
+          isSignOutOpen={isSignOutOpen}
+          onSignOutClose={() => setIsSignOutOpen(false)}
           returnFocusRef={returnFocusRef}
         />
 
         {/* Footer */}
-        <footer className="md:h-20">
+        <footer className="flex flex-col gap-1 pt-2 md:h-20">
           <SettingsButton
             onOpen={() => {
               setIsSettingsOpen(true);
               returnFocusRef.current = document.activeElement;
             }}
           />
-          <SignOutButton />
+          <SignOutButton
+            onOpen={() => {
+              setIsSignOutOpen(true);
+              returnFocusRef.current = document.activeElement;
+            }}
+          />
         </footer>
       </aside>
     </div>

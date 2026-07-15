@@ -1,3 +1,4 @@
+import { useAuth } from "../../contexts/AuthContext";
 import Modal from "../modals/Modal";
 import ListModal from "./ListModal";
 import TagModal from "./TagModal";
@@ -13,9 +14,13 @@ function SidebarModals({
   onSettingsClose,
   isHideCompleted,
   setIsHideCompleted,
+  isSignOutOpen,
+  onSignOutClose,
   returnFocusRef,
 }) {
-  const settings = [
+  const { signOut } = useAuth();
+
+  const settingItems = [
     {
       id: "hideCompleted",
       label: "Hide completed tasks",
@@ -67,7 +72,7 @@ function SidebarModals({
           returnFocusRef={returnFocusRef}
         >
           <ul className="max-h-60 overflow-y-auto">
-            {settings.map((setting) => (
+            {settingItems.map((setting) => (
               <li key={setting.id} className="flex flex-col gap-1">
                 <button
                   type="button"
@@ -93,6 +98,19 @@ function SidebarModals({
               </li>
             ))}
           </ul>
+        </Modal>
+      )}
+
+      {isSignOutOpen && (
+        <Modal
+          header={"Sign out"}
+          onAction={signOut}
+          onClose={onSignOutClose}
+          isLoading={false}
+          action={"Sign out"}
+          returnFocusRef={returnFocusRef}
+        >
+          <p className="my-5 text-center">You're about to be signed out.</p>
         </Modal>
       )}
     </>

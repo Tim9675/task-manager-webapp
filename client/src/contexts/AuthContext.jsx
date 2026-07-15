@@ -8,6 +8,11 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  function signOut() {
+    localStorage.removeItem("token");
+    setUser(null);
+  }
+
   useEffect(() => {
     async function initializeAuth() {
       try {
@@ -35,6 +40,7 @@ export function AuthProvider({ children }) {
         user,
         setUser,
         loading,
+        signOut,
       }}
     >
       {children}
