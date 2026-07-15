@@ -8,7 +8,7 @@ function AddList({ onOpen }) {
       className="flex w-full cursor-pointer items-center rounded-md px-3 hover:bg-[#ebebeb] md:h-9"
     >
       <Plus color={"#7c7c7c"} size={16} strokeWidth={4} />
-      <span className="ms-3.5">Add New List</span>
+      <span className="ms-3.5 text-[#444444]">Add New List</span>
     </button>
   );
 }

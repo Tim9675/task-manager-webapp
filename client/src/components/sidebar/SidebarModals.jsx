@@ -15,6 +15,25 @@ function SidebarModals({
   setIsHideCompleted,
   returnFocusRef,
 }) {
+  const settings = [
+    {
+      id: "hideCompleted",
+      label: "Hide completed tasks",
+      checked: isHideCompleted,
+    },
+  ];
+
+  function toggleSetting(id) {
+    switch (id) {
+      case "hideCompleted":
+        setIsHideCompleted((prev) => !prev);
+        break;
+
+      default:
+        break;
+    }
+  }
+
   return (
     <>
       {isAddListOpen && (
@@ -38,38 +57,42 @@ function SidebarModals({
       {isSettingsOpen && (
         <Modal
           header="Settings"
-          onAction={async () => {
-            // placeholder for future updateSettings function
-            setIsSettingsOpen(false);
+          onAction={() => {
+            // placeholder for future updateSettings function; bring back async when applied
+            onSettingsClose();
           }}
           onClose={onSettingsClose}
           isLoading={false}
           action={"Save"}
           returnFocusRef={returnFocusRef}
         >
-          {/* Toggle hide completed tasks */}
-          <div className="flex max-h-60 flex-col gap-1 overflow-y-auto">
-            <button
-              type="button"
-              onClick={() => setIsHideCompleted(!isHideCompleted)}
-              className="flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors hover:bg-neutral-50"
-              aria-label="Toggle hide completed tasks"
-            >
-              {/* Left Side */}
-              <p className="ms-3">Hide completed tasks</p>
+          <ul className="max-h-60 overflow-y-auto">
+            {settings.map((setting) => (
+              <li key={setting.id} className="flex flex-col gap-1">
+                <button
+                  type="button"
+                  onClick={() => toggleSetting(setting.id)}
+                  className="flex cursor-pointer items-center justify-between rounded-md px-3 py-2 text-sm transition-colors hover:bg-neutral-50"
+                  aria-pressed={setting.checked}
+                >
+                  {/* Left Side */}
+                  <p className="ms-3">{setting.label}</p>
 
-              {/* Right Side */}
-              <div
-                className={`flex size-4 items-center justify-center rounded border text-xs ${
-                  isHideCompleted
-                    ? "border-neutral-700 bg-neutral-700 text-white"
-                    : "border-neutral-300"
-                }`}
-              >
-                {isHideCompleted && "✓"}
-              </div>
-            </button>
-          </div>
+                  {/* Right Side */}
+                  <div
+                    className={`flex size-4 items-center justify-center rounded border text-xs ${
+                      setting.checked
+                        ? "border-neutral-700 bg-neutral-700 text-white"
+                        : "border-neutral-300"
+                    }`}
+                    aria-hidden="true"
+                  >
+                    {setting.checked && "✓"}
+                  </div>
+                </button>
+              </li>
+            ))}
+          </ul>
         </Modal>
       )}
     </>
