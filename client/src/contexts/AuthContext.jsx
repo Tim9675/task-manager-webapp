@@ -1,12 +1,27 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { getCurrentUser } from "../api/authApi";
+import { login, register, getCurrentUser } from "../api/authApi";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  function completeAuthentication({ token, user }) {
+    localStorage.setItem("token", token);
+    setUser(user);
+  }
+
+  async function signIn(credentials) {
+    const response = await login(credentials);
+    completeAuthentication(response);
+  }
+
+  async function signUp(credentials) {
+    const response = await register(credentials);
+    completeAuthentication(response);
+  }
 
   function signOut() {
     localStorage.removeItem("token");
@@ -22,9 +37,9 @@ export function AuthProvider({ children }) {
           return;
         }
         const response = await getCurrentUser();
-        setUser(response.data);
+        setUser(response.user);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         localStorage.removeItem("token"); // Prevents broken sessions
         setUser(null);
       } finally {
@@ -38,8 +53,9 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
-        setUser,
         loading,
+        signIn,
+        signUp,
         signOut,
       }}
     >

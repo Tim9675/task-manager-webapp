@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeClosed } from "lucide-react";
 
-import { login } from "../api/authApi.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import loginImage from "../assets/images/login-img.png";
 
@@ -14,7 +13,7 @@ function LoginPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const navigate = useNavigate();
-  const { user, setUser } = useAuth();
+  const { user, signIn } = useAuth();
 
   useEffect(() => {
     if (user) navigate("/dashboard");
@@ -25,12 +24,10 @@ function LoginPage() {
     try {
       setLoading(true);
       setError("");
-      const response = await login({
+      await signIn({
         email,
         password,
       });
-      localStorage.setItem("token", response.token);
-      setUser(response.user);
     } catch (error) {
       setError(error.response?.data?.message || error.message);
     } finally {
