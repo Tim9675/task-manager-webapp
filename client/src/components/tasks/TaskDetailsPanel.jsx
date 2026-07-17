@@ -1,10 +1,10 @@
-import { X } from "lucide-react";
 import { useState, useRef } from "react";
+import { X } from "lucide-react";
 
-import TaskForm from "./TaskForm";
-import Modal from "../modals/Modal.jsx";
 import { useTasks } from "../../contexts/TasksContext";
 import { PANEL_ANIMATION_MS } from "../../helpers/styles.js";
+import TaskForm from "./TaskForm";
+import Modal from "../modals/Modal.jsx";
 
 function TaskDetailsPanel() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -29,10 +29,16 @@ function TaskDetailsPanel() {
       >
         <header className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-neutral-900">Task:</h2>
-          <button onClick={closeTask} className="cursor-pointer">
+          <button
+            type="button"
+            onClick={closeTask}
+            className="cursor-pointer"
+            aria-label="Close task details panel"
+          >
             <X color="#7c7c7c" size={20} strokeWidth={4} />
           </button>
         </header>
+
         {selectedTask ? (
           <TaskForm
             selectedTask={selectedTask}
@@ -40,7 +46,7 @@ function TaskDetailsPanel() {
             returnFocusRef={returnFocusRef}
           />
         ) : (
-          <div className="flex flex-1 items-center justify-center text-sm text-neutral-500">
+          <div className="flex flex-1 items-center justify-center text-sm text-neutral-600">
             Select a task to view details.
           </div>
         )}
@@ -56,10 +62,14 @@ function TaskDetailsPanel() {
             onClose={() => setIsDeleteModalOpen(false)}
             isLoading={isDeletingTask}
             action={isDeletingTask ? "Deleting..." : "Delete"}
+            descriptionId="delete-task-description"
             returnFocusRef={returnFocusRef}
-            descriptionId={"delete-task-description"}
           >
-            <p id="delete-task-description" className="my-5 text-center">
+            <p
+              role="alert"
+              id="delete-task-description"
+              className="my-5 text-center"
+            >
               Delete this task?
             </p>
           </Modal>

@@ -103,14 +103,17 @@ function SidebarModals({
 
       {isSignOutOpen && (
         <Modal
-          header={"Sign out"}
+          header="Sign out"
           onAction={signOut}
           onClose={onSignOutClose}
           isLoading={false}
-          action={"Sign out"}
+          action="Sign out"
+          descriptionId="signout-description"
           returnFocusRef={returnFocusRef}
         >
-          <p className="my-5 text-center">You're about to be signed out.</p>
+          <p role="alert" id="signout-description" className="my-5 text-center">
+            You're about to be signed out.
+          </p>
         </Modal>
       )}
     </>

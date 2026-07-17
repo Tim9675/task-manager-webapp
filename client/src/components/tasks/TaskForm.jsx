@@ -3,22 +3,22 @@ import { useForm, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import ButtonBar from "./ButtonBar";
-import SubtaskSection from "./SubtaskSection";
-import TagSection from "./TagSection";
+import { useTasks } from "../../contexts/TasksContext";
 import { useLists } from "../../contexts/ListsContext";
 import { useTags } from "../../contexts/TagsContext";
-import { useTasks } from "../../contexts/TasksContext";
+import TagSection from "./TagSection";
+import SubtaskSection from "./SubtaskSection";
+import ButtonBar from "./ButtonBar";
 
 function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
   const {
     register,
-    control,
+    formState: { dirtyFields },
+    watch,
     handleSubmit,
     reset,
-    watch,
     setValue,
-    formState: { dirtyFields },
+    control,
   } = useForm({
     defaultValues: {
       title: "",
@@ -37,14 +37,7 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
   useEffect(() => {
     if (!selectedTask) return;
 
-    function normalizeDate(date) {
-      if (!date) return null;
-
-      const normalizedDate = new Date(date);
-      normalizedDate.setHours(23, 59, 59, 999);
-      return normalizedDate;
-    }
-
+    // Register virtual field managed through TagSection.
     register("tagIds");
 
     reset({
@@ -57,7 +50,15 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
     });
   }, [selectedTask, reset, register]);
 
-  function onSubmit(data) {
+  function normalizeDate(date) {
+    if (!date) return null;
+
+    const normalizedDate = new Date(date);
+    normalizedDate.setHours(23, 59, 59, 999);
+    return normalizedDate;
+  }
+
+  function handleSubmitForm(data) {
     const changedValues = {};
 
     for (const key of Object.keys(dirtyFields)) {
@@ -74,17 +75,25 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
         if (e.key === "Enter" && e.target.tagName !== "TEXTAREA")
           e.preventDefault();
       }}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleSubmitForm)}
     >
       {/* Title */}
+      <label htmlFor="task-title" className="sr-only">
+        Task title
+      </label>
       <input
+        id="task-title"
         {...register("title", { required: true })}
         type="text"
         className="my-3 w-full rounded-md border border-[#ebebeb] px-2 md:h-10"
         placeholder="Title"
       />
       {/* Description */}
+      <label htmlFor="task-description" className="sr-only">
+        Task description
+      </label>
       <textarea
+        id="task-description"
         {...register("description")}
         className="w-full resize-none rounded-md border border-[#ebebeb] p-2 md:h-29"
         placeholder="Description"
@@ -122,18 +131,7 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
               <DatePicker
                 id="dueDate"
                 selected={field.value}
-                onChange={(date) => {
-                  if (!date) {
-                    field.onChange(null);
-                    return;
-                  }
-
-                  const normalizedDate = new Date(date);
-
-                  normalizedDate.setHours(23, 59, 59, 999);
-
-                  field.onChange(normalizedDate);
-                }}
+                onChange={(date) => field.onChange(normalizeDate(date))}
                 className="h-full w-full rounded-md px-2 outline-none"
               />
             )}
@@ -148,7 +146,7 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
         returnFocusRef={returnFocusRef}
       />
       {/* Subtasks */}
-      <SubtaskSection control={control} watch={watch} setValue={setValue} />
+      <SubtaskSection setValue={setValue} control={control} />
 
       <ButtonBar
         onOpen={() => {
