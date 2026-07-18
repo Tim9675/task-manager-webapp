@@ -15,9 +15,14 @@ function useTagDerivedData({ userTags, userTasks }) {
     return userTagsMap[id]?.title;
   }
 
+  function getTagById(id) {
+    return userTagsMap[id];
+  }
+
   return {
     getCachedTasksByTag,
     getTagTitle,
+    getTagById,
   };
 }
 
