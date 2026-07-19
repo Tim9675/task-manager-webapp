@@ -1,6 +1,10 @@
 import Skeleton from "react-loading-skeleton";
 
-function TaskListSkeleton({ header }) {
+import { useDisplay } from "../../contexts/DisplayContext";
+
+function TaskListSkeleton() {
+  const { header } = useDisplay();
+
   return (
     <div className="flex h-full grow flex-col py-5">
       <header className="mb-5 flex w-full px-5">

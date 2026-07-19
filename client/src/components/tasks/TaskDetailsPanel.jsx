@@ -1,22 +1,11 @@
-import { useState, useRef } from "react";
 import { X } from "lucide-react";
 
 import { useTasks } from "../../contexts/TasksContext";
 import { PANEL_ANIMATION_MS } from "../../helpers/styles.js";
 import TaskForm from "./TaskForm";
-import Modal from "../modals/Modal.jsx";
 
 function TaskDetailsPanel() {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const returnFocusRef = useRef(null);
-
-  const {
-    selectedTask,
-    onDeleteTask,
-    isDeletingTask,
-    isTaskDetailsOpen,
-    closeTask,
-  } = useTasks();
+  const { selectedTask, isTaskDetailsOpen, closeTask } = useTasks();
 
   return (
     <div
@@ -40,39 +29,11 @@ function TaskDetailsPanel() {
         </header>
 
         {selectedTask ? (
-          <TaskForm
-            selectedTask={selectedTask}
-            setIsDeleteModalOpen={setIsDeleteModalOpen}
-            returnFocusRef={returnFocusRef}
-          />
+          <TaskForm selectedTask={selectedTask} />
         ) : (
           <div className="flex flex-1 items-center justify-center text-sm text-neutral-600">
             Select a task to view details.
           </div>
-        )}
-
-        {isDeleteModalOpen && (
-          <Modal
-            header="Warning!"
-            onAction={async () => {
-              closeTask();
-              if (selectedTask) await onDeleteTask(selectedTask._id);
-              setIsDeleteModalOpen(false);
-            }}
-            onClose={() => setIsDeleteModalOpen(false)}
-            isLoading={isDeletingTask}
-            action={isDeletingTask ? "Deleting..." : "Delete"}
-            descriptionId="delete-task-description"
-            returnFocusRef={returnFocusRef}
-          >
-            <p
-              role="alert"
-              id="delete-task-description"
-              className="my-5 text-center"
-            >
-              Delete this task?
-            </p>
-          </Modal>
         )}
       </aside>
     </div>

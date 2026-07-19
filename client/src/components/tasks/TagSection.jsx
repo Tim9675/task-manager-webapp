@@ -1,19 +1,22 @@
 import { useState } from "react";
 
+import { useTags } from "../../contexts/TagsContext";
 import TagCard from "./TagCard";
 import OpenTagSelectorButton from "./OpenTagSelectorButton";
 import Modal from "../modals/Modal";
 
-function TagSection({ availableTags, watch, setValue, returnFocusRef }) {
+function TagSection({ watch, setValue, returnFocusRef }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [draftTagIds, setDraftTagIds] = useState([]);
 
+  const { userTags } = useTags();
+
   const committedTagIds = watch("tagIds") || [];
-  const committedTags = availableTags.filter((tag) =>
+  const committedTags = userTags.filter((tag) =>
     committedTagIds.includes(tag._id),
   );
 
-  const userHasNoTags = availableTags.length === 0;
+  const userHasNoTags = userTags.length === 0;
 
   function toggleTag(tagId) {
     setDraftTagIds((prev) =>
@@ -64,7 +67,7 @@ function TagSection({ availableTags, watch, setValue, returnFocusRef }) {
               </p>
             ) : (
               <ul className="flex max-h-60 flex-col gap-1 overflow-y-auto">
-                {availableTags.map((tag) => {
+                {userTags.map((tag) => {
                   const isSelected = draftTagIds.includes(tag._id);
 
                   return (

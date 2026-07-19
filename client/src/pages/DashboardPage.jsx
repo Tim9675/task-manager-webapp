@@ -8,7 +8,7 @@ import TaskList from "../components/tasks/TaskList";
 
 function DashboardPage() {
   const { isLoadingTasks } = useTasks();
-  const { activeView, header, isSearching } = useDisplay();
+  const { activeView, isSearching } = useDisplay();
 
   return (
     <DashboardLayout>
@@ -17,9 +17,9 @@ function DashboardPage() {
       ) : activeView.type === "upcoming" && !isSearching ? (
         <Upcoming />
       ) : isLoadingTasks ? (
-        <TaskListSkeleton header={header} />
+        <TaskListSkeleton />
       ) : (
-        <TaskList header={header} />
+        <TaskList />
       )}
     </DashboardLayout>
   );

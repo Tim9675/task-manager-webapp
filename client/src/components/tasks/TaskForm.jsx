@@ -1,16 +1,19 @@
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { useTasks } from "../../contexts/TasksContext";
 import { useLists } from "../../contexts/ListsContext";
-import { useTags } from "../../contexts/TagsContext";
 import TagSection from "./TagSection";
 import SubtaskSection from "./SubtaskSection";
 import ButtonBar from "./ButtonBar";
+import Modal from "../modals/Modal.jsx";
 
-function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
+function TaskForm({ selectedTask }) {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const returnFocusRef = useRef(null);
+
   const {
     register,
     formState: { dirtyFields },
@@ -30,9 +33,8 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
     },
   });
 
-  const { onUpdateTask } = useTasks();
+  const { onUpdateTask, onDeleteTask, isDeletingTask } = useTasks();
   const { userLists } = useLists();
-  const { userTags } = useTags();
 
   useEffect(() => {
     if (!selectedTask) return;
@@ -69,92 +71,117 @@ function TaskForm({ selectedTask, setIsDeleteModalOpen, returnFocusRef }) {
   }
 
   return (
-    <form
-      className="flex w-full flex-col"
-      onKeyDown={(e) => {
-        if (e.key === "Enter" && e.target.tagName !== "TEXTAREA")
-          e.preventDefault();
-      }}
-      onSubmit={handleSubmit(handleSubmitForm)}
-    >
-      {/* Title */}
-      <label htmlFor="task-title" className="sr-only">
-        Task title
-      </label>
-      <input
-        id="task-title"
-        {...register("title", { required: true })}
-        type="text"
-        className="my-3 w-full rounded-md border border-[#ebebeb] px-2 md:h-10"
-        placeholder="Title"
-      />
-      {/* Description */}
-      <label htmlFor="task-description" className="sr-only">
-        Task description
-      </label>
-      <textarea
-        id="task-description"
-        {...register("description")}
-        className="w-full resize-none rounded-md border border-[#ebebeb] p-2 md:h-29"
-        placeholder="Description"
-      />
-      {/* List */}
-      <div className="my-1 flex h-9 w-50 items-center justify-between">
-        <label htmlFor="list" className="text-sm">
-          List
-        </label>
-        <select
-          {...register("listId", {
-            setValueAs: (value) => (value === "" ? null : value),
-          })}
-          id="list"
-          className="h-7 w-25 rounded-md border border-[#ebebeb] px-2 text-sm"
-        >
-          <option value="">--unlisted--</option>
-          {userLists.map((list) => (
-            <option key={list._id} value={list._id}>
-              {list.title}
-            </option>
-          ))}
-        </select>
-      </div>
-      {/* Due Date */}
-      <div className="my-1 flex h-9 w-49 items-center justify-between">
-        <label htmlFor="dueDate" className="text-sm">
-          Due Date
-        </label>
-        <div className="h-7 w-24 rounded-md border border-[#ebebeb] text-sm">
-          <Controller
-            control={control}
-            name="dueDate"
-            render={({ field }) => (
-              <DatePicker
-                id="dueDate"
-                selected={field.value}
-                onChange={(date) => field.onChange(normalizeDate(date))}
-                className="h-full w-full rounded-md px-2 outline-none"
-              />
-            )}
-          />
-        </div>
-      </div>
-      {/* Tags */}
-      <TagSection
-        availableTags={userTags}
-        watch={watch}
-        setValue={setValue}
-        returnFocusRef={returnFocusRef}
-      />
-      {/* Subtasks */}
-      <SubtaskSection setValue={setValue} control={control} />
-
-      <ButtonBar
-        onOpen={() => {
-          setIsDeleteModalOpen(true);
-          returnFocusRef.current = document.activeElement;
+    <>
+      <form
+        className="flex w-full flex-col"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && e.target.tagName !== "TEXTAREA")
+            e.preventDefault();
         }}
-      />
-    </form>
+        onSubmit={handleSubmit(handleSubmitForm)}
+      >
+        {/* Title */}
+        <label htmlFor="task-title" className="sr-only">
+          Task title
+        </label>
+        <input
+          id="task-title"
+          {...register("title", { required: true })}
+          type="text"
+          className="my-3 w-full rounded-md border border-[#ebebeb] px-2 md:h-10"
+          placeholder="Title"
+        />
+        {/* Description */}
+        <label htmlFor="task-description" className="sr-only">
+          Task description
+        </label>
+        <textarea
+          id="task-description"
+          {...register("description")}
+          className="w-full resize-none rounded-md border border-[#ebebeb] p-2 md:h-29"
+          placeholder="Description"
+        />
+        {/* List */}
+        <div className="my-1 flex h-9 w-50 items-center justify-between">
+          <label htmlFor="list" className="text-sm">
+            List
+          </label>
+          <select
+            {...register("listId", {
+              setValueAs: (value) => (value === "" ? null : value),
+            })}
+            id="list"
+            className="h-7 w-25 rounded-md border border-[#ebebeb] px-2 text-sm"
+          >
+            <option value="">--unlisted--</option>
+            {userLists.map((list) => (
+              <option key={list._id} value={list._id}>
+                {list.title}
+              </option>
+            ))}
+          </select>
+        </div>
+        {/* Due Date */}
+        <div className="my-1 flex h-9 w-49 items-center justify-between">
+          <label htmlFor="dueDate" className="text-sm">
+            Due Date
+          </label>
+          <div className="h-7 w-24 rounded-md border border-[#ebebeb] text-sm">
+            <Controller
+              control={control}
+              name="dueDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="dueDate"
+                  selected={field.value}
+                  onChange={(date) => field.onChange(normalizeDate(date))}
+                  className="h-full w-full rounded-md px-2 outline-none"
+                />
+              )}
+            />
+          </div>
+        </div>
+        {/* Tags */}
+        <TagSection
+          watch={watch}
+          setValue={setValue}
+          returnFocusRef={returnFocusRef}
+        />
+        {/* Subtasks */}
+        <SubtaskSection setValue={setValue} control={control} />
+
+        <ButtonBar
+          onOpen={() => {
+            setIsDeleteModalOpen(true);
+            returnFocusRef.current = document.activeElement;
+          }}
+        />
+      </form>
+
+      {isDeleteModalOpen && (
+        <Modal
+          header="Warning!"
+          onAction={async () => {
+            closeTask();
+            if (selectedTask) await onDeleteTask(selectedTask._id);
+            setIsDeleteModalOpen(false);
+          }}
+          onClose={() => setIsDeleteModalOpen(false)}
+          isLoading={isDeletingTask}
+          action={isDeletingTask ? "Deleting..." : "Delete"}
+          descriptionId="delete-task-description"
+          returnFocusRef={returnFocusRef}
+        >
+          <p
+            role="alert"
+            id="delete-task-description"
+            className="my-5 text-center"
+          >
+            Delete this task?
+          </p>
+        </Modal>
+      )}
+    </>
   );
 }
 

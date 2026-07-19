@@ -6,15 +6,9 @@ import AddNoteButton from "./AddNoteButton";
 import NoteInput from "./NoteInput";
 
 function StickyWall() {
-  const {
-    userNotes,
-    onCreateNote,
-    onUpdateNote,
-    onDeleteNote,
-    isDeletingNote,
-  } = useNotes();
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [editNoteId, setEditNoteId] = useState(null);
+  const { userNotes, onCreateNote, onUpdateNote } = useNotes();
 
   function renderNotes() {
     return userNotes.map((note) => {
@@ -36,8 +30,6 @@ function StickyWall() {
             setEditNoteId(note._id);
             setIsAddingNote(false);
           }}
-          onDelete={() => onDeleteNote(note._id)}
-          isDeletingNote={isDeletingNote}
         />
       );
     });

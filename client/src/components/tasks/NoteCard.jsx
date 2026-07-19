@@ -1,11 +1,14 @@
 import { useState, useRef } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
+import { useNotes } from "../../contexts/NotesContext";
 import Modal from "../modals/Modal";
 
-function NoteCard({ note, onEdit, onDelete, isDeletingNote }) {
+function NoteCard({ note, onEdit }) {
   const [isDeleteNoteOpen, setIsDeleteNoteOpen] = useState(false);
   const returnFocusRef = useRef(null);
+
+  const { onDeleteNote, isDeletingNote } = useNotes();
   const noteTitle = note?.title ?? "Missing note title";
 
   const iconSize = 20;
@@ -52,7 +55,7 @@ function NoteCard({ note, onEdit, onDelete, isDeletingNote }) {
         <Modal
           header="Warning!"
           onAction={async () => {
-            await onDelete();
+            await onDeleteNote(note._id);
             setIsDeleteNoteOpen(false);
           }}
           onClose={() => setIsDeleteNoteOpen(false)}

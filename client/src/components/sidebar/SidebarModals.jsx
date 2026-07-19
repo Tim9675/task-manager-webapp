@@ -1,24 +1,26 @@
 import { useAuth } from "../../contexts/AuthContext";
+import { useLists } from "../../contexts/ListsContext";
+import { useTags } from "../../contexts/TagsContext";
+import { useDisplay } from "../../contexts/DisplayContext";
 import Modal from "../modals/Modal";
 import ListModal from "./ListModal";
 import TagModal from "./TagModal";
 
 function SidebarModals({
   isAddListOpen,
-  onCreateList,
   onAddListClose,
   isAddTagOpen,
-  onCreateTag,
   onAddTagClose,
   isSettingsOpen,
   onSettingsClose,
-  isHideCompleted,
-  setIsHideCompleted,
   isSignOutOpen,
   onSignOutClose,
   returnFocusRef,
 }) {
   const { signOut } = useAuth();
+  const { onCreateList } = useLists();
+  const { onCreateTag } = useTags();
+  const { isHideCompleted, setIsHideCompleted } = useDisplay();
 
   const settingItems = [
     {

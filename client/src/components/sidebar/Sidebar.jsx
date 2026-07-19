@@ -6,10 +6,8 @@ import { useTags } from "../../contexts/TagsContext";
 import { useDisplay } from "../../contexts/DisplayContext";
 import SidebarSkeleton from "../skeletons/SidebarSkeleton";
 import SearchBar from "./SearchBar";
-
-import SidebarBody from "./SidebarBody";
+import SidebarSection from "./SidebarSection";
 import SidebarModals from "./SidebarModals";
-
 import SettingsButton from "./SettingsButton";
 import SignOutButton from "./SignOutButton";
 
@@ -21,14 +19,9 @@ function Sidebar() {
 
   const returnFocusRef = useRef(null);
 
-  const { userListsWithCounts, onCreateList, isLoadingLists } = useLists();
-  const { userTags, onCreateTag, isLoadingTags } = useTags();
-  const {
-    isSidebarOpen,
-    setIsSidebarOpen,
-    isHideCompleted,
-    setIsHideCompleted,
-  } = useDisplay();
+  const { isLoadingLists } = useLists();
+  const { isLoadingTags } = useTags();
+  const { isSidebarOpen, setIsSidebarOpen } = useDisplay();
 
   return isLoadingLists || isLoadingTags ? (
     <SidebarSkeleton />
@@ -61,31 +54,34 @@ function Sidebar() {
         <SearchBar />
 
         {/* Scrollable Content */}
-        <SidebarBody
-          userListsWithCounts={userListsWithCounts}
-          userTags={userTags}
-          onAddListOpen={() => {
-            setIsAddListOpen(true);
-            returnFocusRef.current = document.activeElement;
-          }}
-          onAddTagOpen={() => {
-            setIsAddTagOpen(true);
-            returnFocusRef.current = document.activeElement;
-          }}
-        />
+        <section className="flex-1 overflow-y-auto">
+          <SidebarSection title="Tasks" type={"tasks"} />
+          <SidebarSection
+            title="Lists"
+            type={"lists"}
+            onOpen={() => {
+              setIsAddListOpen(true);
+              returnFocusRef.current = document.activeElement;
+            }}
+          />
+          <SidebarSection
+            title="Tags"
+            type={"tags"}
+            onOpen={() => {
+              setIsAddTagOpen(true);
+              returnFocusRef.current = document.activeElement;
+            }}
+          />
+        </section>
 
         {/* Modals */}
         <SidebarModals
           isAddListOpen={isAddListOpen}
-          onCreateList={onCreateList}
           onAddListClose={() => setIsAddListOpen(false)}
           isAddTagOpen={isAddTagOpen}
-          onCreateTag={onCreateTag}
           onAddTagClose={() => setIsAddTagOpen(false)}
           isSettingsOpen={isSettingsOpen}
           onSettingsClose={() => setIsSettingsOpen(false)}
-          isHideCompleted={isHideCompleted}
-          setIsHideCompleted={setIsHideCompleted}
           isSignOutOpen={isSignOutOpen}
           onSignOutClose={() => setIsSignOutOpen(false)}
           returnFocusRef={returnFocusRef}

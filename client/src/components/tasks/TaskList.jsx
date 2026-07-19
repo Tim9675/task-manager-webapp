@@ -12,13 +12,15 @@ import TaskListActions from "./TaskListActions";
 const iconSize = 28;
 const iconWidth = 2;
 
-function TaskList({ header }) {
+function TaskList() {
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const returnFocusRef = useRef(null);
+
   const { isSelectedTask, openTask, closeTask } = useTasks();
   const { getListById } = useLists();
   const { getTagById } = useTags();
-  const { activeView, isSearching, visibleTasks: tasks } = useDisplay();
+  const { header, activeView, isSearching, visibleTasks: tasks } = useDisplay();
 
   const remainingTasksCounter = useMemo(
     () => tasks.filter((task) => !task.checked).length,
@@ -30,7 +32,6 @@ function TaskList({ header }) {
     itemType === "list"
       ? getListById(activeView.id)
       : getTagById(activeView.id);
-  const returnFocusRef = useRef(null);
 
   return (
     <>
