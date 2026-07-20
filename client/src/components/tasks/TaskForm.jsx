@@ -8,7 +8,7 @@ import { useLists } from "../../contexts/ListsContext";
 import TagSection from "./TagSection";
 import SubtaskSection from "./SubtaskSection";
 import ButtonBar from "./ButtonBar";
-import Modal from "../modals/Modal.jsx";
+import DeleteItemModal from "../modals/DeleteItemModal";
 
 function TaskForm({ selectedTask }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -33,7 +33,7 @@ function TaskForm({ selectedTask }) {
     },
   });
 
-  const { onUpdateTask, onDeleteTask, isDeletingTask } = useTasks();
+  const { onUpdateTask, onDeleteTask, isDeletingTask, closeTask } = useTasks();
   const { userLists } = useLists();
 
   useEffect(() => {
@@ -159,27 +159,19 @@ function TaskForm({ selectedTask }) {
       </form>
 
       {isDeleteModalOpen && (
-        <Modal
-          header="Warning!"
-          onAction={async () => {
+        <DeleteItemModal
+          itemType="task"
+          title={selectedTask.title}
+          onDelete={async () => {
             closeTask();
             if (selectedTask) await onDeleteTask(selectedTask._id);
             setIsDeleteModalOpen(false);
           }}
+          isDeleting={isDeletingTask}
           onClose={() => setIsDeleteModalOpen(false)}
-          isLoading={isDeletingTask}
-          action={isDeletingTask ? "Deleting..." : "Delete"}
           descriptionId="delete-task-description"
           returnFocusRef={returnFocusRef}
-        >
-          <p
-            role="alert"
-            id="delete-task-description"
-            className="my-5 text-center"
-          >
-            Delete this task?
-          </p>
-        </Modal>
+        />
       )}
     </>
   );

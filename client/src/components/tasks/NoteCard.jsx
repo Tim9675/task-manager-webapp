@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
 import { useNotes } from "../../contexts/NotesContext";
-import Modal from "../modals/Modal";
+import DeleteItemModal from "../modals/DeleteItemModal";
 
 function NoteCard({ note, onEdit }) {
   const [isDeleteNoteOpen, setIsDeleteNoteOpen] = useState(false);
@@ -52,22 +52,18 @@ function NoteCard({ note, onEdit }) {
         </div>
       </article>
       {isDeleteNoteOpen && (
-        <Modal
-          header="Warning!"
-          onAction={async () => {
+        <DeleteItemModal
+          itemType="note"
+          title={note.title}
+          onDelete={async () => {
             await onDeleteNote(note._id);
             setIsDeleteNoteOpen(false);
           }}
+          isDeleting={isDeletingNote}
           onClose={() => setIsDeleteNoteOpen(false)}
-          isLoading={isDeletingNote}
-          action={isDeletingNote ? "Deleting..." : "Delete"}
+          descriptionId="delete-note-description"
           returnFocusRef={returnFocusRef}
-          descriptionId={"delete-note-description"}
-        >
-          <p id="delete-note-description" className="my-5 text-center">
-            Delete the note titled '{noteTitle}'?
-          </p>
-        </Modal>
+        />
       )}
     </>
   );

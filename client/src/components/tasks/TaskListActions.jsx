@@ -3,7 +3,7 @@ import { useTags } from "../../contexts/TagsContext";
 import { useDisplay } from "../../contexts/DisplayContext";
 import ListModal from "../sidebar/ListModal";
 import TagModal from "../sidebar/TagModal";
-import Modal from "../modals/Modal";
+import DeleteItemModal from "../modals/DeleteItemModal";
 
 function TaskListActions({
   isEdit,
@@ -41,22 +41,19 @@ function TaskListActions({
         />
       )}
       {type === "list" && isDelete && (
-        <Modal
-          header="Warning!"
-          onAction={async () => {
+        <DeleteItemModal
+          itemType="list"
+          title={item.title}
+          onDelete={async () => {
             await onDeleteList(item._id);
             setActiveView({ type: "today" });
             onClose();
           }}
+          isDeleting={isDeletingList}
           onClose={onClose}
-          isLoading={isDeletingList}
-          action={isDeletingList ? "Deleting..." : "Delete"}
+          descriptionId="delete-list-description"
           returnFocusRef={returnFocusRef}
         >
-          <p className="my-5 text-center wrap-anywhere">
-            Delete the list "{item.title}"?
-          </p>
-
           {taskCount > 0 && (
             <div role="alert" className="text-xs text-red-600">
               <p>
@@ -66,25 +63,22 @@ function TaskListActions({
               <p>{isPlural ? "They" : "It"} will become unlisted.</p>
             </div>
           )}
-        </Modal>
+        </DeleteItemModal>
       )}
       {type === "tag" && isDelete && (
-        <Modal
-          header="Warning!"
-          onAction={async () => {
+        <DeleteItemModal
+          itemType="tag"
+          title={item.title}
+          onDelete={async () => {
             await onDeleteTag(item._id);
             setActiveView({ type: "today" });
             onClose();
           }}
+          isDeleting={isDeletingTag}
           onClose={onClose}
-          isLoading={isDeletingTag}
-          action={isDeletingTag ? "Deleting..." : "Delete"}
+          descriptionId="delete-tag-description"
           returnFocusRef={returnFocusRef}
         >
-          <p className="my-5 text-center wrap-anywhere">
-            Delete the tag "{item.title}"?
-          </p>
-
           {taskCount > 0 && (
             <div role="alert" className="text-xs text-red-600">
               <p>
@@ -94,7 +88,7 @@ function TaskListActions({
               <p>{isPlural ? "They" : "It"} will become unlisted.</p>
             </div>
           )}
-        </Modal>
+        </DeleteItemModal>
       )}
     </>
   );
