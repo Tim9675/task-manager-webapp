@@ -5,13 +5,12 @@ import DashboardLoadingPage from "../pages/DashboardLoadingPage";
 
 function PublicRoute({ children }) {
   const { user, loading } = useAuth();
-  const token = localStorage.getItem("token");
 
   if (loading) {
-    return token ? <DashboardLoadingPage /> : children;
+    return <DashboardLoadingPage />;
   }
 
-  if (user || token) {
+  if (user) {
     return <Navigate to="/dashboard" replace />;
   }
 

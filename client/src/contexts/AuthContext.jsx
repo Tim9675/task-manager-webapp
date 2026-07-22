@@ -1,5 +1,12 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 
+import { setAuthToken, clearAuthToken, onAuthFailure } from "../api/client";
 import { login, register, getCurrentUser } from "../api/authApi";
 
 const AuthContext = createContext();
@@ -9,7 +16,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   function completeAuthentication({ token, user }) {
-    localStorage.setItem("token", token);
+    setAuthToken(token);
     setUser(user);
   }
 
@@ -23,10 +30,10 @@ export function AuthProvider({ children }) {
     completeAuthentication(response);
   }
 
-  function signOut() {
-    localStorage.removeItem("token");
+  const signOut = useCallback(() => {
+    clearAuthToken();
     setUser(null);
-  }
+  }, []);
 
   useEffect(() => {
     async function initializeAuth() {
@@ -36,18 +43,21 @@ export function AuthProvider({ children }) {
           setLoading(false);
           return;
         }
-        const response = await getCurrentUser();
-        setUser(response.user);
-      } catch (error) {
-        console.error(error);
-        localStorage.removeItem("token"); // Prevents broken sessions
-        setUser(null);
+        setAuthToken(token);
+        const { user } = await getCurrentUser();
+        setUser(user);
+      } catch {
+        signOut();
       } finally {
         setLoading(false);
       }
     }
     initializeAuth();
-  }, []);
+
+    const unsubscribe = onAuthFailure(signOut);
+
+    return unsubscribe;
+  }, [signOut]);
 
   return (
     <AuthContext.Provider
