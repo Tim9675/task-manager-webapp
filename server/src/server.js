@@ -37,15 +37,7 @@ app.use("/api/lists", listsRoutes);
 app.use("/api/tags", tagsRoutes);
 app.use("/api/notes", notesRoutes);
 
-app.use(errorMiddleware); // REMINDER: Eventually add centralized error middleware
-
-// Optional improvement for  update functions inside controllers
-
-// if (!Object.keys(updatePayload).length) {
-//   return res.status(400).json({
-//     message: "No fields to update",
-//   });
-// }
+app.use(errorMiddleware);
 
 connectDB().then(() => {
   app.listen(PORT, () => {

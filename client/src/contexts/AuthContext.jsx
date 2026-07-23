@@ -15,19 +15,19 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  function completeAuthentication({ token, user }) {
+  function setSession({ token, user }) {
     setAuthToken(token);
     setUser(user);
   }
 
   async function signIn(credentials) {
     const response = await login(credentials);
-    completeAuthentication(response);
+    setSession(response);
   }
 
   async function signUp(credentials) {
     const response = await register(credentials);
-    completeAuthentication(response);
+    setSession(response);
   }
 
   const signOut = useCallback(() => {
