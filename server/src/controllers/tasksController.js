@@ -1,6 +1,6 @@
-import Task from "../models/Task.js";
 import { normalizeDueDate } from "./helpers/normalizeDueDate.js";
 import { sanitizeDocument } from "./helpers/sanitizeDocument.js";
+import Task from "../models/Task.js";
 
 export async function getTasks(req, res) {
   const userId = req.user.userId;
@@ -8,7 +8,7 @@ export async function getTasks(req, res) {
     .select("-__v -createdAt -updatedAt -userId")
     .sort({ dueDate: 1, createdAt: 1 })
     .lean();
-  res.status(200).json({ data: tasks });
+  res.status(200).json({ message: "Tasks fetched successfully", data: tasks });
 }
 
 export async function createTask(req, res) {
@@ -45,9 +45,7 @@ export async function updateTask(req, res) {
   if (checked !== undefined) updatePayload.checked = checked;
 
   if (!Object.keys(updatePayload).length) {
-    return res.status(400).json({
-      message: "No fields to update",
-    });
+    return res.status(400).json({ message: "No fields to update" });
   }
 
   const updatedTask = await Task.findOneAndUpdate(

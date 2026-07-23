@@ -19,9 +19,7 @@ export function validateCreateNote(req, res, next) {
 
   const colorError = isValidHexColor(color);
   if (colorError) {
-    return res.status(400).json({
-      message: colorError,
-    });
+    return res.status(400).json({ message: colorError });
   }
 
   next();

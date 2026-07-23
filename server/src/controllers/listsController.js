@@ -1,6 +1,6 @@
+import { sanitizeDocument } from "./helpers/sanitizeDocument.js";
 import Task from "../models/Task.js";
 import List from "../models/List.js";
-import { sanitizeDocument } from "./helpers/sanitizeDocument.js";
 
 export async function getLists(req, res) {
   const userId = req.user.userId;
@@ -8,7 +8,7 @@ export async function getLists(req, res) {
     .select("-__v -createdAt -updatedAt -userId")
     .sort({ createdAt: 1 })
     .lean();
-  res.status(200).json({ data: lists });
+  res.status(200).json({ message: "Lists fetched successfully", data: lists });
 }
 
 export async function createList(req, res) {
@@ -35,9 +35,7 @@ export async function updateList(req, res) {
   if (color !== undefined) updatePayload.color = color;
 
   if (!Object.keys(updatePayload).length) {
-    return res.status(400).json({
-      message: "No fields to update",
-    });
+    return res.status(400).json({ message: "No fields to update" });
   }
 
   const updatedList = await List.findOneAndUpdate(
@@ -49,6 +47,7 @@ export async function updateList(req, res) {
     .lean();
 
   if (!updatedList) return res.status(404).json({ message: "List not found" });
+
   res
     .status(200)
     .json({ message: "List updated successfully", data: updatedList });

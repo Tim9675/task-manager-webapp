@@ -1,5 +1,5 @@
-import Note from "../models/Note.js";
 import { sanitizeDocument } from "./helpers/sanitizeDocument.js";
+import Note from "../models/Note.js";
 
 export async function getNotes(req, res) {
   const userId = req.user.userId;
@@ -7,7 +7,7 @@ export async function getNotes(req, res) {
     .select("-__v -userId -createdAt -updatedAt")
     .sort({ createdAt: -1 })
     .lean();
-  res.status(200).json({ data: notes });
+  res.status(200).json({ message: "Notes fetched successfully", data: notes });
 }
 
 export async function createNote(req, res) {
@@ -36,9 +36,7 @@ export async function updateNote(req, res) {
   if (color !== undefined) updatePayload.color = color;
 
   if (!Object.keys(updatePayload).length) {
-    return res.status(400).json({
-      message: "No fields to update",
-    });
+    return res.status(400).json({ message: "No fields to update" });
   }
 
   const updatedNote = await Note.findOneAndUpdate(
@@ -50,6 +48,7 @@ export async function updateNote(req, res) {
     .lean();
 
   if (!updatedNote) return res.status(404).json({ message: "Note not found" });
+
   res
     .status(200)
     .json({ message: "Note updated successfully", data: updatedNote });

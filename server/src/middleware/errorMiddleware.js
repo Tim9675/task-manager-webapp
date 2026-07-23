@@ -1,7 +1,13 @@
 export function errorMiddleware(err, req, res, next) {
+  if (res.headersSent) {
+    return next(err);
+  }
+
   console.error(err.stack || err);
 
-  res.status(500).json({
-    message: "Internal server error",
+  const status = err.status || 500;
+
+  res.status(status).json({
+    message: status === 500 ? "Internal server error" : err.message,
   });
 }

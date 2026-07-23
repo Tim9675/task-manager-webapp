@@ -38,9 +38,7 @@ export function validateRegister(req, res, next) {
     typeof timezone !== "string" ||
     !Intl.supportedValuesOf("timeZone").includes(timezone)
   ) {
-    return res.status(400).json({
-      message: "Invalid timezone",
-    });
+    return res.status(400).json({ message: "Invalid timezone" });
   }
 
   next();

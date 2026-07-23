@@ -6,7 +6,6 @@ import {
   requireArray,
   requireBoolean,
 } from "./helpers/validationHelpers.js";
-
 import List from "../models/List.js";
 import Tag from "../models/Tag.js";
 
@@ -102,10 +101,6 @@ export function validateUpdateTask(req, res, next) {
     }
   }
 
-  // Always send ISO 8601 with timezone
-  // (e.g. "2026-05-06T23:59:59.999+08:00" or "2026-05-06T15:59:59.999Z")
-  // ^^^ SAME WITH updateTask ^^^
-
   if (dueDate !== undefined) {
     const dueDateError = isValidISODate(dueDate, "Due date");
     if (dueDateError) {
@@ -176,8 +171,6 @@ export async function validateTaskReferences(req, res, next) {
   const userId = req.user.userId;
   const { listId, tagIds } = req.body;
 
-  // Prevents users from creating their tasks inside other users' lists; also catches ""
-
   if (listId !== undefined && listId !== null && listId !== "") {
     const listExists = await List.exists({
       _id: listId,
@@ -185,9 +178,7 @@ export async function validateTaskReferences(req, res, next) {
     });
 
     if (!listExists) {
-      return res.status(404).json({
-        message: "List not found",
-      });
+      return res.status(404).json({ message: "List not found" });
     }
   }
 
@@ -200,9 +191,7 @@ export async function validateTaskReferences(req, res, next) {
     });
 
     if (existingTagsCount !== uniqueTagIds.length) {
-      return res.status(404).json({
-        message: "One or more tags not found",
-      });
+      return res.status(404).json({ message: "One or more tags not found" });
     }
   }
 

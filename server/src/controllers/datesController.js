@@ -1,7 +1,7 @@
-import Task from "../models/Task.js";
 import { getTodayRange, getTaskDateBuckets } from "./helpers/dateRanges.js";
+import Task from "../models/Task.js";
 
-const DEFAULT_ZONE = "Asia/Manila"; // temporary value, change to user timezone when authentication is implemented
+const DEFAULT_ZONE = "Asia/Manila";
 
 export async function getTasksToday(req, res) {
   try {
@@ -15,7 +15,10 @@ export async function getTasksToday(req, res) {
     })
       .sort({ dueDate: 1, createdAt: 1 })
       .lean();
-    res.status(200).json({ data: tasks });
+
+    res
+      .status(200)
+      .json({ message: "Tasks today fetched successfully", data: tasks });
   } catch (error) {
     console.error("Error in getTasksToday controller", error);
     res.status(500).json({ message: "Internal server error" });
@@ -54,7 +57,9 @@ export async function getTasksUpcoming(req, res) {
       }
     }
 
-    res.status(200).json({ data: grouped });
+    res
+      .status(200)
+      .json({ message: "Upcoming tasks fetched successfully", data: grouped });
   } catch (error) {
     console.error("Error in getTasksUpcoming controller", error);
     res.status(500).json({ message: "Internal server error" });
