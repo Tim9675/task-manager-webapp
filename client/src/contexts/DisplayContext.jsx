@@ -1,4 +1,4 @@
-import { createContext, useState, useMemo, useContext } from "react";
+import { createContext, useState, useMemo } from "react";
 
 import { isToday, isUpcoming } from "../utils/date";
 import { useTasks } from "./TasksContext";
@@ -95,14 +95,4 @@ export function DisplayProvider({ children }) {
       {children}
     </DisplayContext.Provider>
   );
-}
-
-export function useDisplay() {
-  const context = useContext(DisplayContext);
-
-  if (!context) {
-    throw new Error("useDisplay must be used within DisplayProvider");
-  }
-
-  return context;
 }

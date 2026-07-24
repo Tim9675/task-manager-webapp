@@ -1,4 +1,4 @@
-import { isValidHexColor, requireString } from "./helpers/validationHelpers.js";
+import { requireString, isValidHexColor } from "./helpers/validationHelpers.js";
 
 export function validateCreateList(req, res, next) {
   const { title, color } = req.body;

@@ -1,11 +1,11 @@
-import { useLists } from "../../contexts/ListsContext";
 import { useTasks } from "../../contexts/TasksContext";
+import { useLists } from "../../contexts/ListsContext";
 import AddTask from "./AddTask";
 import TaskCard from "./TaskCard";
 
 function SubTaskList({ tasks, id, header }) {
-  const { getListById } = useLists();
   const { isSelectedTask, openTask, closeTask } = useTasks();
+  const { getListById } = useLists();
 
   return (
     <article className="flex h-61.25 grow flex-col rounded-md border border-[#ebebeb] py-5 md:h-80">

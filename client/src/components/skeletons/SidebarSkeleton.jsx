@@ -1,4 +1,3 @@
-import { Menu } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 
 function SidebarSkeleton() {

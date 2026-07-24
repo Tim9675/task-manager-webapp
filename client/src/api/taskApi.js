@@ -1,5 +1,5 @@
-import client from "./client";
 import { getDueDateOnCreate } from "../utils/date";
+import client from "./client";
 
 export async function getUserTasks() {
   const response = await client.get("/tasks");

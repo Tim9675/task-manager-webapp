@@ -1,34 +1,13 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-} from "react";
+import { createContext, useState, useCallback, useEffect } from "react";
 
-import { setAuthToken, clearAuthToken, onAuthFailure } from "../api/client";
-import { login, register, getCurrentUser } from "../api/authApi";
+import { clearAuthToken, setAuthToken, onAuthFailure } from "../api/client";
+import { getCurrentUser, login, register } from "../api/authApi";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  function setSession({ token, user }) {
-    setAuthToken(token);
-    setUser(user);
-  }
-
-  async function signIn(credentials) {
-    const response = await login(credentials);
-    setSession(response);
-  }
-
-  async function signUp(credentials) {
-    const response = await register(credentials);
-    setSession(response);
-  }
 
   const signOut = useCallback(() => {
     clearAuthToken();
@@ -59,6 +38,21 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, [signOut]);
 
+  function setSession({ token, user }) {
+    setAuthToken(token);
+    setUser(user);
+  }
+
+  async function signIn(credentials) {
+    const response = await login(credentials);
+    setSession(response);
+  }
+
+  async function signUp(credentials) {
+    const response = await register(credentials);
+    setSession(response);
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -72,8 +66,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

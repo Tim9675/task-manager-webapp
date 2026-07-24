@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 import { DateTime } from "luxon";
+import mongoose from "mongoose";
 
 const MIN_LENGTH_REQUIRED = 2;
 const MAX_LENGTH_OPTIONAL = 500;

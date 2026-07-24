@@ -1,10 +1,9 @@
 import { useState } from "react";
 
 import { createNote, updateNote, deleteNote } from "../../api/noteApi";
-import { normalizeTitle } from "../helpers/normalizeTitle";
-import { showApiError, showActionSuccess } from "../helpers/showApiResponse";
-import { isEmptyUpdateBody } from "../helpers/isEmptyUpdateBody";
+import { showActionSuccess, showApiError } from "../helpers/showApiResponse";
 import { isDuplicateTitle } from "../helpers/isDuplicateTitle";
+import { isEmptyUpdateBody } from "../helpers/isEmptyUpdateBody";
 
 function useNoteCrud({ userNotes, setUserNotes }) {
   const [isCreatingNote, setIsCreatingNote] = useState(false);

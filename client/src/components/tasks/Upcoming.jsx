@@ -35,7 +35,15 @@ function Upcoming() {
       }
     }
     return temp;
-  }, [tasks]);
+  }, [
+    tasks,
+    today.start,
+    today.end,
+    tomorrow.start,
+    tomorrow.end,
+    thisWeek.start,
+    thisWeek.end,
+  ]);
 
   return (
     <div className="flex h-full grow flex-col py-5">

@@ -1,17 +1,17 @@
 import express from "express";
 
-import {
-  createNote,
-  deleteNote,
-  getNotes,
-  updateNote,
-} from "../controllers/notesController.js";
 import { validateObjectId } from "../middleware/validateObjectId.js";
 import {
   validateCreateNote,
   validateUpdateNote,
 } from "../validation/noteValidation.js";
 import { asyncHandler } from "./helpers/asyncHandler.js";
+import {
+  getNotes,
+  createNote,
+  updateNote,
+  deleteNote,
+} from "../controllers/notesController.js";
 
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect } from "react";
 
 import { getUserNotes } from "../api/noteApi";
 import { showApiError } from "./helpers/showApiResponse";
@@ -45,14 +45,4 @@ export function NotesProvider({ children }) {
       {children}
     </NotesContext.Provider>
   );
-}
-
-export function useNotes() {
-  const context = useContext(NotesContext);
-
-  if (!context) {
-    throw new Error("useNotes must be used within NotesProvider");
-  }
-
-  return context;
 }

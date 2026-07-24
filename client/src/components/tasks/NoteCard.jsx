@@ -22,7 +22,7 @@ function NoteCard({ note, onEdit }) {
         <div className="h-full overflow-y-auto" tabIndex={-1}>
           <div className="mb-3 flex items-start justify-between gap-2 pt-1">
             <h2 className="line-clamp-2 text-[1.25rem] font-semibold">
-              {note.title}
+              {noteTitle}
             </h2>
 
             <div className="flex w-20 justify-evenly">
@@ -30,7 +30,7 @@ function NoteCard({ note, onEdit }) {
                 type="button"
                 className="flex aspect-square size-7.5 cursor-pointer items-center justify-center rounded text-[#7c7c7c] hover:text-blue-600 focus:text-blue-600"
                 onClick={onEdit}
-                aria-label={`Edit note "${note.title}"`}
+                aria-label={`Edit note "${noteTitle}"`}
               >
                 <Pencil size={iconSize} />
               </button>
@@ -41,7 +41,7 @@ function NoteCard({ note, onEdit }) {
                   setIsDeleteNoteOpen(true);
                   returnFocusRef.current = document.activeElement;
                 }}
-                aria-label={`Delete note "${note.title}"`}
+                aria-label={`Delete note "${noteTitle}"`}
               >
                 <Trash2 size={iconSize} />
               </button>
@@ -54,7 +54,7 @@ function NoteCard({ note, onEdit }) {
       {isDeleteNoteOpen && (
         <DeleteItemModal
           itemType="note"
-          title={note.title}
+          title={noteTitle}
           onDelete={async () => {
             await onDeleteNote(note._id);
             setIsDeleteNoteOpen(false);

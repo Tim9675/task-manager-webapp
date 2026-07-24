@@ -1,5 +1,5 @@
-import { useState, useMemo, useRef } from "react";
-import { Pen, Pencil, Trash2 } from "lucide-react";
+import { useState, useRef, useMemo } from "react";
+import { Pencil, Trash2 } from "lucide-react";
 
 import { useTasks } from "../../contexts/TasksContext";
 import { useLists } from "../../contexts/ListsContext";

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 
 import { useTasks } from "./TasksContext";
 import { getUserTags } from "../api/tagApi";
@@ -47,14 +47,4 @@ export function TagsProvider({ children }) {
       {children}
     </TagsContext.Provider>
   );
-}
-
-export function useTags() {
-  const context = useContext(TagsContext);
-
-  if (!context) {
-    throw new Error("useTags must be used within TagsProvider");
-  }
-
-  return context;
 }

@@ -1,7 +1,7 @@
 import {
-  isValidHexColor,
   requireString,
   optionalString,
+  isValidHexColor,
 } from "./helpers/validationHelpers.js";
 
 export function validateCreateNote(req, res, next) {

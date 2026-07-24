@@ -1,5 +1,5 @@
-import { createPortal } from "react-dom";
 import { useRef } from "react";
+import { createPortal } from "react-dom";
 
 function Modal({
   header,

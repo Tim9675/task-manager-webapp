@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 
 import { useTasks } from "./TasksContext";
 import { getUserLists } from "../api/listApi.js";
@@ -55,14 +55,4 @@ export function ListsProvider({ children }) {
       {children}
     </ListsContext.Provider>
   );
-}
-
-export function useLists() {
-  const context = useContext(ListsContext);
-
-  if (!context) {
-    throw new Error("useLists must be used within ListsProvider");
-  }
-
-  return context;
 }

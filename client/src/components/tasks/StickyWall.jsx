@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 import { useNotes } from "../../contexts/NotesContext";
+import NoteInput from "./NoteInput";
 import NoteCard from "./NoteCard";
 import AddNoteButton from "./AddNoteButton";
-import NoteInput from "./NoteInput";
 
 function StickyWall() {
   const [isAddingNote, setIsAddingNote] = useState(false);

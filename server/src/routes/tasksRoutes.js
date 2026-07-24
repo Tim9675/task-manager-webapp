@@ -7,16 +7,16 @@ import {
 import { validateObjectId } from "../middleware/validateObjectId.js";
 import {
   validateCreateTask,
-  validateTaskReferences,
   validateUpdateTask,
+  validateTaskReferences,
 } from "../validation/taskValidation.js";
+import { asyncHandler } from "./helpers/asyncHandler.js";
 import {
   getTasks,
   createTask,
   updateTask,
   deleteTask,
 } from "../controllers/tasksController.js";
-import { asyncHandler } from "./helpers/asyncHandler.js";
 
 const router = express.Router();
 

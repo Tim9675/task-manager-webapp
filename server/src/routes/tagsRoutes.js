@@ -2,16 +2,16 @@ import express from "express";
 
 import { validateObjectId } from "../middleware/validateObjectId.js";
 import {
+  validateCreateTag,
+  validateUpdateTag,
+} from "../validation/tagValidation.js";
+import { asyncHandler } from "./helpers/asyncHandler.js";
+import {
   getTags,
   createTag,
   updateTag,
   deleteTag,
 } from "../controllers/tagsController.js";
-import {
-  validateCreateTag,
-  validateUpdateTag,
-} from "../validation/tagValidation.js";
-import { asyncHandler } from "./helpers/asyncHandler.js";
 
 const router = express.Router();
 

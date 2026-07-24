@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 
 import { PANEL_ANIMATION_MS } from "../../helpers/styles";
 

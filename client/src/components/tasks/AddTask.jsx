@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Loader } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 
 import { useTasks } from "../../contexts/TasksContext";
 

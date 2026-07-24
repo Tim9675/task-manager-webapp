@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import { useTags } from "../../contexts/TagsContext";
-import Modal from "../modals/Modal";
 import { onSubmitResult } from "../helpers/onSubmitResult";
+import Modal from "../modals/Modal";
 
 function TagModal({ mode, tag = {}, onTagSubmit, onClose, returnFocusRef }) {
   const isEdit = mode === "edit";

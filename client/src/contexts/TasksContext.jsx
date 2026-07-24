@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 import { getUserTasks } from "../api/taskApi.js";
 import { showApiError } from "./helpers/showApiResponse.js";
@@ -59,14 +59,4 @@ export function TasksProvider({ children }) {
       {children}
     </TasksContext.Provider>
   );
-}
-
-export function useTasks() {
-  const context = useContext(TasksContext);
-
-  if (!context) {
-    throw new Error("useTasks must be used within TasksProvider");
-  }
-
-  return context;
 }

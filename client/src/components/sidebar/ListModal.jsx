@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import { useLists } from "../../contexts/ListsContext";
-import Modal from "../modals/Modal";
 import { onSubmitResult } from "../helpers/onSubmitResult";
+import Modal from "../modals/Modal";
 
 function ListModal({ mode, list = {}, onListSubmit, onClose, returnFocusRef }) {
   const isEdit = mode === "edit";
