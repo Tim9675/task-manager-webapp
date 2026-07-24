@@ -6,14 +6,13 @@ export function authMiddleWare(req, res, next) {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const token = authHeader.split(" ")[1];
+    const [, token] = authHeader.split(" ");
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = {
       userId: decoded.userId,
     };
     next();
   } catch (error) {
-    console.log("Error in authMiddleware", error);
     return res.status(401).json({ message: "Unauthorized" });
   }
 }
