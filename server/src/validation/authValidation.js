@@ -14,7 +14,7 @@ export function validateRegister(req, res, next) {
     errorMessage += nameError + "\n";
   }
 
-  const emailError = requireString(email, "Email", 254); // 254 is the max email length as per current standards
+  const emailError = requireString(email, "Email", 254); // DOC: 254 is the max email length as per current standards
   if (emailError) {
     errorMessage += emailError + "\n";
   } else {

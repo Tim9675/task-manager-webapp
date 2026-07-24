@@ -4,7 +4,7 @@ export function getTodayRange(zone) {
   const now = DateTime.now().setZone(zone);
 
   const start = now.startOf("day");
-  const end = start.plus({ days: 1 }); // exclusive end
+  const end = start.plus({ days: 1 }); // DOC: exclusive end
 
   return {
     start: start.toUTC().toJSDate(),
@@ -18,7 +18,7 @@ export function getTaskDateBuckets(zone) {
   const todayStart = now.startOf("day");
   const tomorrowStart = todayStart.plus({ days: 1 });
   const dayAfterTomorrow = tomorrowStart.plus({ days: 1 });
-  const weekStart = now.startOf("week"); // Monday (Luxon ISO default)
+  const weekStart = now.startOf("week"); // DOC: Monday (Luxon ISO default)
   const nextWeekStart = weekStart.plus({ weeks: 1 });
 
   return {

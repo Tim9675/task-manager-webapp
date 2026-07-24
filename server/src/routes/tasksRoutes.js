@@ -20,11 +20,9 @@ import { asyncHandler } from "./helpers/asyncHandler.js";
 
 const router = express.Router();
 
-// date-related routes
-router.get("/today", getTasksToday); // Learning Point: Static routes (/today) must come before dynamic ones (/:taskId)
+router.get("/today", getTasksToday);
 router.get("/upcoming", getTasksUpcoming);
 
-// CRUD routes
 router.get("/", asyncHandler(getTasks));
 router.post(
   "/",

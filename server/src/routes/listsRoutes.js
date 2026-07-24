@@ -16,14 +16,14 @@ import {
 
 const router = express.Router();
 
-router.post("/", validateCreateList, asyncHandler(createList)); // works
-router.get("/", asyncHandler(getLists)); // works
+router.post("/", validateCreateList, asyncHandler(createList));
+router.get("/", asyncHandler(getLists));
 router.patch(
   "/:listId",
   validateObjectId("listId"),
   validateUpdateList,
   asyncHandler(updateList),
-); //works
-router.delete("/:listId", validateObjectId("listId"), asyncHandler(deleteList)); // works
+);
+router.delete("/:listId", validateObjectId("listId"), asyncHandler(deleteList));
 
 export default router;

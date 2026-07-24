@@ -11,7 +11,6 @@ function useNoteCrud({ userNotes, setUserNotes }) {
   const [isUpdatingNote, setIsUpdatingNote] = useState(false);
   const [isDeletingNote, setIsDeletingNote] = useState(false);
 
-  // CRUD functions
   async function onCreateNote(title, content, color) {
     const duplicate = isDuplicateTitle(userNotes, title);
     if (duplicate) return { success: false, error: "duplicate" };

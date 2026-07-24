@@ -46,14 +46,12 @@ function Sidebar() {
         inert={!isSidebarOpen}
         aria-hidden={!isSidebarOpen}
       >
-        {/* Header */}
         <header className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-neutral-900">Menu</h2>
         </header>
 
         <SearchBar />
 
-        {/* Scrollable Content */}
         <section className="flex-1 overflow-y-auto">
           <SidebarSection title="Tasks" type={"tasks"} />
           <SidebarSection
@@ -74,7 +72,6 @@ function Sidebar() {
           />
         </section>
 
-        {/* Modals */}
         <SidebarModals
           isAddListOpen={isAddListOpen}
           onAddListClose={() => setIsAddListOpen(false)}
@@ -87,7 +84,6 @@ function Sidebar() {
           returnFocusRef={returnFocusRef}
         />
 
-        {/* Footer */}
         <footer className="flex flex-col gap-1 pt-2 md:h-20">
           <SettingsButton
             onOpen={() => {

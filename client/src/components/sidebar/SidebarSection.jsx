@@ -19,7 +19,7 @@ function SidebarSection({ title, type, onOpen }) {
   const { userListsWithCounts } = useLists();
   const { userTags } = useTags();
 
-  // Should be the only one hardcoded
+  // DOC: Should be the only one hardcoded
   const tasksSection = [
     {
       _id: 0,

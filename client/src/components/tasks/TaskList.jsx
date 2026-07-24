@@ -102,9 +102,7 @@ function TaskList() {
                           openTask(task._id);
                         }
                       }}
-                      // Tag condition in case a tag has same id as list
                       listDetails={
-                        activeView.type !== "tag" &&
                         activeView.id !== task.listId &&
                         getListById(task.listId)
                       }

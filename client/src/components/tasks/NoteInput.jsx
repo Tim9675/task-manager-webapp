@@ -144,7 +144,6 @@ function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
             This note already exists.
           </p>
 
-          {/* Footer */}
           <div className="flex h-10 items-center justify-between gap-7.5">
             <button
               type="button"

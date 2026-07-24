@@ -11,7 +11,6 @@ function useTagCrud({ userTags, setUserTags, removeTagFromTasks }) {
   const [isUpdatingTag, setIsUpdatingTag] = useState(false);
   const [isDeletingTag, setIsDeletingTag] = useState(false);
 
-  // CRUD functions
   async function onCreateTag(title, color) {
     const duplicate = isDuplicateTitle(userTags, title);
     if (duplicate) return { success: false, error: "duplicate" };

@@ -11,7 +11,6 @@ function useListCrud({ userLists, setUserLists, removeListFromTasks }) {
   const [isUpdatingList, setIsUpdatingList] = useState(false);
   const [isDeletingList, setIsDeletingList] = useState(false);
 
-  // CRUD functions
   async function onCreateList(title, color) {
     const duplicate = isDuplicateTitle(userLists, title);
     if (duplicate) return { success: false, error: "duplicate" };

@@ -39,7 +39,7 @@ function TaskForm({ selectedTask }) {
   useEffect(() => {
     if (!selectedTask) return;
 
-    // Register virtual field managed through TagSection.
+    // DOC: Register virtual field managed through TagSection.
     register("tagIds");
 
     reset({
@@ -80,7 +80,6 @@ function TaskForm({ selectedTask }) {
         }}
         onSubmit={handleSubmit(handleSubmitForm)}
       >
-        {/* Title */}
         <label htmlFor="task-title" className="sr-only">
           Task title
         </label>
@@ -91,7 +90,7 @@ function TaskForm({ selectedTask }) {
           className="my-3 w-full rounded-md border border-[#ebebeb] px-2 md:h-10"
           placeholder="Title"
         />
-        {/* Description */}
+
         <label htmlFor="task-description" className="sr-only">
           Task description
         </label>
@@ -101,7 +100,7 @@ function TaskForm({ selectedTask }) {
           className="w-full resize-none rounded-md border border-[#ebebeb] p-2 md:h-29"
           placeholder="Description"
         />
-        {/* List */}
+
         <div className="my-1 flex h-9 w-50 items-center justify-between">
           <label htmlFor="list" className="text-sm">
             List
@@ -121,7 +120,7 @@ function TaskForm({ selectedTask }) {
             ))}
           </select>
         </div>
-        {/* Due Date */}
+
         <div className="my-1 flex h-9 w-49 items-center justify-between">
           <label htmlFor="dueDate" className="text-sm">
             Due Date
@@ -141,13 +140,13 @@ function TaskForm({ selectedTask }) {
             />
           </div>
         </div>
-        {/* Tags */}
+
         <TagSection
           watch={watch}
           setValue={setValue}
           returnFocusRef={returnFocusRef}
         />
-        {/* Subtasks */}
+
         <SubtaskSection setValue={setValue} control={control} />
 
         <ButtonBar

@@ -42,10 +42,10 @@ app.use(
 app.use(express.json());
 app.use(rateLimiter);
 
-//Public Routes
+// DOC: Public Routes
 app.use("/api/auth", authRoutes);
 
-// Protected Routes
+// DOC: Protected Routes
 app.use(authMiddleWare);
 app.use("/api/tasks", tasksRoutes);
 app.use("/api/lists", listsRoutes);

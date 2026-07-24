@@ -57,7 +57,6 @@ function ListModal({ mode, list = {}, onListSubmit, onClose, returnFocusRef }) {
       action={buttonContent}
       returnFocusRef={returnFocusRef}
     >
-      {/* Toggle hide completed tasks */}
       <div className="flex h-20 w-full flex-col justify-evenly">
         <div className="flex h-10 w-full items-center rounded border-2 border-[#ebebeb]">
           <div
@@ -81,7 +80,7 @@ function ListModal({ mode, list = {}, onListSubmit, onClose, returnFocusRef }) {
             className="h-full w-55 rounded-md px-2.5"
           />
         </div>
-        {/* REMINDER: Do radio group accessibility for ListModal and TagModal as well */}
+        {/* REM: Do radio group accessibility for ListModal and TagModal as well */}
         <div className="mt-2.5 flex h-5 w-full items-center justify-evenly">
           {availableListColors.map((color) => (
             <button

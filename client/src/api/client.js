@@ -16,7 +16,6 @@ export function clearAuthToken() {
   setAuthToken(null);
 }
 
-// auth-failure subscribers
 const authFailureSubscribers = new Set();
 
 export function onAuthFailure(fn) {
@@ -29,18 +28,18 @@ function emitAuthFailure() {
     try {
       fn();
     } catch {
-      /* ignore subscriber errors */
+      // DOC: ignore subscriber errors
     }
   });
 }
 
-// attach token from memory (fast & avoids stale reads)
+// DOC: attach token from memory (fast & avoids stale reads)
 client.interceptors.request.use((config) => {
   if (authToken) config.headers.Authorization = `Bearer ${authToken}`;
   return config;
 });
 
-// central response handling + normalize errors
+// DOC: central response handling + normalize errors
 client.interceptors.response.use(
   (res) => res,
   (err) => {

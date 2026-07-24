@@ -25,7 +25,6 @@ function TagSelectorModal({
       descriptionId={userHasNoTags ? "empty-tags-description" : undefined}
       returnFocusRef={returnFocusRef}
     >
-      {/* Tag List */}
       {userHasNoTags ? (
         <p
           id="empty-tags-description"
@@ -49,7 +48,6 @@ function TagSelectorModal({
                   }`}
                   aria-pressed={isSelected}
                 >
-                  {/* Left Side */}
                   <div className="flex items-center">
                     <div
                       className="size-3 rounded"
@@ -59,7 +57,6 @@ function TagSelectorModal({
                     <p className="ms-3">{tag.title}</p>
                   </div>
 
-                  {/* Right Side */}
                   <div
                     className={`flex size-4 items-center justify-center rounded border text-xs ${
                       isSelected

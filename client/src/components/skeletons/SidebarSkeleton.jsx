@@ -4,7 +4,6 @@ import Skeleton from "react-loading-skeleton";
 function SidebarSkeleton() {
   return (
     <aside className="my-5 ms-5 flex h-[calc(100vh-2.5rem)] w-72 flex-col rounded-2xl bg-neutral-100 px-4 py-5">
-      {/* Header */}
       <header className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-neutral-900">Menu</h1>
       </header>

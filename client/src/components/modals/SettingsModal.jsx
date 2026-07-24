@@ -27,7 +27,7 @@ function SettingsModal({ onSettingsClose, returnFocusRef }) {
     <Modal
       header="Settings"
       onAction={() => {
-        // placeholder for future updateSettings function; bring back async when applied
+        // FUT: placeholder for future updateSettings function; bring back async when applied
         onSettingsClose();
       }}
       onClose={onSettingsClose}
@@ -44,10 +44,8 @@ function SettingsModal({ onSettingsClose, returnFocusRef }) {
               className="flex cursor-pointer items-center justify-between rounded-md px-3 py-2 text-sm transition-colors hover:bg-neutral-50"
               aria-pressed={setting.checked}
             >
-              {/* Left Side */}
               <p className="ms-3">{setting.label}</p>
 
-              {/* Right Side */}
               <div
                 className={`flex size-4 items-center justify-center rounded border text-xs ${
                   setting.checked

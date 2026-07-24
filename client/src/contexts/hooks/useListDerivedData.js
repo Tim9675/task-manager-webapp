@@ -20,7 +20,6 @@ function useListDerivedData({ userLists, userTasks }) {
     [userLists],
   );
 
-  // Helper functions
   const getCachedTasksByList = useCallback(
     (listId) => userTasks.filter((task) => task.listId === listId),
     [userTasks],

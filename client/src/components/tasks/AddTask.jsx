@@ -10,7 +10,7 @@ function AddTask({ activeView }) {
   async function createTask() {
     const res = await onCreateTask(taskTitle, activeView);
 
-    if (res) setTaskTitle(""); // Only reset task title after getting valid response
+    if (res) setTaskTitle("");
   }
 
   return (

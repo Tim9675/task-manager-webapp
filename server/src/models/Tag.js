@@ -13,7 +13,7 @@ const tagSchema = new mongoose.Schema(
       minlength: 2,
       maxlength: 25,
       trim: true,
-    }, // Can add lowercase: true if want to implement case-sensitiveness
+    }, // FUT: Can add lowercase: true if want to implement case-sensitiveness
     color: {
       type: String,
       default: "#d1eaed",

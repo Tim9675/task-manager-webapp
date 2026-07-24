@@ -57,7 +57,6 @@ function TagModal({ mode, tag = {}, onTagSubmit, onClose, returnFocusRef }) {
       action={buttonContent}
       returnFocusRef={returnFocusRef}
     >
-      {/* Toggle hide completed tasks */}
       <div className="flex h-20 w-full flex-col justify-evenly">
         <div className="flex h-10 w-full items-center rounded border-2 border-[#ebebeb]">
           <div

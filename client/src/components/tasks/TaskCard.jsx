@@ -50,10 +50,9 @@ function TaskCard({ task, headingLevel, onSelect, listDetails }) {
         </button>
       </div>
 
-      {/* Metadata */}
+      {/* DOC: Metadata */}
       {(listDetails || task.subtasks.length > 0) && (
         <footer className="ms-9 flex items-center gap-3 pb-2 text-neutral-600">
-          {/* List */}
           {listDetails && (
             <div className="flex items-center gap-2">
               <div
@@ -65,7 +64,6 @@ function TaskCard({ task, headingLevel, onSelect, listDetails }) {
             </div>
           )}
 
-          {/* Subtasks */}
           {task.subtasks.length > 0 && (
             <div className="flex items-center gap-2 text-xs">
               <div className="flex h-4 min-w-4 items-center justify-center rounded bg-[#ebebeb] px-1 text-[0.625rem]">
