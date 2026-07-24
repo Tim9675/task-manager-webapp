@@ -1,6 +1,8 @@
 import { toast } from "react-hot-toast";
 
 export function showApiError(error, fallback) {
+  if (error.isAuthError) return;
+
   toast.error(error.message ?? fallback);
 }
 
