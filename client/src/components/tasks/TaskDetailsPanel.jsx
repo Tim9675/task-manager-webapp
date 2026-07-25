@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 
-import { useTasks } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/useTasks.js";
 import { PANEL_ANIMATION_MS } from "../../helpers/styles.js";
 import TaskForm from "./TaskForm";
 

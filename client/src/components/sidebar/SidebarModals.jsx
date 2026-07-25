@@ -1,5 +1,5 @@
-import { useLists } from "../../contexts/ListsContext";
-import { useTags } from "../../contexts/TagsContext";
+import { useLists } from "../../contexts/useLists";
+import { useTags } from "../../contexts/useTags";
 import ListModal from "./ListModal";
 import TagModal from "./TagModal";
 import SettingsModal from "../modals/SettingsModal";

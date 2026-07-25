@@ -1,12 +1,11 @@
-import { createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { getUserNotes } from "../api/noteApi";
 import { showApiError } from "./helpers/showApiResponse";
 import useNoteCrud from "./hooks/useNoteCrud";
+import NotesContext from "./NotesContext";
 
-const NotesContext = createContext();
-
-export function NotesProvider({ children }) {
+function NotesProvider({ children }) {
   const [userNotes, setUserNotes] = useState([]);
   const [isLoadingNotes, setIsLoadingNotes] = useState(true);
 
@@ -25,10 +24,10 @@ export function NotesProvider({ children }) {
   }, []);
 
   const availableNoteColors = [
-    { value: "#d1eaed", label: "Light blue" },
-    { value: "#ffdada", label: "Light pink" },
-    { value: "#fdf2b3", label: "Light yellow" },
-    { value: "#ffd4a9", label: "Light orange" },
+    { value: "#d1eaed", label: "Powder blue" },
+    { value: "#ffdada", label: "Blush pink" },
+    { value: "#fdf2b3", label: "Vanilla" },
+    { value: "#ffd4a9", label: "Peach" },
   ];
 
   const crud = useNoteCrud({ userNotes, setUserNotes });
@@ -46,3 +45,5 @@ export function NotesProvider({ children }) {
     </NotesContext.Provider>
   );
 }
+
+export default NotesProvider;

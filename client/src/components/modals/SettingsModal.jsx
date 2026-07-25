@@ -1,4 +1,4 @@
-import { useDisplay } from "../../contexts/DisplayContext";
+import { useDisplay } from "../../contexts/useDisplay";
 import Modal from "../../components/modals/Modal";
 
 function SettingsModal({ onSettingsClose, returnFocusRef }) {

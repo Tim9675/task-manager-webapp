@@ -1,4 +1,4 @@
-import { useAuth } from "../../contexts/AuthContext";
+import useAuth from "../../contexts/useAuth";
 import Modal from "../modals/Modal";
 
 function SignoutModal({ onSignOutClose, returnFocusRef }) {

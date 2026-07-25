@@ -1,8 +1,8 @@
-import { TasksProvider } from "../contexts/TasksContext";
-import { ListsProvider } from "../contexts/ListsContext";
-import { TagsProvider } from "../contexts/TagsContext";
-import { NotesProvider } from "../contexts/NotesContext";
-import { DisplayProvider } from "../contexts/DisplayContext";
+import TasksProvider from "../contexts/TasksProvider";
+import ListsProvider from "../contexts/ListsProvider";
+import TagsProvider from "../contexts/TagsProvider";
+import NotesProvider from "../contexts/NotesProvider";
+import DisplayProvider from "../contexts/DisplayProvider";
 
 function AppProviders({ children }) {
   return (

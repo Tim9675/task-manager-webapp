@@ -1,14 +1,13 @@
-import { createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { getUserTasks } from "../api/taskApi.js";
 import { showApiError } from "./helpers/showApiResponse.js";
 import useTaskActions from "./hooks/useTaskActions.js";
 import useTaskSelection from "./hooks/useTaskSelection.js";
 import useTaskDerivedData from "./hooks/useTaskDerivedData.js";
+import TasksContext from "./TasksContext.js";
 
-const TasksContext = createContext();
-
-export function TasksProvider({ children }) {
+function TasksProvider({ children }) {
   const [userTasks, setUserTasks] = useState([]);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [isTaskDetailsOpen, setIsTaskDetailsOpen] = useState(false);
@@ -60,3 +59,5 @@ export function TasksProvider({ children }) {
     </TasksContext.Provider>
   );
 }
+
+export default TasksProvider;

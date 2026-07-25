@@ -6,9 +6,9 @@ import {
   StickyNote,
 } from "lucide-react";
 
-import { useTasks } from "../../contexts/TasksContext";
-import { useLists } from "../../contexts/ListsContext";
-import { useTags } from "../../contexts/TagsContext";
+import { useTasks } from "../../contexts/useTasks";
+import { useLists } from "../../contexts/useLists";
+import { useTags } from "../../contexts/useTags";
 import SidebarItem from "./SidebarItem";
 import AddList from "./AddList";
 import AddTag from "./AddTag";

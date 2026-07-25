@@ -1,4 +1,4 @@
-import { useDisplay } from "../../contexts/DisplayContext";
+import { useDisplay } from "../../contexts/useDisplay";
 
 function ListSidebarItem({ nav }) {
   const { activeView, setActiveView, isSearching, setIsSearching } =

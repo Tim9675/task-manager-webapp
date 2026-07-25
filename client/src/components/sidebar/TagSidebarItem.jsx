@@ -1,4 +1,4 @@
-import { useDisplay } from "../../contexts/DisplayContext";
+import { useDisplay } from "../../contexts/useDisplay";
 
 function TagSidebarItem({ nav }) {
   const { activeView, setActiveView, isSearching, setIsSearching } =

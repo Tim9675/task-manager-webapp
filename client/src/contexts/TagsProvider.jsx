@@ -1,14 +1,13 @@
-import { createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import { useTasks } from "./TasksContext";
+import { useTasks } from "./useTasks";
 import { getUserTags } from "../api/tagApi";
 import { showApiError } from "./helpers/showApiResponse";
 import useTagCrud from "./hooks/useTagCrud";
 import useTagDerivedData from "./hooks/useTagDerivedData";
+import TagsContext from "./TagsContext";
 
-const TagsContext = createContext();
-
-export function TagsProvider({ children }) {
+function TagsProvider({ children }) {
   const [userTags, setUserTags] = useState([]);
   const [isLoadingTags, setIsLoadingTags] = useState(true);
   const { userTasks, removeTagFromTasks } = useTasks();
@@ -28,7 +27,12 @@ export function TagsProvider({ children }) {
     fetchTags();
   }, []);
 
-  const availableTagColors = ["#d1eaed", "#ffdada", "#fdf2b3", "#ffd4a9"];
+  const availableTagColors = [
+    { value: "#d1eaed", label: "Powder blue" },
+    { value: "#ffdada", label: "Blush pink" },
+    { value: "#fdf2b3", label: "Vanilla" },
+    { value: "#ffd4a9", label: "Peach" },
+  ];
 
   const crud = useTagCrud({ userTags, setUserTags, removeTagFromTasks });
 
@@ -48,3 +52,5 @@ export function TagsProvider({ children }) {
     </TagsContext.Provider>
   );
 }
+
+export default TagsProvider;

@@ -1,18 +1,19 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
-import { useLists } from "../../contexts/ListsContext";
+import { useLists } from "../../contexts/useLists";
 import { onSubmitResult } from "../helpers/onSubmitResult";
 import Modal from "../modals/Modal";
 
 function ListModal({ mode, list = {}, onListSubmit, onClose, returnFocusRef }) {
-  const isEdit = mode === "edit";
-
-  const [listTitle, setListTitle] = useState(isEdit ? list.title : "");
-  const [listColor, setListColor] = useState(isEdit ? list.color : "#ff6b6b");
+  const [listTitle, setListTitle] = useState(list?.title ?? "");
+  const [listColor, setListColor] = useState(list?.color ?? "#ff6b6b");
   const [isListDuplicate, setIsListDuplicate] = useState(false);
+
+  const colorRefs = useRef([]);
 
   const { availableListColors, isCreatingList, isUpdatingList } = useLists();
 
+  const isEdit = mode === "edit";
   const isLoading = isCreatingList || isUpdatingList;
 
   const buttonContent = isCreatingList
@@ -45,6 +46,31 @@ function ListModal({ mode, list = {}, onListSubmit, onClose, returnFocusRef }) {
     }
   }
 
+  function handleColorKeyDown(e, index) {
+    let nextIndex;
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        nextIndex = (index + 1) % availableListColors.length;
+        break;
+
+      case "ArrowLeft":
+      case "ArrowUp":
+        nextIndex =
+          (index - 1 + availableListColors.length) % availableListColors.length;
+        break;
+
+      default:
+        return;
+    }
+
+    e.preventDefault();
+
+    setListColor(availableListColors[nextIndex].value);
+    colorRefs.current[nextIndex]?.focus();
+  }
+
   return (
     <Modal
       header={isEdit ? "Edit list" : "Add new list"}
@@ -62,11 +88,16 @@ function ListModal({ mode, list = {}, onListSubmit, onClose, returnFocusRef }) {
           <div
             className="mx-2 size-4 rounded"
             style={{ backgroundColor: listColor }}
-          ></div>
+          />
+          <label htmlFor="list-title" className="sr-only">
+            List title
+          </label>
           <input
+            id="list-title"
             type="text"
             value={listTitle}
             autoFocus
+            required
             onChange={(e) => {
               setListTitle(e.target.value);
               setIsListDuplicate(false);
@@ -78,25 +109,39 @@ function ListModal({ mode, list = {}, onListSubmit, onClose, returnFocusRef }) {
               }
             }}
             className="h-full w-55 rounded-md px-2.5"
+            aria-describedby={isEdit ? "edit-list-error" : "create-list-error"}
           />
         </div>
-        {/* REM: Do radio group accessibility for ListModal and TagModal as well */}
-        <div className="mt-2.5 flex h-5 w-full items-center justify-evenly">
-          {availableListColors.map((color) => (
+        <div
+          role="radiogroup"
+          className="mt-2.5 flex h-5 w-full items-center justify-evenly"
+          aria-label="Choose list color"
+        >
+          {availableListColors.map((color, index) => (
             <button
-              key={color}
+              key={color.value}
+              ref={(el) => (colorRefs.current[index] = el)}
               type="button"
-              onClick={() => setListColor(color)}
-              className={`size-4 cursor-pointer rounded ${listColor === color && "outline outline-offset-6 outline-[#ebebeb]"}`}
-              style={{ backgroundColor: color }}
-            ></button>
+              role="radio"
+              tabIndex={listColor === color.value ? 0 : -1}
+              onClick={() => setListColor(color.value)}
+              onKeyDown={(e) => handleColorKeyDown(e, index)}
+              className={`size-4 cursor-pointer rounded ${listColor === color.value && "outline outline-offset-6 outline-blue-600"} focus-visible:ring-2 focus-visible:ring-blue-600`}
+              style={{ backgroundColor: color.value }}
+              aria-label={`Select ${color.label} list color`}
+              aria-checked={listColor === color.value}
+            />
           ))}
         </div>
       </div>
 
-      <div className="mt-2.5 h-5 w-full text-center text-red-600">
-        {isListDuplicate && "This list already exists."}
-      </div>
+      <p
+        id={isEdit ? "edit-list-error" : "create-list-error"}
+        role="alert"
+        className={`mt-2.5 h-5 w-full text-center text-red-600 ${isListDuplicate ? "visible" : "invisible"}`}
+      >
+        This list already exists
+      </p>
     </Modal>
   );
 }

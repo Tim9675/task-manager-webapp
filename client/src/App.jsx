@@ -6,7 +6,7 @@ import PublicRoute from "./routes/PublicRoute";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import AppProviders from "./providers/AppProviders";
+import AppProviders from "./contexts/AppProviders";
 import DashboardPage from "./pages/DashboardPage";
 
 function App() {

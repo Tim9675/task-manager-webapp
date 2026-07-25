@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Loader, Plus } from "lucide-react";
 
-import { useTasks } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/useTasks";
 
 function AddTask({ activeView }) {
   const [taskTitle, setTaskTitle] = useState("");

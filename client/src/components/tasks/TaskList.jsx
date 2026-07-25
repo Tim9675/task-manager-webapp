@@ -1,10 +1,10 @@
 import { useState, useRef, useMemo } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
-import { useTasks } from "../../contexts/TasksContext";
-import { useLists } from "../../contexts/ListsContext";
-import { useTags } from "../../contexts/TagsContext";
-import { useDisplay } from "../../contexts/DisplayContext";
+import { useTasks } from "../../contexts/useTasks";
+import { useLists } from "../../contexts/useLists";
+import { useTags } from "../../contexts/useTags";
+import { useDisplay } from "../../contexts/useDisplay";
 import AddTask from "./AddTask";
 import TaskCard from "./TaskCard";
 import TaskListActions from "./TaskListActions";

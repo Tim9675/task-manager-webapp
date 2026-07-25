@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
-import { useNotes } from "../../contexts/NotesContext";
+import { useNotes } from "../../contexts/useNotes";
 import DeleteItemModal from "../modals/DeleteItemModal";
 
 function NoteCard({ note, onEdit }) {

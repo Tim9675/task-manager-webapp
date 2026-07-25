@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import Checkbox from "@mui/material/Checkbox";
 
-import { useTasks } from "../../contexts/TasksContext";
+import { useTasks } from "../../contexts/useTasks";
 
 function TaskCard({ task, headingLevel, onSelect, listDetails }) {
   const { isSelectedTask, onToggleTask } = useTasks();

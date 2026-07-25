@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Search, X } from "lucide-react";
 
-import { useDisplay } from "../../contexts/DisplayContext";
+import { useDisplay } from "../../contexts/useDisplay";
 
 function SearchBar() {
   const inputRef = useRef(null);

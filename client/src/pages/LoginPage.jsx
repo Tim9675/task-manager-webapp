@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeClosed } from "lucide-react";
 
-import { useAuth } from "../contexts/AuthContext.jsx";
+import useAuth from "../contexts/useAuth";
 import loginImage from "../assets/images/login-img.png";
 
 function LoginPage() {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useTags } from "../../contexts/TagsContext";
+import { useTags } from "../../contexts/useTags";
 import TagCard from "./TagCard";
 import OpenTagSelectorButton from "./OpenTagSelectorButton";
 import TagSelectorModal from "../modals/TagSelectorModal";

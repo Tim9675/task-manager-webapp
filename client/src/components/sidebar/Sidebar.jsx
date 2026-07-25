@@ -1,9 +1,9 @@
 import { Menu } from "lucide-react";
 import { useState, useRef } from "react";
 
-import { useLists } from "../../contexts/ListsContext";
-import { useTags } from "../../contexts/TagsContext";
-import { useDisplay } from "../../contexts/DisplayContext";
+import { useLists } from "../../contexts/useLists";
+import { useTags } from "../../contexts/useTags";
+import { useDisplay } from "../../contexts/useDisplay";
 import SidebarSkeleton from "../skeletons/SidebarSkeleton";
 import SearchBar from "./SearchBar";
 import SidebarSection from "./SidebarSection";

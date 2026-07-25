@@ -3,8 +3,8 @@ import { useForm, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { useTasks } from "../../contexts/TasksContext";
-import { useLists } from "../../contexts/ListsContext";
+import { useTasks } from "../../contexts/useTasks";
+import { useLists } from "../../contexts/useLists";
 import TagSection from "./TagSection";
 import SubtaskSection from "./SubtaskSection";
 import ButtonBar from "./ButtonBar";

@@ -1,14 +1,13 @@
-import { createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import { useTasks } from "./TasksContext";
+import { useTasks } from "./useTasks.js";
 import { getUserLists } from "../api/listApi.js";
 import { showApiError } from "./helpers/showApiResponse.js";
 import useListCrud from "./hooks/useListCrud.js";
 import useListDerivedData from "./hooks/useListDerivedData.js";
+import ListsContext from "./ListsContext.js";
 
-const ListsContext = createContext();
-
-export function ListsProvider({ children }) {
+function ListsProvider({ children }) {
   const [userLists, setUserLists] = useState([]);
   const [isLoadingLists, setIsLoadingLists] = useState(true);
   const { userTasks, removeListFromTasks } = useTasks();
@@ -28,14 +27,14 @@ export function ListsProvider({ children }) {
   }, []);
 
   const availableListColors = [
-    "#ff6b6b",
-    "#da77f2",
-    "#9775fa",
-    "#5c7cfa",
-    "#66d9e8",
-    "#8ce99a",
-    "#ffd43b",
-    "#ff922b",
+    { value: "#ff6b6b", label: "Coral" },
+    { value: "#da77f2", label: "Orchid" },
+    { value: "#9775fa", label: "Purple" },
+    { value: "#5c7cfa", label: "Blue" },
+    { value: "#66d9e8", label: "Cyan" },
+    { value: "#8ce99a", label: "Mint" },
+    { value: "#ffd43b", label: "Yellow" },
+    { value: "#ff922b", label: "Orange" },
   ];
 
   const crud = useListCrud({ userLists, setUserLists, removeListFromTasks });
@@ -56,3 +55,5 @@ export function ListsProvider({ children }) {
     </ListsContext.Provider>
   );
 }
+
+export default ListsProvider;

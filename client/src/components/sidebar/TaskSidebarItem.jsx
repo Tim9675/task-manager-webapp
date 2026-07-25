@@ -1,5 +1,5 @@
-import { useTasks } from "../../contexts/TasksContext";
-import { useDisplay } from "../../contexts/DisplayContext";
+import { useTasks } from "../../contexts/useTasks";
+import { useDisplay } from "../../contexts/useDisplay";
 
 function TaskSidebarItem({ nav }) {
   const { closeTask } = useTasks();

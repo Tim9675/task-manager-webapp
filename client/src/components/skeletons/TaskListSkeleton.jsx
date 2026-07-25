@@ -1,6 +1,6 @@
 import Skeleton from "react-loading-skeleton";
 
-import { useDisplay } from "../../contexts/DisplayContext";
+import { useDisplay } from "../../contexts/useDisplay";
 
 function TaskListSkeleton() {
   const { header } = useDisplay();

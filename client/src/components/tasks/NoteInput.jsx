@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 
-import { useNotes } from "../../contexts/NotesContext";
+import { useNotes } from "../../contexts/useNotes";
 import { onSubmitResult } from "../helpers/onSubmitResult";
 
 function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
@@ -49,7 +49,7 @@ function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
   }
 
   function handleColorKeyDown(e, index) {
-    let nextIndex = index;
+    let nextIndex;
 
     switch (e.key) {
       case "ArrowRight":
@@ -138,8 +138,8 @@ function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
 
           <p
             id={isEdit ? "edit-note-error" : "create-note-error"}
-            className={`mt-0.5 h-5 w-full text-center text-red-600 ${isNoteDuplicate ? "visible" : "invisible"}`}
             role="alert"
+            className={`mt-0.5 h-5 w-full text-center text-red-600 ${isNoteDuplicate ? "visible" : "invisible"}`}
           >
             This note already exists.
           </p>

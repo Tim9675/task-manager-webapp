@@ -1,11 +1,10 @@
-import { createContext, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 
 import { isToday, isUpcoming } from "../utils/date";
-import { useTasks } from "./TasksContext";
-import { useLists } from "./ListsContext";
-import { useTags } from "./TagsContext";
-
-const DisplayContext = createContext();
+import { useTasks } from "./useTasks";
+import { useLists } from "./useLists";
+import { useTags } from "./useTags";
+import DisplayContext from "./DisplayContext";
 
 function compareTasks(a, b) {
   if (a.checked === b.checked) {
@@ -34,7 +33,7 @@ function taskMatchesView(task, activeView, isHideCompleted) {
   }
 }
 
-export function DisplayProvider({ children }) {
+function DisplayProvider({ children }) {
   const [activeView, setActiveView] = useState({
     type: "today",
   });
@@ -96,3 +95,5 @@ export function DisplayProvider({ children }) {
     </DisplayContext.Provider>
   );
 }
+
+export default DisplayProvider;

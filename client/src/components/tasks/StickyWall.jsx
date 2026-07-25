@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useNotes } from "../../contexts/NotesContext";
+import { useNotes } from "../../contexts/useNotes";
 import NoteInput from "./NoteInput";
 import NoteCard from "./NoteCard";
 import AddNoteButton from "./AddNoteButton";
