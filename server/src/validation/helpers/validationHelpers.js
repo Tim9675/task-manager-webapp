@@ -24,6 +24,10 @@ export function optionalString(value, fieldName) {
     return `${fieldName} must be a string`;
   }
 
+  if (!value.trim()) {
+    return `${fieldName} must be a non-empty string`;
+  }
+
   if (value.length > MAX_LENGTH_OPTIONAL) {
     return `${fieldName} must not exceed ${MAX_LENGTH_OPTIONAL} characters`;
   }
