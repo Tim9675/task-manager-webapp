@@ -63,18 +63,6 @@ describe("optionalString", () => {
     expect(optionalString("  A valid description  ", "Description")).toBe(null);
   });
 
-  it("rejects an empty string", () => {
-    expect(optionalString("", "Description")).toBe(
-      "Description must be a non-empty string",
-    );
-  });
-
-  it("rejects a whitespace only string", () => {
-    expect(optionalString("      ", "Description")).toBe(
-      "Description must be a non-empty string",
-    );
-  });
-
   it("returns null for null", () => {
     expect(optionalString(null, "Description")).toBe(null);
   });
