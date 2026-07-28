@@ -1,4 +1,4 @@
-import { beforeEach, describe, vi, it, expect } from "vitest";
+import { vi, beforeEach, describe, it, expect } from "vitest";
 
 import List from "../../models/List";
 import Tag from "../../models/Tag";
