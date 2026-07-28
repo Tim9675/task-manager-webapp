@@ -1,22 +1,10 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
+
+import createMock from "./helpers/createMock.js";
 import {
   validateCreateTask,
   validateUpdateTask,
 } from "../../validation/taskValidation.js";
-
-function createMockResponse() {
-  return {
-    status: vi.fn().mockReturnThis(),
-    json: vi.fn(),
-  };
-}
-
-function createMock() {
-  return {
-    res: createMockResponse(),
-    next: vi.fn(),
-  };
-}
 
 describe("validateCreateTask", () => {
   it("calls next() for valid input", () => {

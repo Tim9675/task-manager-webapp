@@ -171,7 +171,7 @@ export async function validateTaskReferences(req, res, next) {
   const userId = req.user.userId;
   const { listId, tagIds } = req.body;
 
-  if (listId !== undefined && listId !== null && listId !== "") {
+  if (listId != null && listId !== "") {
     const listExists = await List.exists({
       _id: listId,
       userId,
