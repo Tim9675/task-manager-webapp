@@ -7,7 +7,7 @@ export async function createUser(name, email) {
   const user = await User.create({
     name: name,
     email: email,
-    passwordHash: await bcrypt.hash("password", 10),
+    passwordHash: await bcrypt.hash("Pass123;", 10),
     timezone: "Asia/Manila",
   });
 
