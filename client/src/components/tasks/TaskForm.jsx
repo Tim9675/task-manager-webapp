@@ -53,7 +53,7 @@ function TaskForm({ selectedTask }) {
   }, [selectedTask, reset, register]);
 
   function normalizeDate(date) {
-    if (!date) return null;
+    if (isNaN(new Date(date))) return null;
 
     const normalizedDate = new Date(date);
     normalizedDate.setHours(23, 59, 59, 999);

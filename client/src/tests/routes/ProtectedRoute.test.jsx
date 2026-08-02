@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 function renderComponent() {
-  return render(
+  render(
     <MemoryRouter initialEntries={["/dashboard"]}>
       <Routes>
         <Route
