@@ -12,7 +12,6 @@ vi.mock("../../contexts/useTasks", () => ({
   useTasks: () => ({
     onUpdateTask,
     onDeleteTask,
-    isDeletingTask: false,
     closeTask,
   }),
 }));
