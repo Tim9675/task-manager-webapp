@@ -22,7 +22,7 @@ function AuthProvider({ children }) {
           return;
         }
         setAuthToken(token);
-        const { user } = await getCurrentUser();
+        const user = await getCurrentUser();
         setUser(user);
       } catch {
         signOut();
