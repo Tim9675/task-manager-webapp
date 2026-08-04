@@ -1,4 +1,4 @@
-import { sanitizeDocument } from "./helpers/sanitizeDocument.js";
+import { sanitizeDocument } from "./utils/sanitizeDocument.js";
 import Task from "../models/Task.js";
 import List from "../models/List.js";
 

@@ -5,7 +5,7 @@ import {
   validateCreateNote,
   validateUpdateNote,
 } from "../validation/noteValidation.js";
-import { asyncHandler } from "./helpers/asyncHandler.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 import {
   getNotes,
   createNote,

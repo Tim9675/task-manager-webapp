@@ -1,4 +1,4 @@
-import { requireString, isValidHexColor } from "./helpers/validationHelpers.js";
+import { requireString, isValidHexColor } from "./utils/validationUtils.js";
 
 export function validateCreateTag(req, res, next) {
   const { title, color } = req.body;

@@ -5,7 +5,7 @@ import {
   validateCreateList,
   validateUpdateList,
 } from "../validation/listValidation.js";
-import { asyncHandler } from "./helpers/asyncHandler.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 import {
   getLists,
   createList,

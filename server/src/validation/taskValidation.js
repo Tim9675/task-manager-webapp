@@ -5,7 +5,7 @@ import {
   isValidObjectId,
   requireArray,
   requireBoolean,
-} from "./helpers/validationHelpers.js";
+} from "./utils/validationUtils.js";
 import List from "../models/List.js";
 import Tag from "../models/Tag.js";
 

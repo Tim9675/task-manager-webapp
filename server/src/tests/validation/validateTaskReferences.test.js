@@ -2,7 +2,7 @@ import { vi, beforeEach, describe, it, expect } from "vitest";
 
 import List from "../../models/List";
 import Tag from "../../models/Tag";
-import createMock from "./helpers/createMock";
+import createMock from "./utils/createMock";
 import { validateTaskReferences } from "../../validation/taskValidation";
 
 vi.mock("../../models/List.js", () => ({

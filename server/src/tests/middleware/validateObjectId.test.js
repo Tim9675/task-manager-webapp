@@ -2,7 +2,7 @@ import { beforeEach, describe, it, expect, vi } from "vitest";
 import mongoose from "mongoose";
 
 import { validateObjectId } from "../../middleware/validateObjectId";
-import createMock from "../validation/helpers/createMock";
+import createMock from "../validation/utils/createMock";
 
 vi.mock("mongoose", () => ({
   default: {

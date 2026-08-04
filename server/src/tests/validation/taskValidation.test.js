@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import createMock from "./helpers/createMock.js";
+import createMock from "./utils/createMock.js";
 import {
   validateCreateTask,
   validateUpdateTask,

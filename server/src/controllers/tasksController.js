@@ -1,5 +1,5 @@
-import { normalizeDueDate } from "./helpers/normalizeDueDate.js";
-import { sanitizeDocument } from "./helpers/sanitizeDocument.js";
+import { normalizeDueDate } from "./utils/normalizeDueDate.js";
+import { sanitizeDocument } from "./utils/sanitizeDocument.js";
 import Task from "../models/Task.js";
 
 export async function getTasks(req, res) {

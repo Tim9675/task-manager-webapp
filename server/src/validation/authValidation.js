@@ -1,5 +1,5 @@
-import { normalizeString } from "../helpers/normalizeString.js";
-import { requireString } from "./helpers/validationHelpers.js";
+import { normalizeString } from "../utils/normalizeString.js";
+import { requireString } from "./utils/validationUtils.js";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_PATTERN =

@@ -1,4 +1,4 @@
-import { sanitizeDocument } from "./helpers/sanitizeDocument.js";
+import { sanitizeDocument } from "./utils/sanitizeDocument.js";
 import Note from "../models/Note.js";
 
 export async function getNotes(req, res) {

@@ -8,7 +8,7 @@ import {
   requireArray,
   requireBoolean,
   isValidHexColor,
-} from "../../validation/helpers/validationHelpers";
+} from "../../validation/utils/validationUtils";
 
 describe("requireString", () => {
   it("returns null for a valid string", () => {

@@ -5,7 +5,7 @@ import {
   validateLogin,
 } from "../validation/authValidation.js";
 import { authMiddleWare } from "../middleware/authMiddleware.js";
-import { asyncHandler } from "./helpers/asyncHandler.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 import {
   register,
   login,

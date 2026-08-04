@@ -1,8 +1,8 @@
 import request from "supertest";
 import { beforeAll, afterEach, afterAll, describe, it, expect } from "vitest";
 
-import { clearTestDB, connectTestDB, disconnectTestDB } from "./helpers/db";
-import { createUser } from "./helpers/createUser";
+import { clearTestDB, connectTestDB, disconnectTestDB } from "./utils/db";
+import { createUser } from "./utils/createUser";
 import app from "../../app";
 import Task from "../../models/Task";
 

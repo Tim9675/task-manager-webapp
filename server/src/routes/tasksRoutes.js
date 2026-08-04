@@ -10,7 +10,7 @@ import {
   validateUpdateTask,
   validateTaskReferences,
 } from "../validation/taskValidation.js";
-import { asyncHandler } from "./helpers/asyncHandler.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 import {
   getTasks,
   createTask,

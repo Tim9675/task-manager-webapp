@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 import { useLists } from "../../contexts/useLists";
-import { onSubmitResult } from "../helpers/onSubmitResult";
+import { onSubmitResult } from "../utils/onSubmitResult";
 import Modal from "../modals/Modal";
 
 function ListModal({ mode, list = {}, onListSubmit, onClose, returnFocusRef }) {

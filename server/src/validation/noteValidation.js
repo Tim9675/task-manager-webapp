@@ -2,7 +2,7 @@ import {
   requireString,
   optionalString,
   isValidHexColor,
-} from "./helpers/validationHelpers.js";
+} from "./utils/validationUtils.js";
 
 export function validateCreateNote(req, res, next) {
   const { title, content, color } = req.body;

@@ -4,9 +4,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const authLimiter = new Ratelimit({
+export const loginLimiter = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(5, "60 s"),
+});
+
+export const registerLimiter = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(3, "3600 s"),
 });
 
 export const apiLimiter = new Ratelimit({

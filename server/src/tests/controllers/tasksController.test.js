@@ -1,8 +1,8 @@
 import { vi, beforeEach, describe, it, expect } from "vitest";
 
-import { normalizeDueDate } from "../../controllers/helpers/normalizeDueDate.js";
-import { sanitizeDocument } from "../../controllers/helpers/sanitizeDocument.js";
-import createMock from "../validation/helpers/createMock";
+import { normalizeDueDate } from "../../controllers/utils/normalizeDueDate.js";
+import { sanitizeDocument } from "../../controllers/utils/sanitizeDocument.js";
+import createMock from "../validation/utils/createMock";
 import {
   getTasks,
   createTask,
@@ -20,11 +20,11 @@ vi.mock("../../models/Task.js", () => ({
   },
 }));
 
-vi.mock("../../controllers/helpers/normalizeDueDate.js", () => ({
+vi.mock("../../controllers/utils/normalizeDueDate.js", () => ({
   normalizeDueDate: vi.fn(),
 }));
 
-vi.mock("../../controllers/helpers/sanitizeDocument.js", () => ({
+vi.mock("../../controllers/utils/sanitizeDocument.js", () => ({
   sanitizeDocument: vi.fn(),
 }));
 

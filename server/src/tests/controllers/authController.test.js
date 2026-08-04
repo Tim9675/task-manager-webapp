@@ -1,15 +1,15 @@
 import { vi, beforeEach, describe, it, expect } from "vitest";
 import bcrypt, { hash } from "bcrypt";
 
-import { sanitizeUser } from "../../controllers/helpers/sanitizeUser.js";
-import { signToken } from "../../controllers/helpers/signToken.js";
-import { normalizeString } from "../../helpers/normalizeString.js";
+import { sanitizeUser } from "../../controllers/utils/sanitizeUser.js";
+import { signToken } from "../../controllers/utils/signToken.js";
+import { normalizeString } from "../../utils/normalizeString.js";
 import {
   register,
   login,
   getCurrentUser,
 } from "../../controllers/authController.js";
-import createMock from "../validation/helpers/createMock.js";
+import createMock from "../validation/utils/createMock.js";
 import User from "../../models/User.js";
 
 vi.mock("../../models/User.js", () => ({
@@ -27,15 +27,15 @@ vi.mock("bcrypt", () => ({
   },
 }));
 
-vi.mock("../../controllers/helpers/sanitizeUser.js", () => ({
+vi.mock("../../controllers/utils/sanitizeUser.js", () => ({
   sanitizeUser: vi.fn(),
 }));
 
-vi.mock("../../controllers/helpers/signToken.js", () => ({
+vi.mock("../../controllers/utils/signToken.js", () => ({
   signToken: vi.fn(),
 }));
 
-vi.mock("../../helpers/normalizeString.js", () => ({
+vi.mock("../../utils/normalizeString.js", () => ({
   normalizeString: vi.fn(),
 }));
 

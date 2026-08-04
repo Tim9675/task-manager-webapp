@@ -1,7 +1,7 @@
 import { vi, beforeEach, describe, expect, it } from "vitest";
 import jwt from "jsonwebtoken";
 
-import createMock from "../validation/helpers/createMock";
+import createMock from "../validation/utils/createMock";
 import { authMiddleWare } from "../../middleware/authMiddleware";
 
 vi.mock("jsonwebtoken", () => ({

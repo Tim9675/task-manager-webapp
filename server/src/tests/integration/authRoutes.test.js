@@ -2,9 +2,9 @@ import { beforeAll, afterEach, afterAll, describe, it, expect } from "vitest";
 import request from "supertest";
 import jwt from "jsonwebtoken";
 
-import { clearTestDB, connectTestDB, disconnectTestDB } from "./helpers/db";
-import { createUser } from "./helpers/createUser";
-import { deleteUser } from "./helpers/deleteUser";
+import { clearTestDB, connectTestDB, disconnectTestDB } from "./utils/db";
+import { createUser } from "./utils/createUser";
+import { deleteUser } from "./utils/deleteUser";
 import app from "../../app";
 import User from "../../models/User";
 

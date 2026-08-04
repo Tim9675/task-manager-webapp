@@ -1,6 +1,6 @@
 import { useRef, useEffect, useMemo } from "react";
 
-import { PANEL_ANIMATION_MS } from "../../helpers/styles";
+import { PANEL_ANIMATION_MS } from "../../utils/styles";
 
 function useTaskSelection({
   userTasks,

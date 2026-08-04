@@ -1,5 +1,5 @@
-import { useTasks } from "../../contexts/useTasks";
-import { useLists } from "../../contexts/useLists";
+import { useTasks } from "../../../contexts/useTasks";
+import { useLists } from "../../../contexts/useLists";
 import AddTask from "./AddTask";
 import TaskCard from "./TaskCard";
 

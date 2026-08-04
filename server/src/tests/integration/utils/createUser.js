@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-import { signToken } from "../../../controllers/helpers/signToken.js";
+import { signToken } from "../../../controllers/utils/signToken.js";
 import User from "../../../models/User.js";
 
 export async function createUser(name, email) {

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 import { useTags } from "../../contexts/useTags";
-import { onSubmitResult } from "../helpers/onSubmitResult";
+import { onSubmitResult } from "../utils/onSubmitResult";
 import Modal from "../modals/Modal";
 
 function TagModal({ mode, tag = {}, onTagSubmit, onClose, returnFocusRef }) {

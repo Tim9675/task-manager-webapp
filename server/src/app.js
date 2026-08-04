@@ -4,7 +4,7 @@ import cors from "cors";
 import { authMiddleWare } from "./middleware/authMiddleware.js";
 import { errorMiddleware } from "./middleware/errorMiddleware.js";
 import { createRateLimiter } from "./middleware/rateLimiter.js";
-import { authLimiter, apiLimiter } from "./config/upstash.js";
+import { loginLimiter, registerLimiter, apiLimiter } from "./config/upstash.js";
 import authRoutes from "./routes/authRoutes.js";
 import tasksRoutes from "./routes/tasksRoutes.js";
 import listsRoutes from "./routes/listsRoutes.js";
@@ -20,7 +20,8 @@ app.use(
   }),
 );
 app.use(express.json());
-app.use("/api/auth", createRateLimiter(authLimiter));
+app.use("/api/auth/login", createRateLimiter(loginLimiter));
+app.use("/api/auth/register", createRateLimiter(registerLimiter));
 
 // DOC: Public Routes
 app.use("/api/auth", authRoutes);

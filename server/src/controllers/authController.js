@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 
-import { sanitizeUser } from "./helpers/sanitizeUser.js";
-import { signToken } from "./helpers/signToken.js";
-import { normalizeString } from "../helpers/normalizeString.js";
+import { sanitizeUser } from "./utils/sanitizeUser.js";
+import { signToken } from "./utils/signToken.js";
+import { normalizeString } from "../utils/normalizeString.js";
 import User from "../models/User.js";
 
 export async function register(req, res) {

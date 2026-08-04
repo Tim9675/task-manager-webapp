@@ -5,7 +5,7 @@ import {
   validateCreateTag,
   validateUpdateTag,
 } from "../validation/tagValidation.js";
-import { asyncHandler } from "./helpers/asyncHandler.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 import {
   getTags,
   createTag,
