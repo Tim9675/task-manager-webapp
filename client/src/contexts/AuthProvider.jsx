@@ -24,8 +24,8 @@ function AuthProvider({ children }) {
         setAuthToken(token);
         const user = await getCurrentUser();
         setUser(user);
-      } catch {
-        signOut();
+      } catch (err) {
+        if (err.isAuthError) signOut();
       } finally {
         setLoading(false);
       }

@@ -51,6 +51,7 @@ client.interceptors.response.use(
 
     normalized.status = status;
     normalized.isAuthError = status === 401 || status === 403;
+    normalized.headers = err.response?.headers;
     normalized.original = err;
 
     if (normalized.isAuthError) emitAuthFailure();

@@ -10,6 +10,8 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [retryUntil, setRetryUntil] = useState(null);
+  const [secondsLeft, setSecondsLeft] = useState(0);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const navigate = useNavigate();
@@ -17,10 +19,32 @@ function LoginPage() {
 
   useEffect(() => {
     if (user) navigate("/dashboard");
-  }, [user, navigate]);
+
+    if (!retryUntil) return;
+
+    const interval = setInterval(() => {
+      const remaining = Math.max(
+        0,
+        Math.ceil((retryUntil - Date.now()) / 1000),
+      );
+
+      setSecondsLeft(remaining);
+
+      if (remaining === 0) {
+        setRetryUntil(null);
+        setError("");
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [user, navigate, retryUntil]);
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if (loading || secondsLeft > 0) return;
+
     try {
       setLoading(true);
       setError("");
@@ -29,7 +53,16 @@ function LoginPage() {
         password,
       });
     } catch (error) {
-      setError(error.response?.data?.message || error.message);
+      setError(error.message);
+
+      if (error.status === 429) {
+        const retryAfter = error.headers["retry-after"];
+
+        const until = Date.now() + retryAfter * 1000;
+
+        setRetryUntil(until);
+        setSecondsLeft(retryAfter);
+      }
     } finally {
       setLoading(false);
     }
@@ -108,10 +141,14 @@ function LoginPage() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || secondsLeft > 0}
                 className="mx-2 mt-2.5 mb-2.5 h-10 cursor-pointer rounded-md bg-[#ffd43b] font-bold text-[#212529] hover:brightness-95 disabled:opacity-50"
               >
-                Sign in
+                {loading
+                  ? "Signing in..."
+                  : secondsLeft > 0
+                    ? `Try again in ${secondsLeft}s`
+                    : "Sign in"}
               </button>
             </form>
 

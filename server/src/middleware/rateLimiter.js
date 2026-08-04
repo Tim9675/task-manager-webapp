@@ -1,16 +1,20 @@
-import ratelimit from "../config/upstash.js";
+export function createRateLimiter(ratelimit) {
+  return async (req, res, next) => {
+    const identifier = req.user?.id ?? req.headers["x-forwarded-for"] ?? req.ip;
 
-const rateLimiter = async (req, res, next) => {
-  try {
-    const { success } = await ratelimit.limit("my-limit-key"); // REM: change later when user auth is implemented
+    const { success, reset } = await ratelimit.limit(identifier);
 
-    if (!success) return res.status(429).json({ message: "Too many requests" });
+    if (!success) {
+      res.setHeader(
+        "Retry-After",
+        Math.max(0, Math.ceil((reset - Date.now()) / 1000)),
+      );
+
+      return res.status(429).json({
+        message: "Too many requests",
+      });
+    }
 
     next();
-  } catch (error) {
-    console.error("Rate limit error", error);
-    next(error);
-  }
-};
-
-export default rateLimiter;
+  };
+}
