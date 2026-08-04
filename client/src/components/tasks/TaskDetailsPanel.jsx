@@ -1,8 +1,8 @@
 import { X } from "lucide-react";
 
 import { useTasks } from "../../contexts/useTasks.js";
-import { PANEL_ANIMATION_MS } from "../../helpers/styles.js";
-import TaskForm from "./TaskForm";
+import { PANEL_ANIMATION_MS } from "../../utils/styles.js";
+import TaskForm from "./forms/TaskForm.jsx";
 
 function TaskDetailsPanel() {
   const { selectedTask, isTaskDetailsOpen, closeTask } = useTasks();

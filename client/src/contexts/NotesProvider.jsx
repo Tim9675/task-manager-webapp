@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { getUserNotes } from "../api/noteApi";
-import { showApiError } from "./helpers/showApiResponse";
+import { showApiError } from "./utils/showApiResponse";
 import useNoteCrud from "./hooks/useNoteCrud";
 import NotesContext from "./NotesContext";
 

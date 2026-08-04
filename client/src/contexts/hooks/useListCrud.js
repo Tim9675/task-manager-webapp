@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 import { createList, updateList, deleteList } from "../../api/listApi.js";
-import { showActionSuccess, showApiError } from "../helpers/showApiResponse.js";
-import { isDuplicateTitle } from "../helpers/isDuplicateTitle.js";
-import { isEmptyUpdateBody } from "../helpers/isEmptyUpdateBody.js";
+import { showActionSuccess, showApiError } from "../utils/showApiResponse.js";
+import { isDuplicateTitle } from "../utils/isDuplicateTitle.js";
+import { isEmptyUpdateBody } from "../utils/isEmptyUpdateBody.js";
 
 function useListCrud({ userLists, setUserLists, removeListFromTasks }) {
   const [isCreatingList, setIsCreatingList] = useState(false);

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { useTasks } from "./useTasks";
 import { getUserTags } from "../api/tagApi";
-import { showApiError } from "./helpers/showApiResponse";
+import { showApiError } from "./utils/showApiResponse";
 import useTagCrud from "./hooks/useTagCrud";
 import useTagDerivedData from "./hooks/useTagDerivedData";
 import TagsContext from "./TagsContext";

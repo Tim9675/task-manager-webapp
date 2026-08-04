@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
-import { useNotes } from "../../contexts/useNotes";
-import { onSubmitResult } from "../helpers/onSubmitResult";
+import { useNotes } from "../../../contexts/useNotes";
+import { onSubmitResult } from "../../helpers/onSubmitResult";
 
 function NoteInput({ mode, note = {}, onClose, onNoteSubmit }) {
   const [noteTitle, setNoteTitle] = useState(note?.title ?? "");

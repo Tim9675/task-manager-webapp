@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { getUserTasks } from "../api/taskApi.js";
-import { showApiError } from "./helpers/showApiResponse.js";
+import { showApiError } from "./utils/showApiResponse.js";
 import useTaskActions from "./hooks/useTaskActions.js";
 import useTaskSelection from "./hooks/useTaskSelection.js";
 import useTaskDerivedData from "./hooks/useTaskDerivedData.js";

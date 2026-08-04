@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
-import { useNotes } from "../../contexts/useNotes";
-import DeleteItemModal from "../modals/DeleteItemModal";
+import { useNotes } from "../../../contexts/useNotes";
+import DeleteItemModal from "../../modals/DeleteItemModal";
 
 function NoteCard({ note, onEdit }) {
   const [isDeleteNoteOpen, setIsDeleteNoteOpen] = useState(false);

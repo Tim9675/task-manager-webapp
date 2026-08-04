@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 import { createTag, updateTag, deleteTag } from "../../api/tagApi";
-import { showActionSuccess, showApiError } from "../helpers/showApiResponse";
-import { isDuplicateTitle } from "../helpers/isDuplicateTitle";
-import { isEmptyUpdateBody } from "../helpers/isEmptyUpdateBody";
+import { showActionSuccess, showApiError } from "../utils/showApiResponse";
+import { isDuplicateTitle } from "../utils/isDuplicateTitle";
+import { isEmptyUpdateBody } from "../utils/isEmptyUpdateBody";
 
 function useTagCrud({ userTags, setUserTags, removeTagFromTasks }) {
   const [isCreatingTag, setIsCreatingTag] = useState(false);

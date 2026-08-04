@@ -1,9 +1,9 @@
-import { useLists } from "../../contexts/useLists";
-import { useTags } from "../../contexts/useTags";
-import { useDisplay } from "../../contexts/useDisplay";
-import ListModal from "../sidebar/ListModal";
-import TagModal from "../sidebar/TagModal";
-import DeleteItemModal from "../modals/DeleteItemModal";
+import { useLists } from "../../../contexts/useLists";
+import { useTags } from "../../../contexts/useTags";
+import { useDisplay } from "../../../contexts/useDisplay";
+import ListModal from "../../sidebar/ListModal";
+import TagModal from "../../sidebar/TagModal";
+import DeleteItemModal from "../../modals/DeleteItemModal";
 
 function TaskListActions({
   isEdit,

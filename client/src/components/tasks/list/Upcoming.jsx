@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import { useDisplay } from "../../contexts/useDisplay";
-import { getTaskDateBuckets } from "../../utils/date";
+import { useDisplay } from "../../../contexts/useDisplay";
+import { getTaskDateBuckets } from "../../../utils/date";
 import SubTaskList from "./SubTaskList";
 
 function Upcoming() {

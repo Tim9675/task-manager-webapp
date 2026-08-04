@@ -1,7 +1,7 @@
 import { useFieldArray } from "react-hook-form";
 
-import AddSubtask from "./AddSubtask";
-import SubtaskCard from "./SubtaskCard";
+import AddSubtask from "../subtasks/AddSubtask";
+import SubtaskCard from "../subtasks/SubtaskCard";
 
 function SubtaskSection({ setValue, control }) {
   const {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { useTasks } from "./useTasks.js";
 import { getUserLists } from "../api/listApi.js";
-import { showApiError } from "./helpers/showApiResponse.js";
+import { showApiError } from "./utils/showApiResponse.js";
 import useListCrud from "./hooks/useListCrud.js";
 import useListDerivedData from "./hooks/useListDerivedData.js";
 import ListsContext from "./ListsContext.js";
