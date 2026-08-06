@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import PublicRoute from "./routes/PublicRoute";
+import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -23,7 +24,7 @@ function App() {
           path="/"
           element={
             <PublicRoute>
-              <LoginPage />
+              <LandingPage />
             </PublicRoute>
           }
         />

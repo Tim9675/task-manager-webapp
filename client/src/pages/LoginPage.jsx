@@ -74,8 +74,8 @@ function LoginPage() {
 
   return (
     <div className="h-screen w-screen bg-[#fafafa] p-[1.5%]">
-      <div className="flex h-full w-full justify-between">
-        <aside className="overflow-clip rounded-2xl md:h-full md:w-[49%]">
+      <div className="flex h-full w-full flex-col justify-between md:flex-row">
+        <aside className="hidden overflow-clip rounded-2xl md:block md:h-full md:w-[49%]">
           <img src={loginImage} alt="" />
         </aside>
 
