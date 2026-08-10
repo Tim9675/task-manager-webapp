@@ -1,250 +1,305 @@
-# Task Management Web App
+# Task Management Web Application
 
-A full-stack task management application built with the MERN stack. This project is focused on building a modern productivity platform with list-based task organization, task editing, and a responsive user experience while following real-world full-stack development practices.
+A full-stack MERN productivity application featuring authenticated multi-user task management, lists, tags, notes, and responsive UI.
+
+## Screenshot
+
+![Project Screenshot](image.png)
+
+## Live Demo
+
+(to add once everything is deployed)
 
 ## Overview
 
-This project was built as part of my journey toward becoming a full-stack/software developer. The application is designed to help users organize tasks into lists, manage task details efficiently, and provide a clean and intuitive productivity workflow.
+Users can organize work through lists, tags, subtasks, due dates, and notes, while each account's data is isolated through JWT-based authentication and authorization. The project was built as a portfolio application to demonstrate full-stack software engineering practices.
 
-The project is also being used as a learning platform for:
+## Why I built this
 
-* Full-stack application architecture
-* REST API development
-* MongoDB data modeling
-* React state management
-* Authentication and authorization
-* CRUD operations
-* Frontend/backend integration
-* Scalable project structure
+I built this project to gain hands-on experience designing and implementing a production-style full-stack application. Rather than focusing only on CRUD functionality, I emphasized code organization, reusable architecture, authentication, validation, testing, and maintainability to better reflect real-world development practices.
 
-Although the current stack uses MERN, I am intentionally focusing on transferable software engineering concepts that can be applied across different frameworks and languages.
+## Project Background
 
----
+This project began as an attempt to build a simple to-do application, a common portfolio project for junior developers. Rather than stopping at basic CRUD functionality, I used it as an opportunity to explore how a production-style full-stack application is designed and implemented.
 
-# Tech Stack
+To accelerate my learning, I referenced both a UI design and a full-stack tutorial during the early stages of development. While these resources influenced the initial direction of the project, the application evolved significantly throughout development. The architecture, authentication system, validation layer, testing strategy, project structure, and many implementation details were redesigned or expanded based on what I learned along the way.
 
-## Frontend
+The primary purpose of this project is to demonstrate my understanding of full-stack software engineering concepts rather than to serve as a production-ready SaaS application. As a result, the deployed version may periodically reset user accounts and application data to keep hosting costs manageable.
 
-* React
-* React Router
-* Material UI (MUI)
-* Lucide React Icons
-* Tailwind CSS / Responsive Layouts
+### Video Reference
 
-## Backend
+https://www.youtube.com/watch?v=F9gB5b4jgOI
 
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
+### UI Design Reference
 
-## Development Tools
+https://app.uizard.io/templates/XXJOvmKW0jhEyYZdmA7w/preview
 
-* Git & GitHub
-* VS Code
-* Postman
+## Features
 
----
+### Authentication
 
-# Current Features (As of May 17, 2026)
+- Register
+- Login
+- JWT-based authentication
+- Protected routes
+- Automatic session restoration
 
-## Task Management
+### Task Management
 
-* Create tasks
-* Edit/update tasks
-* Delete tasks
-* Toggle task completion
-* Render tasks dynamically from database data
-* Organize tasks into lists/categories
+- Create tasks
+- Edit tasks
+- Delete tasks
+- Due date management
+- Add subtasks inside tasks
 
-## Frontend Features
+### Organization
 
-* Component-based UI
-* Reusable task card components
-* Form handling for task updates
-* Conditional rendering for task/list data
-* Interactive UI elements using Material UI and Lucide icons
+- Custom Lists
+- Custom Tags
+- Sticky notes linked to user accounts
 
-## Backend Features
+### Security
 
-* RESTful API architecture
-* CRUD endpoints for tasks and lists
-* MongoDB database integration using Mongoose
-* Structured schema models
-* Data persistence
+- Ownership validation
+- Password hashing
+- Rate limiting
 
----
+## Tech Stack
 
-# Features Currently In Progress
+### Frontend
 
-The following features are planned or currently being implemented:
+- React
+- React Router
+- Material UI (MUI)
+- Lucide React Icons
+- React Hot Toast
+- Tailwind CSS / Responsive Layouts
 
-* User authentication & authorization
-* Protected routes
-* Search and filtering
-* Better error handling and validation
-* List Management
-  - Create lists
-  - Update list information
-  - Delete lists
-  - Dynamic task rendering per list
-* Rate limiting with notification
-* Deployment and production configuration
+### Backend
 
----
+- Node.js
+- Express.js
+- Upstash Redis
 
-# Project Goals
+### Database
 
-This project is not just about building a task manager, but it is also focused on practicing real-world software engineering workflows and preparing for entry-level full-stack/software development roles.
+- MongoDB
+- Mongoose
 
-Key goals include:
+### Testing
 
-* Writing maintainable and scalable code
-* Improving frontend/backend integration skills
-* Learning proper API design patterns
-* Understanding database relationships and modeling
-* Practicing debugging and feature iteration
-* Building a strong portfolio project
+- Vitest
+- React Testing Library
 
----
+### Deployment
 
-# Installation
+- Vercel
+- Render
 
-## Clone the repository
+### Development Workflow
+
+- Git
+- GitHub
+- VS Code
+- Postman
+- GitHub Copilot
+- ChatGPT
+
+## Architecture
+
+### Frontend
+
+- React Context for global state management
+- Custom hooks to encapsulate CRUD logic
+- Axios client with centralized authentication and error handling
+- Component-based UI architecture
+
+### Backend
+
+- RESTful API architecture
+- Layered MVC-inspired architecture
+- Request validation layer
+- Authentication and authorization middleware
+- MongoDB data models using Mongoose
+
+## Folder Structure
+
+```text
+project-root/
+└── client/
+    ├── public/
+    └── src/
+        ├── api/
+        ├── assets/
+        ├── components/
+        ├── contexts/
+        ├── layouts/
+        ├── pages/
+        ├── routes/
+        ├── tests/
+        ├── utils/
+        ├── App.jsx
+        ├── index.css
+        └── main.jsx
+    ├── .env
+    ├── index.html
+    ├── package-lock.json
+    ├── package.json
+    ├── README.md
+    └── vite.config.js
+└── server/
+    └── src/
+        ├── config/
+        ├── controllers/
+        ├── middleware/
+        ├── models/
+        ├── routes/
+        ├── tests/
+        ├── utils/
+        ├── validation/
+        ├── app.js
+        └── server.js
+    ├── .env
+    ├── package-lock.json
+    └── package.json
+.gitignore
+LICENSE
+README.md
+```
+
+## Installation
+
+### 1. Clone the repository
 
 ```bash
 git clone <repository-url>
 ```
 
-## Navigate into the project folder
+### 2. Navigate into the project folder
 
 ```bash
 cd <project-folder>
 ```
 
-## Install frontend dependencies
+### 3. Install frontend dependencies
 
 ```bash
 cd client
 npm install
 ```
 
-## Install backend dependencies
+### 4. Install backend dependencies
 
 ```bash
 cd server
 npm install
 ```
 
----
+## Environment Variables
 
-# Environment Variables
+### Frontend
 
-Create a `.env` file inside the backend directory.
+Create a `.env` file inside the client directory.
 
 Example:
 
 ```env
-PORT=5000
+VITE_API_URL=your_api_url
+```
+
+### Backend
+
+Create a `.env` file inside the server directory.
+
+Example:
+
+```env
 MONGO_URI=your_mongodb_connection_string
+
+PORT=5001
 
 UPSTASH_REDIS_REST_URL=your_upstashredis_url
 UPSTASH_REDIS_REST_TOKEN=your_upstashredis_token
 
 JWT_SECRET_KEY=your_jwt_key
+
+CLIENT_URL=your_client-url
 ```
 
----
+## Running the Project
 
-# Running the Project
+### Start the backend
 
-## Start the backend
+Inside the server directory:
 
 ```bash
 npm run dev
 ```
 
-## Start the frontend
+### Start the frontend
+
+Inside the client directory:
 
 ```bash
-npm start
+npm run dev
 ```
 
----
+## Testing
 
-# Folder Structure
+### Frontend
 
-```text
-project-root/
-│
-├── client/
-│   ├── public/
-│   ├── src/
-|   |   ├── api/
-|   |   ├── components/
-|   |   ├── context/
-|   |   ├── layouts/
-|   |   ├── mock/
-|   |   ├── pages/
-|   |   ├── routes/
-|   |   ├── App.jsx
-|   |   ├── index.css
-|   |   └── main.jsx
-│   └── package.json
-│
-├── server/
-│   ├── src/
-|   |   ├── config/
-|   |   ├── controllers/
-|   |   ├── helpers/
-|   |   ├── middleware/
-|   |   ├── models/
-|   |   ├── routes/
-|   |   ├── utils/
-|   |   └── server.js
-│   └── package.json
-│
-├── .gitignore
-├── LICENSE
-└── README.md
+Unit/component testing using Vitest and React Testing Library.
+
+Inside the client directory:
+
+```bash
+npm test
 ```
 
----
+### Backend
 
-# Learning Highlights
+Validation, controller, middleware, and integration tests using Vitest.
 
-Some of the concepts practiced during development include:
+Inside the server directory:
 
-* React component composition
-* State lifting and prop management
-* Controlled forms
-* MongoDB document relationships
-* API request handling
-* Express route structuring
-* Full CRUD lifecycle implementation
-* Conditional rendering and dynamic UI updates
+```bash
+npm test
+```
 
----
+## Design Decisions
 
-# Future Improvements
+- React Context is used to manage application state.
+- CRUD operations are encapsulated in reusable custom hooks to reduce duplication across providers.
+- API calls are isolated behind an API layer.
+- Backend validation is separated from controllers.
+- JWT authentication is handled through middleware.
+- Every resource is ownership-validated to prevent unauthorized access to another user's data.
+- Rate limiting is implemented using Upstash Redis.
 
-Potential long-term improvements:
+## Future Improvements
 
-* Dark mode
-* Calendar integration
-* Testing suite (Jest / Cypress)
-* CI/CD pipeline
+- Dark mode
+- Mobile responsive design
+- Dedicated 404 not found page
+- Calendar view with events
+- Recurring tasks
+- CI/CD
 
----
+## Lessons Learned
 
-# Status
-
-This project is actively being developed and continuously improved.
-
----
+- Designing reusable React Context providers and custom hooks
+- Handling JavaScript date normalization across time zones
+- Structuring Express middleware for authentication, validation, and error handling
+- Protecting both frontend routes and backend resources
+- Writing unit and integration tests with Vitest
+- Separating business logic from controllers to improve maintainability
 
 # Author
 
 Developed by Timothy Magno.
 
 Aspiring Full-Stack / Software Developer.
+
+Email: tmmagno9675@gmail.com
+
+LinkedIn: https://www.linkedin.com/in/timothy-john-magno/
