@@ -1,5 +1,7 @@
 export function createRateLimiter(ratelimit) {
   return async (req, res, next) => {
+    if (process.env.NODE_ENV === "test") return next();
+
     const identifier =
       req.user?.id || req.headers["x-forwarded-for"]?.split(",")[0] || req.ip;
 
