@@ -11,6 +11,7 @@ function Modal({
   returnFocusRef,
   descriptionId,
   children,
+  isSettings = false,
 }) {
   const modalRef = useRef(null);
 
@@ -119,6 +120,29 @@ function Modal({
             {action}
           </button>
         </div>
+
+        {isSettings && (
+          <footer className="mt-5 flex w-full flex-col items-center gap-0.5 text-[0.6rem] text-neutral-500">
+            <p>Task Management Web App</p>
+            <p>© 2026 Timothy Magno</p>
+            <div className="flex gap-2.5 text-blue-700 underline">
+              <a
+                href="https://github.com/Tim9675/task-manager-webapp"
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/timothy-john-magno/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </footer>
+        )}
       </div>
     </div>,
     document.body,

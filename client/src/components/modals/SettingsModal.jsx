@@ -34,6 +34,7 @@ function SettingsModal({ onSettingsClose, returnFocusRef }) {
       isLoading={false}
       action={"Save"}
       returnFocusRef={returnFocusRef}
+      isSettings={true}
     >
       <ul className="max-h-60 overflow-y-auto">
         {settingItems.map((setting) => (
