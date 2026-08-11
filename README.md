@@ -4,15 +4,17 @@ A full-stack MERN productivity application featuring authenticated multi-user ta
 
 ## Screenshot
 
-![Project Screenshot](image.png)
+![Application screenshot](image.png)
 
 ## Live Demo
 
-(to add once everything is deployed)
+[Live Application] https://task-manager-webapp-inky.vercel.app/
+
+[Source Code] https://github.com/Tim9675/task-manager-webapp
 
 ## Overview
 
-Users can organize work through lists, tags, subtasks, due dates, and notes, while each account's data is isolated through JWT-based authentication and authorization. The project was built as a portfolio application to demonstrate full-stack software engineering practices.
+Users can organize work through lists, tags, due dates, and notes, while each account's data is isolated through JWT-based authentication and authorization. The project was built as a portfolio application to demonstrate full-stack software engineering practices.
 
 ## Why I built this
 
@@ -24,7 +26,7 @@ This project began as an attempt to build a simple to-do application, a common p
 
 To accelerate my learning, I referenced both a UI design and a full-stack tutorial during the early stages of development. While these resources influenced the initial direction of the project, the application evolved significantly throughout development. The architecture, authentication system, validation layer, testing strategy, project structure, and many implementation details were redesigned or expanded based on what I learned along the way.
 
-The primary purpose of this project is to demonstrate my understanding of full-stack software engineering concepts rather than to serve as a production-ready SaaS application. As a result, the deployed version may periodically reset user accounts and application data to keep hosting costs manageable.
+The primary purpose of this project is to demonstrate my understanding of full-stack software engineering concepts rather than to serve as a production SaaS application. As a result, the deployed version may periodically reset user accounts and application data to keep hosting costs manageable.
 
 ### Video Reference
 
@@ -50,13 +52,13 @@ https://app.uizard.io/templates/XXJOvmKW0jhEyYZdmA7w/preview
 - Edit tasks
 - Delete tasks
 - Due date management
-- Add subtasks inside tasks
+- Create and manage subtasks
 
 ### Organization
 
-- Custom Lists
-- Custom Tags
-- Sticky notes linked to user accounts
+- Create and manage custom lists
+- Create and manage custom tags
+- Create and manage sticky notes
 
 ### Security
 
@@ -145,7 +147,6 @@ project-root/
     ├── index.html
     ├── package-lock.json
     ├── package.json
-    ├── README.md
     └── vite.config.js
 └── server/
     └── src/
@@ -197,6 +198,8 @@ npm install
 
 ## Environment Variables
 
+For local development, create the following .env files. Production environment variables are configured directly through the respective hosting platforms.
+
 ### Frontend
 
 Create a `.env` file inside the client directory.
@@ -204,7 +207,7 @@ Create a `.env` file inside the client directory.
 Example:
 
 ```env
-VITE_API_URL=your_api_url
+VITE_API_URL=http://localhost:5001/api
 ```
 
 ### Backend
@@ -223,7 +226,7 @@ UPSTASH_REDIS_REST_TOKEN=your_upstashredis_token
 
 JWT_SECRET_KEY=your_jwt_key
 
-CLIENT_URL=your_client-url
+CLIENT_URL=http://localhost:5173
 ```
 
 ## Running the Project
@@ -266,6 +269,15 @@ Inside the server directory:
 npm test
 ```
 
+## Deployment
+
+The frontend is deployed on Vercel and the backend is deployed on Render.
+
+- Frontend: Vercel
+- Backend: Render
+- Database: MongoDB Atlas
+- Rate limiting: Upstash Redis
+
 ## Design Decisions
 
 - React Context is used to manage application state.
@@ -276,15 +288,6 @@ npm test
 - Every resource is ownership-validated to prevent unauthorized access to another user's data.
 - Rate limiting is implemented using Upstash Redis.
 
-## Future Improvements
-
-- Dark mode
-- Mobile responsive design
-- Dedicated 404 not found page
-- Calendar view with events
-- Recurring tasks
-- CI/CD
-
 ## Lessons Learned
 
 - Designing reusable React Context providers and custom hooks
@@ -293,6 +296,15 @@ npm test
 - Protecting both frontend routes and backend resources
 - Writing unit and integration tests with Vitest
 - Separating business logic from controllers to improve maintainability
+
+## Future Improvements
+
+- Mobile responsive design
+- Dark Mode
+- Dedicated 404 not found page
+- Calendar view with events
+- Recurring tasks
+- CI/CD
 
 # Author
 
